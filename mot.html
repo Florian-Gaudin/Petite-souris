@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Le mot de la Petite Souris</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  /* Page à afficher en plein écran sur l'ordinateur : l'enfant scanne le QR code avec la tablette */
+  html,body{height:100%}
+  body{display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 20% 15%,#2b356f 0,transparent 40%),radial-gradient(circle at 85% 80%,#1d2558 0,transparent 45%),var(--nuit);text-align:center;padding:16px}
+  .mot{display:grid;grid-template-columns:1fr auto;gap:28px 40px;align-items:center;max-width:1100px;width:100%}
+  .mot-texte{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .mot h1{font-size:clamp(1.8rem,4.6vw,3.4rem);font-weight:800;max-width:16ch;text-shadow:0 3px 14px rgba(0,0,0,.5)}
+  .mot .souris{width:clamp(140px,22vw,260px);height:auto;filter:drop-shadow(0 12px 24px rgba(0,0,0,.45))}
+  .mot .inv{font-size:clamp(1.1rem,2.4vw,1.6rem);color:var(--muet);max-width:26ch}
+  .mot .sign{font-family:var(--hand);font-size:clamp(1.4rem,3vw,2.2rem);color:var(--lanterne);display:flex;align-items:center;gap:10px}
+  .mot .sign svg{width:1.3em;height:1.3em;fill:var(--lanterne)}
+  .qr-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .qr{background:#fff;border-radius:22px;padding:clamp(12px,2vw,22px);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+  .qr svg{display:block;width:clamp(220px,34vmin,460px);height:auto}
+  .url{font-family:var(--mono);font-size:clamp(.8rem,1.6vw,1.05rem);color:var(--muet);word-break:break-all;max-width:36ch}
+  .scan{font-weight:700;font-size:clamp(1rem,2.2vw,1.35rem)}
+  .outils{position:fixed;right:12px;bottom:12px;display:flex;gap:8px;opacity:.45;transition:opacity .2s}
+  .outils:hover,.outils:focus-within{opacity:1}
+  .outils .btn{min-height:40px;font-size:.85rem}
+  .alerte-url{position:fixed;left:0;right:0;top:0;background:var(--rouge);color:#fff;padding:10px 16px;font-weight:700;text-align:center;z-index:5}
+  @media (max-width:760px){.mot{grid-template-columns:1fr;gap:20px}.mot h1{max-width:none}}
+  @media print{
+    @page{size:A6;margin:7mm}
+    body{display:block;background:#fff!important;color:#000;padding:0;height:auto}
+    .mot{grid-template-columns:1fr;gap:4mm;max-width:none}
+    .mot h1{font-size:17pt;text-shadow:none;color:#1F2235}
+    .mot .souris{width:28mm;filter:none}
+    .mot .inv{font-size:10pt;color:#333}
+    .mot .sign{font-size:15pt;color:#1F2235}.mot .sign svg{fill:#1F2235}
+    .qr{box-shadow:none;padding:0;border-radius:0}.qr svg{width:48mm}
+    .url{font-size:7pt;color:#333}.scan{font-size:10pt;color:#1F2235}
+    .outils,.alerte-url{display:none!important}
+  }
+</style>
+</head>
+<body>
+<div id="alerte" class="alerte-url" hidden>L'adresse du site n'est pas encore renseignée : modifiez « url » dans config.js, puis rechargez cette page.</div>
+<main class="mot">
+  <div class="mot-texte">
+    <svg class="souris" viewBox="0 0 220 240" aria-hidden="true"><use href="#souris-face"/></svg>
+    <h1 id="titre"></h1>
+    <p class="inv">Quelqu'un a laissé un film, une lettre et un diplôme pour toi…</p>
+    <p class="sign"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#patte"/></svg><span id="signature"></span></p>
+  </div>
+  <div class="qr-wrap">
+    <p class="scan">Scanne ce carré avec la tablette</p>
+    <div class="qr" id="qr" role="img" aria-label="QR code vers l'histoire"></div>
+    <p class="url" id="url"></p>
+  </div>
+</main>
+<div class="outils">
+  <button class="btn btn-petit" id="btn-plein">Plein écran</button>
+  <button class="btn btn-petit" id="btn-print">Imprimer (A6)</button>
+</div>
+<script src="config.js"></script>
+<script src="js/art.js"></script>
+<script src="vendor/qrcode.js"></script>
+<script>
+(function(){
+  document.body.insertAdjacentHTML('afterbegin', ART.symboles());
+  const C = window.CONFIG;
+  document.getElementById('titre').textContent = C.enfant + ', quelqu\'un est venu cette nuit…';
+  document.getElementById('signature').textContent = C.souris;
+  document.getElementById('url').textContent = C.url;
+  if (!C.url || /VOTRE-COMPTE/i.test(C.url)) document.getElementById('alerte').hidden = false;
+  // QR code généré hors ligne (bibliothèque embarquée, aucune requête réseau)
+  const qr = qrcode(0, 'M'); qr.addData(C.url); qr.make();
+  const n = qr.getModuleCount(), marge = 2, taille = n + marge * 2;
+  let chemins = '';
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) chemins += `M${c + marge} ${r + marge}h1v1h-1z`;
+  document.getElementById('qr').innerHTML = `<svg viewBox="0 0 ${taille} ${taille}" shape-rendering="crispEdges"><rect width="${taille}" height="${taille}" fill="#fff"/><path d="${chemins}" fill="#141A3A"/></svg>`;
+  document.getElementById('btn-print').onclick = () => window.print();
+  document.getElementById('btn-plein').onclick = () => { const el = document.documentElement; const f = el.requestFullscreen || el.webkitRequestFullscreen; if (f) f.call(el); };
+})();
+</script>
+</body>
+</html>
