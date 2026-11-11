@@ -141,7 +141,7 @@ window.SCENES = (function () {
         g.classList.add('bonus'); if (vus.indexOf(id) >= 0) g.classList.add('deja');
         // Une petite étoile qui clignote au-dessus de chaque secret
         const h = g.querySelector('.halo');
-        if (h) { const cx = +h.getAttribute('cx'), cy = +h.getAttribute('cy'), r = +h.getAttribute('r'); g.insertAdjacentHTML('beforeend', `<use href="#etoile5" class="indice" x="${cx - 15}" y="${(cy - r * 0.8 - 15).toFixed(0)}" width="30" height="30"/>`); }
+        if (h) { const cx = +h.getAttribute('cx'), cy = +h.getAttribute('cy'), r = +h.getAttribute('r'); g.insertAdjacentHTML('beforeend', `<g class="indice" transform="translate(${cx},${(cy - r * 0.8).toFixed(0)})"><use href="#etoile5" x="-15" y="-15" width="30" height="30"/></g>`); }
       }
       g.addEventListener('click', e => onTap(g, e));
       g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTap(g, e); } });
