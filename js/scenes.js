@@ -242,6 +242,8 @@ window.SCENES = (function () {
       return;
     }
     if (pos > idx) { SON.play('toc'); return; }
+    // Pas avant la phrase qui le demande, et pas pendant qu'elle s'écrit : l'histoire se lit dans l'ordre
+    if (!g.classList.contains('cible') || NARR.lit) { SON.play('toc'); g.classList.remove('refus'); void g.getBBox(); g.classList.add('refus'); return; }
     obligatoire(g, id, el, e);
   }
   function secret() {
