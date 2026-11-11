@@ -9,6 +9,7 @@ window.DATA = {
     expr: "joie",
     bouton: "Viens, je te raconte !",
   },
+  accueilDepart: { txt: "Tout a commencé au château, bien avant d'arriver chez toi…", expr: "clin" },
 
   // ---------- Chapitre 1 : six scènes ----------
   // Chaque scène : une bulle d'arrivée (intro), un élément obligatoire (ou une chaîne d'éléments)
@@ -23,7 +24,10 @@ window.DATA = {
           demande: { txt: "Mais j'ai reçu un message : ta deuxième dent est tombée ! C'est la jumelle de la première. Je dois aller la chercher cette nuit. Allume ma lanterne, il fait si noir !", expr: "surprise" },
           reponse: { txt: "Merci {enfant} ! Avec ma lanterne, je vois comme en plein jour.", expr: "joie" },
         },
-        feuillage: { bulle: { txt: "Hou hou ! C'est la hulotte, ma voisine. « Bon voyage, {souris} ! » qu'elle me dit.", expr: "surprise" } },
+        feuillage: {
+          bulle: { txt: "Hou hou ! C'est la hulotte, ma voisine. Elle sort la tête des feuilles pour me dire : « Bon voyage, {souris} ! »", expr: "surprise" },
+          bulle2: { txt: "Et hop, elle s'envole chasser dans la forêt. À bientôt, hulotte !", expr: "joie" },
+        },
         sac: { bulle: { txt: "Regarde dans mon sac : j'ai un cadeau pour toi ! C'est un billet de 5 euros, pour te remercier de ta dent.", expr: "clin" } },
       },
       pont: { txt: "C'est parti, direction la forêt !", expr: "joie" },

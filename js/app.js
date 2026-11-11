@@ -98,6 +98,13 @@
     const s = $('.fil-souris'); if (s) s.style.left = n === 0 ? '6%' : [16, 33, 50, 67, 84][n - 1] + '%';
     document.body.dataset.chapitre = n;
   }
+  // Fondu au noir entre deux tableaux : on assombrit, on change, on rallume
+  function fondu(fn, duree) {
+    const v = $('#voile-noir'); duree = RM ? 0 : (duree || 700);
+    v.style.transitionDuration = duree + 'ms';
+    v.classList.add('on');
+    return wait(duree + 60).then(() => { fn(); return wait(80); }).then(() => { v.classList.remove('on'); });
+  }
   function show(n, opts) {
     opts = opts || {};
     n = Math.max(0, Math.min(5, n)); if (n > State.unlocked) n = State.unlocked;
@@ -127,8 +134,14 @@
       NARR.action(A.icone('lanterne') + ' ' + T(D.accueil.bouton), async () => {
         SON.unlock(); SON.play('lanterne');
         $('.ch0', r).classList.add('allume'); NARR.action(null);
-        await wait(RM ? 150 : 900);
-        complete(0); show(1, { scene: State.unlocked > 1 ? 0 : State.scene });
+        NARR.dire(B(D.accueilDepart), { vite: true });
+        await wait(RM ? 150 : 1000);
+        // Quenotte suit le chemin jusqu'à la maison, puis le rideau tombe
+        const am = $('#am0', r); if (am && !RM) { try { am.beginElement(); } catch (e) { } }
+        for (let i = 0; i < 6 && !RM; i++) { await wait(420); SON.play('pas'); }
+        await wait(RM ? 100 : 600);
+        complete(0);
+        await fondu(() => show(1, { scene: State.unlocked > 1 ? 0 : State.scene }), 900);
       });
     },
   };
@@ -142,6 +155,7 @@
       window.SCENES.monter($('#ch1', r), {
         state: State, config: C, T, heure, etoile, toast, save,
         sceneFaite(i) { if (State.scene < i + 1) { State.scene = Math.min(5, i + 1); save(); } },
+        fondu,
         finChapitre() { complete(1); badge('detective'); show(2); },
         scene13,
       }, n);

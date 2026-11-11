@@ -27,7 +27,10 @@ window.SCENES = (function () {
   const ACTIONS = {
     chateau: {
       lanterne() { svg.classList.add('allume'); SON.play('lanterne'); },
-      feuillage(g) { g.classList.add('secoue'); SON.play('buisson'); setTimeout(() => SON.play('hulotte'), 500); },
+      feuillage(g, sub, etape, deuxieme) {
+        if (deuxieme && !g.classList.contains('envol')) { g.classList.add('envol'); SON.play('hulotte'); setTimeout(() => SON.play('buisson'), 300); return; }
+        g.classList.remove('secoue'); void g.getBBox(); g.classList.add('secoue'); SON.play('buisson'); setTimeout(() => SON.play('hulotte'), 500);
+      },
       sac() { SON.play('papier'); },
     },
     foret: {
@@ -151,7 +154,7 @@ window.SCENES = (function () {
       if (e.target.closest('.tap')) return;
       wrap.classList.remove('bouge'); void wrap.offsetWidth; wrap.classList.add('bouge');
     });
-    $$('.pastille', root).forEach(p => p.onclick = () => { const k = +p.dataset.n; if (k <= ctx.state.scene) ouvrir(k); });
+    $$('.pastille', root).forEach(p => p.onclick = () => { const k = +p.dataset.n; if (k <= ctx.state.scene && k !== courant) ctx.fondu(() => ouvrir(k)); });
     NARR.action(null); compteSecrets();
     await NARR.dire(derniere = bulle(sc.intro));
     if (mien !== jeton) return;
@@ -235,15 +238,16 @@ window.SCENES = (function () {
   }
 
   async function bonus(g, id, el) {
-    // Pendant la traversée, une réponse, ou tant qu'un texte principal s'écrit : on attend
-    if (occupe || NARR.lit) { SON.play('toc'); return; }
+    // Pendant la traversée ou la réponse à l'élément obligatoire : on attend (l'élément frémit pour le dire)
+    if (occupe) { SON.play('toc'); g.classList.remove('refus'); void g.getBBox(); g.classList.add('refus'); return; }
     const mien = jeton, mienBulle = ++jetonBulle;
     const premiere = !g.classList.contains('vu') && !g.classList.contains('deja');
+    const deuxieme = g.classList.contains('vu');
     g.classList.add('vu');
-    const act = ACTIONS[sc.id][id]; if (act) act(g);
+    const act = ACTIONS[sc.id][id]; if (act) act(g, null, 0, deuxieme);
     if (premiere) { ctx.etoile(sc.id, id); compteSecrets(); }
     NARR.masquerAction(true); // le bouton Continuer attend la fin du secret
-    await NARR.dire(bulle(el.bulle));
+    await NARR.dire(bulle(deuxieme && el.bulle2 ? el.bulle2 : el.bulle));
     if (mien !== jeton) return;
     rappel(mien, mienBulle);
   }
@@ -262,12 +266,12 @@ window.SCENES = (function () {
       if (act) act(g, sub, etape);
       const txt = { txt: T(el.etapes[etape - 1]), expr: etape >= el.etapes.length ? 'joie' : 'surprise' };
       if (etape < el.etapes.length) { NARR.dire(txt, { vite: true }); aideLance(); return; }
-      occupe = true;
+      occupe = true; svg.classList.add('occupe');
       g.classList.add('vu', 'fait'); g.classList.remove('cible');
       await NARR.dire(txt, { vite: true }); if (mien !== jeton) return;
       await wait(500); if (mien !== jeton) return;
     } else {
-      occupe = true;
+      occupe = true; svg.classList.add('occupe');
       g.classList.add('vu', 'fait'); g.classList.remove('cible');
       if (act) act(g);
     }
@@ -280,7 +284,7 @@ window.SCENES = (function () {
       if (!direct) { await NARR.attendre(); if (mien !== jeton) return; }
     }
     idx++;
-    occupe = false;
+    occupe = false; svg.classList.remove('occupe');
     if (idx < chaine.length) { await demande(); return; }
     await fini(mien);
   }
@@ -291,7 +295,7 @@ window.SCENES = (function () {
     if (sc.pont) { await NARR.dire(derniere = bulle(sc.pont)); if (mien !== jeton) return; }
     const dernier = courant >= D.scenes.length - 1;
     if (dernier) NARR.action(A.icone('patte') + ' ' + T(sc.bouton), () => ctx.finChapitre(), 'btn-rouge');
-    else NARR.action('Continuer ' + A.icone('suite'), () => { SON.play('clic'); ouvrir(courant + 1); });
+    else NARR.action('Continuer ' + A.icone('suite'), () => { SON.play('clic'); NARR.action(null); ctx.fondu(() => ouvrir(courant + 1)); });
   }
 
   return {

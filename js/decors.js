@@ -32,8 +32,8 @@ ${A.fond(nuit, 21, { x: 830, y: 95, r: 34 })}
 </g>
 <rect x="790" y="300" width="26" height="185" fill="#4a3324"/><path d="M780 485q23-20 46 0z" fill="#4a3324"/>
 ${tap('feuillage', 'Le feuillage de l’arbre', `${halo(803, 255, 105)}
-  <g transform="translate(800,290)"><g class="hulotte"><ellipse cx="0" cy="20" rx="19" ry="24" fill="#8B5A3C"/><ellipse cx="0" cy="24" rx="10" ry="16" fill="#C9A98A"/><circle cx="0" cy="-4" r="18" fill="#A0724A"/><path d="M-16-14l-6-14 14 6zM16-14l6-14-14 6z" fill="#A0724A"/><circle cx="-7" cy="-6" r="7.5" fill="#FFF4D6"/><circle cx="7" cy="-6" r="7.5" fill="#FFF4D6"/><circle cx="-7" cy="-6" r="3.5" fill="#2B2B33"/><circle cx="7" cy="-6" r="3.5" fill="#2B2B33"/><path d="M-3 1l3 6 3-6z" fill="#FFC857"/></g></g>
-  <g class="feuillage"><circle cx="755" cy="285" r="56" fill="#1E3F36"/><circle cx="850" cy="280" r="58" fill="#1E3F36"/><circle cx="800" cy="228" r="66" fill="#24483E"/><circle cx="765" cy="238" r="42" fill="#2F5D50"/><circle cx="836" cy="236" r="38" fill="#2F5D50"/></g>`)}
+  <g class="feuillage"><circle cx="755" cy="285" r="56" fill="#1E3F36"/><circle cx="850" cy="280" r="58" fill="#1E3F36"/><circle cx="800" cy="228" r="66" fill="#24483E"/><circle cx="765" cy="238" r="42" fill="#2F5D50"/><circle cx="836" cy="236" r="38" fill="#2F5D50"/></g>
+  <g transform="translate(800,250)"><g class="hulotte"><path class="aile ag" d="M-16 6q-26 6-22 34q14-6 22-24z" fill="#8B5A3C"/><path class="aile ad" d="M16 6q26 6 22 34q-14-6-22-24z" fill="#8B5A3C"/><ellipse cx="0" cy="20" rx="19" ry="24" fill="#8B5A3C"/><ellipse cx="0" cy="24" rx="10" ry="16" fill="#C9A98A"/><circle cx="0" cy="-4" r="18" fill="#A0724A"/><path d="M-16-14l-6-14 14 6zM16-14l6-14-14 6z" fill="#A0724A"/><circle cx="-7" cy="-6" r="7.5" fill="#FFF4D6"/><circle cx="7" cy="-6" r="7.5" fill="#FFF4D6"/><circle cx="-7" cy="-6" r="3.5" fill="#2B2B33"/><circle cx="7" cy="-6" r="3.5" fill="#2B2B33"/><path d="M-3 1l3 6 3-6z" fill="#FFC857"/></g></g>`)}
 <rect class="noir" x="0" y="-700" width="1000" height="1300" fill="#050816" opacity=".45"/>
 ${lueur(L.x, L.y, 150)}
 ${A.souris(sx, sy, sw, 'class="quenotte"')}
