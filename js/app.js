@@ -268,8 +268,17 @@
         d.querySelector('span').textContent = label;
       };
       const rm = id => { const d = $('#det-' + id, dets); if (d) d.remove(); };
-      const chuchote = b => { if (!instant()) NARR.dire(B(b)); };
       const instant = () => cam.classList.contains('instant');
+      // Quenotte chuchote : le film se met en pause jusqu'à un toucher sur le bandeau
+      let pause = false, pauseA = 0;
+      const chuchote = b => {
+        if (instant()) return;
+        pause = true; pauseA = performance.now(); cancelAnimationFrame(self.raf);
+        NARR.dire(B(b)).then(() => NARR.attendre()).then(ok => {
+          if (!pause || !ok || fini) return;
+          pause = false; debut += performance.now() - pauseA; self.raf = requestAnimationFrame(boucle);
+        });
+      };
       const evenements = [
         [0.3, () => { mv(cs2, -90, 200); mv(bat, -40, 236); mv(cs1, -90, 232); }],
         [0.6, () => chuchote(D.camera.intro)],
@@ -310,13 +319,13 @@
         self.raf = requestAnimationFrame(boucle);
       };
       const lancer = () => {
-        cancelAnimationFrame(self.raf); fini = false; debut = null; idx = 0;
+        cancelAnimationFrame(self.raf); fini = false; debut = null; idx = 0; pause = false;
         cam.classList.remove('fin'); cam.classList.add('instant'); dets.innerHTML = ''; NARR.action(null);
         chambre.setAttribute('hidden', ''); salon.removeAttribute('hidden'); nom.textContent = 'CAM 1 · SALON'; dent.classList.remove('prise'); mot.classList.remove('pose'); cs2.classList.remove('coucou');
         evenements[0][1](); $('#btn-passer', r).hidden = false; $('#btn-revoir', r).hidden = true;
         requestAnimationFrame(() => { cam.classList.remove('instant'); self.raf = requestAnimationFrame(boucle); });
       };
-      const passer = () => { cancelAnimationFrame(self.raf); cam.classList.add('instant'); while (idx < evenements.length) evenements[idx++][1](); horo(finAt); fini = true; NARR.dire(B(D.camera.fin), { vite: 'instant' }); };
+      const passer = () => { cancelAnimationFrame(self.raf); pause = false; cam.classList.add('instant'); while (idx < evenements.length) evenements[idx++][1](); horo(finAt); fini = true; NARR.dire(B(D.camera.fin), { vite: 'instant' }); };
       $('#btn-passer', r).onclick = () => { SON.unlock(); passer(); };
       $('#btn-revoir', r).onclick = () => lancer();
       lancer();
