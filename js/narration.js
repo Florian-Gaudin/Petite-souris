@@ -4,17 +4,22 @@ window.NARR = (function () {
   'use strict';
   const RM = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const BULLES = { sourire: '', joie: '★', surprise: '!', chuchote: 'chut', clin: '♪', triste: '…' };
-  let el = null, texte = null, portrait = null, bulle = null, actions = null, timer = null, enCours = null, jeton = 0;
+  let el = null, texte = null, portrait = null, bulle = null, actions = null, timer = null, enCours = null, jeton = 0, attente = null;
 
   function init() {
     el = document.getElementById('bandeau');
     el.innerHTML = `<div class="bandeau-in">
       <div class="bandeau-portrait">${window.ART.portrait()}<span class="bandeau-bulle" aria-hidden="true"></span></div>
       <p class="bandeau-texte" id="bandeau-texte" aria-live="polite"></p>
+      <span class="bandeau-suite" aria-hidden="true">Touche pour continuer <b>▸</b></span>
       <div class="bandeau-actions" id="bandeau-actions"></div>
     </div>`;
     texte = el.querySelector('#bandeau-texte'); portrait = el.querySelector('.portrait'); bulle = el.querySelector('.bandeau-bulle'); actions = el.querySelector('#bandeau-actions');
-    el.addEventListener('click', e => { if (e.target.closest('.bandeau-actions')) return; toutMontrer(); });
+    el.addEventListener('click', e => {
+      if (e.target.closest('.bandeau-actions')) return;
+      if (enCours) { toutMontrer(); return; }
+      if (attente) { const f = attente; attente = null; el.classList.remove('attente'); f(true); }
+    });
     // La hauteur du bandeau est transmise au reste de la page (pour ne jamais cacher la scène)
     const mesure = () => { document.documentElement.style.setProperty('--bandeau-h', el.offsetHeight + 'px'); };
     if (window.ResizeObserver) new ResizeObserver(mesure).observe(el); else window.addEventListener('resize', mesure);
@@ -48,8 +53,9 @@ window.NARR = (function () {
   function dire(b, opts) {
     opts = opts || {};
     clearTimeout(timer); const mien = ++jeton;
-    // Une bulle remplacée libère ceux qui l'attendaient
+    // Une bulle remplacée libère ceux qui l'attendaient (et annule l'attente d'un toucher)
     if (enCours) { const f = enCours.fin; enCours = null; if (f) f(); }
+    if (attente) { const f = attente; attente = null; el.classList.remove('attente'); f(false); }
     const t = (b && b.txt) || '';
     expression((b && b.expr) || 'sourire');
     el.classList.toggle('chuchote', (b && b.expr) === 'chuchote');
@@ -69,6 +75,12 @@ window.NARR = (function () {
       suivant();
     });
   }
+  // Attend un toucher sur le bandeau avant la suite. Résout false si une autre bulle a pris la place.
+  function attendre() {
+    if (attente) { const f = attente; attente = null; f(false); }
+    el.classList.add('attente');
+    return new Promise(res => { attente = res; });
+  }
   // Un bouton (ou rien) dans le bandeau
   function action(html, onclick, cls) {
     actions.innerHTML = '';
@@ -78,5 +90,5 @@ window.NARR = (function () {
   }
   function cacher(on) { el.classList.toggle('cache', !!on); }
 
-  return { init, dire, action, cacher, expression, get visible() { return !el.classList.contains('cache'); } };
+  return { init, dire, attendre, action, cacher, expression, get visible() { return !el.classList.contains('cache'); } };
 })();

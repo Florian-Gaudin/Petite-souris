@@ -75,6 +75,11 @@ p{margin:.4rem 0}
 .bandeau.chuchote .bandeau-texte{font-style:italic;color:#3a3550}
 .bandeau-texte .mot{opacity:0;transition:opacity .35s ease-out}
 .bandeau-texte .mot.vu{opacity:1}
+.bandeau-suite{grid-area:actions;display:none;justify-self:end;align-items:center;gap:4px;font-size:.95rem;font-weight:700;color:#8a6a10;animation:suite 1.4s ease-in-out infinite}
+.bandeau-suite b{font-size:1.2em}
+.bandeau.attente .bandeau-suite{display:inline-flex}
+.bandeau.attente .bandeau-actions:not(:empty)~.bandeau-suite{display:none}
+@keyframes suite{0%,100%{opacity:.55;transform:translateX(0)}50%{opacity:1;transform:translateX(4px)}}
 .bandeau-actions{grid-area:actions;display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
 .bandeau-actions:empty{display:none}
 .bandeau-actions .btn{min-height:56px;font-size:1.2rem;width:100%;max-width:420px}
@@ -127,6 +132,7 @@ p{margin:.4rem 0}
 
 /* Éléments à toucher, halos, main qui montre */
 .tap{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.decor .noir,.decor .dore,.decor .lueur,.decor .lueur-maison,.decor .lampe-lueur,.decor .champi-lueur,.decor .brume,.decor .main-aide,.decor .navire,.decor .etoile{pointer-events:none}
 .tap .halo{opacity:0;transform-box:fill-box;transform-origin:center;pointer-events:all}
 .tap.bonus .halo{opacity:.55;animation:scintille 2.6s ease-in-out infinite}
 .tap.cible .halo{opacity:1;animation:pulse-halo 1.4s ease-in-out infinite}
@@ -373,6 +379,7 @@ p{margin:.4rem 0}
 @media (min-width:700px){
   body{font-size:19px}
   .bandeau-in{grid-template-columns:84px 1fr auto;grid-template-areas:"portrait texte actions";align-items:center}
+  .bandeau-suite{align-self:end}
   .bandeau-portrait{width:84px;height:84px}
   .bandeau-actions .btn{width:auto;min-width:200px}
   .bandeau-texte{min-height:3em}

@@ -150,7 +150,8 @@ window.SCENES = (function () {
     NARR.action(null);
     await NARR.dire(derniere = bulle(sc.intro));
     if (mien !== jeton) return;
-    await wait(500); if (mien !== jeton) return;
+    const ok = await NARR.attendre();
+    if (mien !== jeton || !ok) return; // un élément a été touché pendant l'attente : la suite s'en charge
     await demande();
   }
   // Cadrage : la scène occupe toute la largeur, et le ciel se prolonge vers le haut si l'écran est en hauteur
@@ -185,11 +186,12 @@ window.SCENES = (function () {
     aideLance();
     if (el.demande) { await NARR.dire(derniere = bulle(el.demande)); if (mien !== jeton) return; }
   }
-  // Après une bulle bonus, on rappelle doucement ce qu'il y a à faire
+  // Après une bulle bonus (et un toucher), on revient à ce qu'il y a à faire
   async function rappel(mien, mienBulle) {
-    await wait(1800);
-    if (mien !== jeton || mienBulle !== jetonBulle || occupe || !derniere) return;
-    NARR.dire(derniere, { vite: 'instant' });
+    const ok = await NARR.attendre();
+    if (!ok || mien !== jeton || mienBulle !== jetonBulle || occupe) return;
+    if (idx < chaine.length && !$('.tap.cible', svg)) { await demande(); return; }
+    if (derniere) NARR.dire(derniere, { vite: 'instant' });
   }
 
   function onTap(g, e) {
@@ -249,17 +251,20 @@ window.SCENES = (function () {
     }
     const apres = APRES[sc.id] && APRES[sc.id][id];
     if (apres) { await apres(g); if (mien !== jeton) return; }
-    if (el.reponse) { await NARR.dire(derniere = bulle(el.reponse)); if (mien !== jeton) return; }
+    if (el.reponse) {
+      await NARR.dire(derniere = bulle(el.reponse)); if (mien !== jeton) return;
+      await NARR.attendre(); if (mien !== jeton) return;
+    }
     idx++;
     occupe = false;
-    if (idx < chaine.length) { await wait(400); if (mien !== jeton) return; await demande(); return; }
+    if (idx < chaine.length) { await demande(); return; }
     await fini(mien);
   }
 
   async function fini(mien) {
     ctx.sceneFaite(courant);
     $$('.pastille', root).forEach(p => { if (+p.dataset.n <= ctx.state.scene) p.disabled = false; });
-    if (sc.pont) { await wait(300); if (mien !== jeton) return; await NARR.dire(derniere = bulle(sc.pont)); if (mien !== jeton) return; }
+    if (sc.pont) { await NARR.dire(derniere = bulle(sc.pont)); if (mien !== jeton) return; }
     const dernier = courant >= D.scenes.length - 1;
     if (dernier) NARR.action(A.icone('patte') + ' ' + T(sc.bouton), () => ctx.finChapitre(), 'btn-rouge');
     else NARR.action('Continuer ' + A.icone('suite'), () => { SON.play('clic'); ouvrir(courant + 1); });
