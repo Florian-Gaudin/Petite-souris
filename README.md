@@ -27,13 +27,13 @@ Une petite expérience web (site statique, sans compte, sans suivi) racontée à
 - Les deux secrets de chaque image sont signalés par une petite étoile qui clignote et un compteur « ★ 0/2 » en haut à droite de l'image. Quenotte l'explique une fois, à la première scène. Un secret n'est accepté que lorsque Quenotte a fini sa phrase, et le bouton Continuer disparaît le temps du secret pour ne pas changer de scène par erreur.
 - Après 4 secondes sans toucher, une petite main montre l'élément obligatoire ; après 8 secondes, le halo grossit. Un toucher à côté fait juste bouger la scène.
 - **Narration.** Quenotte parle dans le bandeau du bas, de hauteur fixe pour que l'image reste entière à l'écran (un texte trop long défile dans le cadre). Le texte apparaît par petits groupes de mots ; un toucher sur le texte l'affiche d'un coup. Seul le bouton jaune **« Suite ▸ »** passe au texte suivant : rien n'avance tout seul.
-- **Son.** La musique démarre au premier toucher. Le bouton haut-parleur coupe musique et effets.
-- **Billet.** Dans l'histoire, le billet de 5 € sert de bateau sur la Meuse puis sèche sur la cheminée (éteinte !) : c'est là qu'il faut poser le vrai billet. Le mot A6 sous l'oreiller et la lettre indiquent cet endroit. Sur le diplôme, un bouton « J'ai trouvé mon billet ! » donne le badge correspondant.
+- **Son.** La musique démarre au premier toucher. Le menu Préférences (roue dentée en haut à droite) coupe ou remet musique et effets.
+- **Billet.** Dans l'histoire, le billet de 5 € sert de bateau sur la Meuse puis sèche sur la cheminée (éteinte !) : c'est là qu'il faut poser le vrai billet. Le mot A6 sous l'oreiller et la lettre indiquent cet endroit. À la fin de la lettre, le bouton « J'ai trouvé mon billet ! » donne le badge correspondant et ouvre le diplôme.
 - **Chapitre secret.** Une fois que le Grand Marionnettiste a fait coucou, le toucher trois fois de suite ouvre la 13e scène.
 
 ## Plein écran et web app
 
-- **Android et iPad** : la page passe en plein écran au premier toucher (les navigateurs l'interdisent sans geste). Un bouton dans le ruban du haut permet d'en sortir ou d'y revenir.
+- **Android et iPad** : la page passe en plein écran au premier toucher (les navigateurs l'interdisent sans geste). Le menu Préférences (roue dentée) permet d'en sortir ou d'y revenir.
 - **Comme une vraie application** : ouvrir le lien, puis « Ajouter à l'écran d'accueil » (menu ⋮ de Chrome sur Android, bouton Partager de Safari sur iPhone et iPad). L'icône Petite Souris s'ouvre ensuite en plein écran, sans barre d'adresse. **C'est la seule solution sur iPhone**, où Safari ne permet pas le plein écran d'une page.
 - Fichiers concernés : `manifest.webmanifest` et le dossier `icones/`.
 
@@ -60,7 +60,7 @@ Le dépôt prévu est `https://github.com/Florian-Gaudin/Petite-souris.git`, don
 
 ## Réinitialiser et sauter des chapitres
 
-- Lien discret **« Recommencer »** en bas à droite de l'écran d'accueil : efface la progression, les étoiles, les badges et la date mémorisée.
+- Menu **Préférences** (roue dentée en haut à droite) → **Recommencer l'histoire**, à toucher deux fois pour confirmer : efface la progression, les étoiles, les badges et la date mémorisée.
 - Dans l'adresse : `index.html?reset=1` fait la même chose.
 - `index.html?chapitre=3` débloque et ouvre directement le chapitre 3 (de 0 à 5).
 - `index.html?chapitre=1&scene=4` ouvre directement la scène 4 du voyage (de 0 à 5).

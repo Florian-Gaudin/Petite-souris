@@ -79,23 +79,24 @@ ${A.souris(sx, sy, sw, 'class="quenotte trotte"')}
     let lum = '';
     for (let i = 0; i < 14; i++) lum += `<rect x="${790 + i * 15}" y="${300 - (i % 4) * 9}" width="5" height="7" fill="#FFC857"/>`;
     return `<svg class="decor decor-meuse" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="La Meuse sous la lune, avec le billet à plier en bateau">
-${A.fond(nuit, 41, { x: 700, y: 110, r: 38 })}
+${A.fond(nuit, 41, null)}
+<g transform="translate(700,110)"><circle r="60" fill="#FFF4D6" opacity=".07"/><path d="M10 -36A38 38 0 1 0 10 36A40 40 0 0 1 10 -36Z" fill="#FFF4D6"/></g>
 <defs><linearGradient id="geau" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a8ea3"/><stop offset="1" stop-color="#2b5f70"/></linearGradient></defs>
 <path d="M0 330Q200 280 400 320T1000 290V600H0Z" fill="#1E2658"/>
 <g class="lumieres"><g fill="#1b2250"><rect x="780" y="260" width="60" height="70"/><rect x="845" y="245" width="40" height="85"/><rect x="890" y="270" width="80" height="60"/><path d="M845 245l20-28 20 28z"/><rect x="970" y="250" width="30" height="80"/></g>${lum}</g>
 <rect y="330" width="1000" height="270" fill="url(#geau)"/>
 <g class="vagues" fill="none" stroke="#7FB8C7" stroke-width="2.5" stroke-linecap="round" opacity=".5"><path d="M-100 400q20-8 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0"/><path d="M-100 470q20-8 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0" opacity=".7"/><path d="M-100 540q20-8 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0" opacity=".5"/></g>
-${tap('reflet', 'Le reflet de la lune', `${halo(700, 420, 70)}<ellipse class="reflet" cx="700" cy="420" rx="48" ry="14" fill="#FFF4D6" opacity=".55"/><g class="ronds" fill="none" stroke="#FFF4D6" stroke-width="2"><ellipse cx="700" cy="420" rx="30" ry="9"/><ellipse cx="700" cy="420" rx="30" ry="9"/><ellipse cx="700" cy="420" rx="30" ry="9"/></g>`)}
+${tap('reflet', 'Le reflet de la lune', `${halo(700, 420, 70)}<g transform="translate(700,421) scale(1.2,-.42)"><path class="reflet" d="M10 -36A38 38 0 1 0 10 36A40 40 0 0 1 10 -36Z" fill="#FFF4D6" opacity=".6"/></g><g class="ronds" fill="none" stroke="#FFF4D6" stroke-width="2"><ellipse cx="700" cy="420" rx="30" ry="9"/><ellipse cx="700" cy="420" rx="30" ry="9"/><ellipse cx="700" cy="420" rx="30" ry="9"/></g>`)}
 ${tap('bulles', 'Des bulles dans l’eau', `${halo(470, 440, 60)}<g class="bulles-eau" fill="none" stroke="#cfe9f0" stroke-width="2"><circle cx="458" cy="462" r="5"/><circle cx="476" cy="470" r="7"/><circle cx="490" cy="455" r="4"/></g>
   <g class="poisson"><g class="poisson-in"><ellipse cx="0" cy="0" rx="28" ry="13" fill="#9fd0dd" stroke="#5f9fb0" stroke-width="2"/><path d="M26-2l16-12v28l-16-12z" fill="#9fd0dd" stroke="#5f9fb0" stroke-width="2"/><circle cx="-14" cy="-3" r="3" fill="#2B2B33"/><path d="M-6-13q6-8 12 0" fill="none" stroke="#5f9fb0" stroke-width="2"/></g></g>`, 'transform="translate(0,0)"')}
 <path d="M0 600V380Q120 360 240 400L300 600Z" fill="#24483E"/><path d="M0 600V440Q120 430 230 470L260 600Z" fill="#1A2A26"/>
 <path d="M1000 600V360Q900 350 780 400L720 600Z" fill="#24483E"/><path d="M1000 600V430Q900 420 790 460L760 600Z" fill="#1A2A26"/>
 <g fill="#2F5D50"><ellipse cx="60" cy="390" rx="40" ry="18"/><ellipse cx="900" cy="372" rx="46" ry="18"/></g>
-${tap('billet', 'Le billet de 5 euros à plier', `${halo(0, 0, 84)}
+${tap('billet', 'Le billet de 5 euros à plier', `<g class="billet-in">${halo(0, 0, 84)}
   <g class="pli pli0"><use href="#billet" x="-70" y="-37" width="140" height="74"/></g>
   <g class="pli pli1"><rect x="-70" y="-20" width="140" height="40" rx="3" fill="#B9C4B0" stroke="#7f8c7a" stroke-width="2"/><path d="M-70 0h140" stroke="#8fa08a" stroke-width="2" stroke-dasharray="6 4"/><text x="0" y="12" font-family="Share Tech Mono, monospace" font-size="18" fill="#4a5a4a" text-anchor="middle">5 €</text></g>
   <g class="pli pli2"><path d="M-62 18L0-44l62 62z" fill="#CBD3C4" stroke="#7f8c7a" stroke-width="2"/><rect x="-62" y="18" width="124" height="16" fill="#B9C4B0" stroke="#7f8c7a" stroke-width="2"/><path d="M0-44v62" stroke="#8fa08a" stroke-width="2"/></g>
-  <g class="pli pli3"><use href="#bateau" x="-70" y="-40" width="140" height="74"/></g>`, 'transform="translate(170,316)" data-etape="0"')}
+  <g class="pli pli3"><use href="#bateau" x="-70" y="-40" width="140" height="74"/></g></g>`, 'transform="translate(170,316)" data-etape="0"')}
 ${lueur(L.x, L.y, 110)}
 ${A.souris(sx, sy, sw, 'class="quenotte rive-g"')}
 <g class="navire" transform="translate(230,440)"><use href="#bateau" x="-70" y="-40" width="140" height="74"/>${A.souris(-52, -106, 110)}</g>

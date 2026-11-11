@@ -138,6 +138,8 @@ window.ART = (function () {
     son: '<path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
     muet: '<path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
     imprimer: '<path d="M7 8V3h10v5M7 17h10v4H7zM5 8h14a2 2 0 0 1 2 2v7h-4v-3H7v3H3v-7a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+    reglages: '<path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 13.5a7.6 7.6 0 0 0 0-3l2-1.6-2-3.4-2.4 1a7.4 7.4 0 0 0-2.6-1.5L14 2.5h-4l-.4 2.5a7.4 7.4 0 0 0-2.6 1.5l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 0 0 0 3l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 0 0 2.6 1.5l.4 2.5h4l.4-2.5a7.4 7.4 0 0 0 2.6-1.5l2.4 1 2-3.4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+    recommencer: '<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
     plein: '<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
     reduire: '<path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
     etoile: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z" fill="currentColor"/>',
@@ -192,6 +194,7 @@ window.ART = (function () {
   function cielSVG(nuit) {
     return `<svg class="ciel-svg" viewBox="0 0 800 480" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
 <defs>${CIEL}${luneSVG(nuit, 650, 86, 32, 'mlune0')}</defs>
+<rect x="-200" y="-1500" width="1200" height="1500" fill="#141A3A"/>${etoiles(90, 800, 480, 3, -1500)}
 <rect width="800" height="480" fill="url(#gciel)"/>
 ${etoiles(60, 800, 480, 7)}
 <path d="M0 320 Q130 250 270 300 T560 290 T800 260 V480 H0Z" fill="#1E2658"/>
@@ -255,19 +258,49 @@ ${etoiles(40, 1000, 500, 5)}
 </g>
 <g id="cam-chambre" hidden>
   <rect width="400" height="300" fill="#06180B"/>
-  <line x1="0" y1="232" x2="400" y2="232" stroke="#1d4d26" stroke-width="2"/>
-  <rect x="290" y="30" width="80" height="90" fill="none" stroke="#2fbf2f" stroke-width="2"/><path d="M330 30v90M290 75h80" stroke="#2fbf2f" stroke-width="1.5"/>
-  <rect x="40" y="110" width="230" height="30" rx="6" fill="none" stroke="#2fbf2f" stroke-width="2"/>
-  <rect x="40" y="140" width="250" height="92" rx="8" fill="#0b3a14" stroke="#2fbf2f" stroke-width="2"/>
-  <rect x="52" y="146" width="70" height="30" rx="8" fill="#0f4a1b" stroke="#39FF14" stroke-width="1.5"/>
-  <ellipse cx="150" cy="168" rx="58" ry="22" fill="#0f4a1b" stroke="#39FF14" stroke-width="2"/>
-  <path d="M100 152q-10-14-2-24M108 150q-6-16 4-24M116 152q-2-14 8-20" stroke="#39FF14" stroke-width="2" fill="none"/>
-  <ellipse cx="232" cy="176" rx="30" ry="14" fill="#0f4a1b" stroke="#39FF14" stroke-width="2"/>
-  <circle cx="205" cy="163" r="9" fill="#0f4a1b" stroke="#39FF14" stroke-width="2"/><path d="M199 156q6-6 12 0" stroke="#39FF14" stroke-width="2" fill="none"/>
-  <g id="dent1"><use href="#dent-cam" x="112" y="168" width="14" height="14"/></g>
-  <g id="mot1" class="cam-mot"><use href="#mot-cam" x="100" y="166" width="30" height="22"/></g>
+  <line x1="0" y1="236" x2="400" y2="236" stroke="#1d4d26" stroke-width="2"/>
+  <!-- fenêtre et rideaux -->
+  <rect x="292" y="32" width="76" height="86" fill="none" stroke="#2fbf2f" stroke-width="2"/><path d="M330 32v86M292 75h76" stroke="#2fbf2f" stroke-width="1.5"/>
+  <path d="M284 24q10 52 0 104M376 24q-10 52 0 104M280 24h100" fill="none" stroke="#2fbf2f" stroke-width="2"/>
+  <!-- table de nuit et veilleuse -->
+  <rect x="320" y="178" width="50" height="58" rx="3" fill="none" stroke="#2fbf2f" stroke-width="2"/><path d="M320 202h50" stroke="#2fbf2f" stroke-width="1.5"/><circle cx="345" cy="191" r="2.2" fill="#39FF14"/>
+  <path d="M332 162l5-18h16l5 18z" fill="#0f4a1b" stroke="#39FF14" stroke-width="2"/><path d="M345 162v16" stroke="#2fbf2f" stroke-width="3"/>
+  <!-- lit : tête de lit arrondie à barreaux, pied de lit, sommier, pieds -->
+  <path d="M30 236V112q0-16 16-16h8q16 0 16 16v124" fill="#0b3a14" stroke="#2fbf2f" stroke-width="2"/>
+  <path d="M42 112v84M50 108v88M58 112v84" stroke="#1d7a2c" stroke-width="1.5"/>
+  <path d="M292 236v-66q0-10 10-10h4q10 0 10 10v66" fill="#0b3a14" stroke="#2fbf2f" stroke-width="2"/>
+  <rect x="70" y="196" width="222" height="22" rx="4" fill="#0b3a14" stroke="#2fbf2f" stroke-width="2"/>
+  <path d="M78 218v18M284 218v18" stroke="#2fbf2f" stroke-width="3" stroke-linecap="round"/>
+  <!-- oreiller -->
+  <path d="M72 170q-6-28 22-28h30q14 0 14 16v10q-10 8-34 8t-32-6z" fill="#0f4a1b" stroke="#39FF14" stroke-width="2"/>
+  <path d="M84 148q16-3 40 0" fill="none" stroke="#1d7a2c" stroke-width="1.5"/>
+  <!-- la dent et le petit mot, glissés au bord de l'oreiller -->
+  <g id="dent1"><use href="#dent-cam" x="124" y="165" width="12" height="12"/></g>
+  <g id="mot1" class="cam-mot"><use href="#mot-cam" x="114" y="163" width="26" height="19"/></g>
+  <!-- l'enfant : cheveux étalés sur l'oreiller, visage endormi -->
+  <path d="M94 146q-22-6-28 10q-4 12 4 20M90 160q-14 4-16 16M96 144q-6-8-20-8" fill="none" stroke="#2fbf2f" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="104" cy="157" r="15" fill="#0f4a1b" stroke="#39FF14" stroke-width="2"/>
+  <path d="M90 151q6-12 26-8q2 6-6 8q-8 0-14 6" fill="#0b3a14" stroke="#39FF14" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M105 157q4 3 8 0" fill="none" stroke="#39FF14" stroke-width="2" stroke-linecap="round"/>
+  <path d="M118 159q3 2 1 5" fill="none" stroke="#39FF14" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M109 166q3 2 6 0" fill="none" stroke="#39FF14" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- la couverture qui épouse le corps, avec ses plis -->
+  <path d="M112 197v-25q10-12 30-12q30-4 58 4q34 8 60 4q20-2 34 6v23z" fill="#0b3a14" stroke="#2fbf2f" stroke-width="2"/>
+  <path d="M150 178q20 9 40 3M222 182q24 7 48 0M118 186q86 9 176 0" fill="none" stroke="#1d7a2c" stroke-width="1.5"/>
+  <!-- Nicolas, le doudou ours, serré contre l'enfant -->
+  <g id="doudou">
+    <ellipse cx="198" cy="158" rx="13" ry="11" fill="#0f4a1b" stroke="#39FF14" stroke-width="2"/>
+    <circle cx="186" cy="127" r="5.5" fill="#0f4a1b" stroke="#39FF14" stroke-width="2"/><circle cx="205" cy="127" r="5.5" fill="#0f4a1b" stroke="#39FF14" stroke-width="2"/>
+    <circle cx="195.5" cy="138" r="12" fill="#0f4a1b" stroke="#39FF14" stroke-width="2"/>
+    <ellipse cx="196" cy="143" rx="5.5" ry="4" fill="#0b3a14" stroke="#39FF14" stroke-width="1.5"/><circle cx="196" cy="141.5" r="1.6" fill="#39FF14"/>
+    <path d="M188 136q2.5 2 5 0M198.5 136q2.5 2 5 0" fill="none" stroke="#39FF14" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="209" cy="163" r="4.5" fill="#0f4a1b" stroke="#39FF14" stroke-width="1.6"/>
+  </g>
+  <!-- le bras de l'enfant par-dessus la couverture, qui tient le doudou -->
+  <path d="M124 174q22-7 46-3q10 2 16-3" fill="none" stroke="#39FF14" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="188" cy="166" r="4.5" fill="#0f4a1b" stroke="#39FF14" stroke-width="1.8"/>
+  <!-- une chaussette oubliée -->
   <path d="M30 262q-10 10 0 16 8 4 14-4l4-22h-10z" fill="none" stroke="#2fbf2f" stroke-width="1.5"/>
-  <rect x="310" y="170" width="60" height="62" fill="none" stroke="#2fbf2f" stroke-width="2"/><rect x="325" y="140" width="30" height="30" fill="none" stroke="#2fbf2f" stroke-width="1.5"/>
   <g id="cs1" class="cam-souris"><use href="#souris-cam" width="70" height="54"/></g>
 </g>
 </svg>`;

@@ -25,7 +25,7 @@ window.DATA = {
           reponse: { txt: "Merci {enfant} ! Avec ma lanterne, je vois comme en plein jour.", expr: "joie" },
         },
         feuillage: {
-          bulle: { txt: "Hou hou ! C'est la hulotte, ma voisine. Elle sort la tête des feuilles pour me dire : « Bon voyage, {souris} ! »", expr: "surprise" },
+          bulle: { txt: "Hou hou ! C'est la hulotte, ma voisine. Elle sort la tête des feuilles pour me dire : « Bon voyage, {souris} ! » Touche-la encore : elle va s'envoler !", expr: "surprise" },
           bulle2: { txt: "Et hop, elle s'envole chasser dans la forêt. À bientôt, hulotte !", expr: "joie" },
         },
         sac: { bulle: { txt: "Regarde dans mon sac : j'ai un cadeau pour toi ! C'est un billet de 5 euros, pour te remercier de ta dent.", expr: "clin" } },
@@ -154,8 +154,7 @@ window.DATA = {
   signature: "Bisous à moustaches, {souris}",
   heureLettre: "3 h 02",
   ps: "P.-S. J'ai laissé un bout de fromage à {chat}. Ne lui dis pas que c'est moi.",
-  lireAvec: "Lis-la avec papa !",
-  boutonLettre: "Mon diplôme",
+  boutonLettre: "J'ai trouvé mon billet !",
 
   // ---------- Chapitre 5 : le diplôme ----------
   diplome: { txt: "Bravo {enfant} ! Voici ton diplôme officiel, signé de ma patte. Tu peux l'imprimer avec un grand.", expr: "joie" },
@@ -170,14 +169,15 @@ window.DATA = {
 
   // ---------- Badges du diplôme ----------
   badges: [
-    { id: "detective", nom: "Détective de nuit", chapitre: 1 },
-    { id: "exploratrice", nom: "Exploratrice", etoiles: 6 },
-    { id: "lynx", nom: "Œil de lynx", etoiles: 12 },
-    { id: "passechat", nom: "Passe-Chat", chapitre: 2 },
-    { id: "hibou", nom: "Œil de hibou", chapitre: 3 },
-    { id: "amie", nom: "Amie de {souris}", chapitre: 4 },
-    { id: "jumelle", nom: "Dent jumelle", chapitre: 5 },
-    { id: "billet", nom: "Billet trouvé", bouton: true },
-    { id: "scene13", nom: "Scène 13", secret: true },
+    // obtenu : ce que dit le diplôme quand le badge est gagné ; aGagner : comment l'obtenir
+    { id: "detective", nom: "Détective de nuit", chapitre: 1, obtenu: "Tu as guidé {souris} de son château jusqu'à ta maison.", aGagner: "Guide {souris} de son château jusqu'à ta maison." },
+    { id: "exploratrice", nom: "Exploratrice", etoiles: 6, obtenu: "Tu as trouvé au moins 6 étoiles cachées dans les images.", aGagner: "Trouve 6 étoiles cachées dans les images du voyage." },
+    { id: "lynx", nom: "Œil de lynx", etoiles: 12, obtenu: "Tu as trouvé les 12 étoiles cachées. Rien ne t'échappe !", aGagner: "Trouve les 12 étoiles cachées dans les images du voyage." },
+    { id: "passechat", nom: "Passe-Chat", chapitre: 2, obtenu: "Tu as aidé {souris} à passer devant {chat} sans le réveiller.", aGagner: "Aide {souris} à passer devant {chat} sans le réveiller." },
+    { id: "hibou", nom: "Œil de hibou", chapitre: 3, obtenu: "Tu as regardé le film de la caméra de {souris} jusqu'au bout.", aGagner: "Regarde le film de la caméra de {souris} jusqu'au bout." },
+    { id: "amie", nom: "Amie de {souris}", chapitre: 4, obtenu: "Tu as lu la lettre que {souris} t'a laissée.", aGagner: "Lis la lettre que {souris} t'a laissée." },
+    { id: "jumelle", nom: "Dent jumelle", chapitre: 5, obtenu: "Ta deuxième dent a retrouvé sa jumelle au château.", aGagner: "Ta deuxième dent doit retrouver sa jumelle au château." },
+    { id: "billet", nom: "Billet trouvé", bouton: true, obtenu: "Tu as trouvé le billet qui séchait {lieuBillet}.", aGagner: "Trouve le billet qui sèche {lieuBillet}, puis touche « J'ai trouvé mon billet ! » à la fin de la lettre." },
+    { id: "scene13", nom: "Scène 13", secret: true, obtenu: "Tu as découvert la 13e scène secrète du Grand Marionnettiste !", aGagner: "Un secret bien caché…" },
   ],
 };

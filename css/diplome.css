@@ -17,7 +17,13 @@
 .dip-machoire{flex:0 1 260px;max-width:100%}
 .machoire{width:100%;height:auto;display:block}
 .machoire-legende{font-size:.72rem;color:#7a6220;font-style:italic;text-align:center;margin-top:2px}
-.dip-badges{flex:1 1 260px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.dip-badges-bloc{flex:1 1 260px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.dip-badges-titre{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:1.05rem;color:#7a6220;letter-spacing:.04em}
+.dip-compte{display:inline-block;margin-left:6px;background:#C9A227;color:#fff;border-radius:999px;padding:0 9px;font-size:.9rem}
+.dip-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.dip-badge-info{min-height:2.8em;margin:2px 0 0;font-family:'Baloo 2',sans-serif;font-size:.85rem;line-height:1.35;color:#5c4a1e;text-align:center;max-width:30em}
+button.badge-dip{background:none;border:0;padding:4px 2px;border-radius:10px;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent}
+button.badge-dip.choisi,button.badge-dip:hover{background:rgba(201,162,39,.16)}
 .badge-dip{display:flex;flex-direction:column;align-items:center;gap:2px;width:86px;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:.72rem;line-height:1.1;color:#1F2235}
 .badge-dip.off{opacity:.3;filter:grayscale(1)}
 .badge-ico{display:block}
@@ -39,7 +45,7 @@
   .dip-entete{font-size:1.9rem}
   .dip-texte{font-size:1.1rem}
   .badge-dip{width:92px;font-size:.78rem}
-  .dip-sourire{height:120px;margin-top:10mm}
+  .dip-badge-info{display:none}
   .tampon{width:120px;height:120px}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }

@@ -60,7 +60,7 @@
   // ---------- Fil rouge, heure, son, toasts ----------
   const root = $('#scene');
   let courant = null, courantN = 0;
-  function heure(t) { $('#heure').textContent = t; }
+  function heure() { } // l'heure est affichée dans chaque scène, plus dans le ruban
   function toast(txt, icone) {
     const el = $('#toast');
     el.innerHTML = `<div class="toast-in">${icone || ''}<span>${esc(txt)}</span></div>`;
@@ -99,18 +99,41 @@
     },
     sortir() { try { const p = document.exitFullscreen ? document.exitFullscreen() : (document.webkitExitFullscreen && document.webkitExitFullscreen()); if (p && p.catch) p.catch(() => { }); } catch (e) { } },
   };
-  function boutonPlein() { const b = $('#btn-plein'); if (b) b.innerHTML = A.icone(PLEIN.actif() ? 'reduire' : 'plein'); }
+  function boutonPlein() { if (boutonPlein.maj) boutonPlein.maj(); }
   function buildFil() {
     const maison = `<button class="perle maison" data-n="0" aria-label="Revenir au début de l'histoire" title="Revenir au début"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="#fff"/></svg></button>`;
     const perles = maison + [1, 2, 3, 4, 5].map(i => `<button class="perle" data-n="${i}" aria-label="Chapitre ${i}"><span>${i}</span></button>`).join('');
     $('#fil').innerHTML = `<div class="fil-in">
-      <div class="ruban" aria-label="Progression de l'histoire"><div class="fil-ligne"></div>${perles}<div class="fil-souris"><svg viewBox="0 0 130 100"><use href="#souris-side"/></svg></div></div>
-      <div class="heure" id="heure" aria-label="Heure dans l'histoire">—</div>
-      ${PLEIN.api && !PLEIN.appli ? `<button class="btn-ico" id="btn-plein" aria-label="Plein écran">${A.icone('plein')}</button>` : ''}
-      <button class="btn-ico" id="btn-son" aria-label="Couper ou remettre le son et la musique">${A.icone(SON.muet ? 'muet' : 'son')}</button>
+      <div class="ruban" aria-label="Progression de l'histoire">${perles}<div class="fil-souris"><svg viewBox="0 0 130 100"><use href="#souris-side"/></svg></div></div>
+      <div class="prefs">
+        <button class="btn-ico" id="btn-prefs" aria-label="Préférences" aria-haspopup="true" aria-expanded="false">${A.icone('reglages')}</button>
+        <div class="prefs-menu" id="prefs-menu" role="menu" hidden>
+          <button role="menuitem" id="pref-son"></button>
+          ${PLEIN.api && !PLEIN.appli ? `<button role="menuitem" id="pref-plein"></button>` : ''}
+          <button role="menuitem" id="pref-reset" class="danger">${A.icone('recommencer')} Recommencer l'histoire</button>
+        </div>
+      </div>
     </div>`;
-    if ($('#btn-plein')) $('#btn-plein').onclick = e => { e.stopPropagation(); if (PLEIN.actif()) PLEIN.sortir(); else PLEIN.entrer(); };
-    $('#btn-son').onclick = () => { SON.unlock(); const m = SON.toggle(); $('#btn-son').innerHTML = A.icone(m ? 'muet' : 'son'); toast(m ? 'Son et musique coupés' : 'Son et musique activés'); };
+    const menu = $('#prefs-menu'), bPrefs = $('#btn-prefs');
+    const majPrefs = () => {
+      $('#pref-son').innerHTML = A.icone(SON.muet ? 'muet' : 'son') + (SON.muet ? ' Son et musique : coupés' : ' Son et musique : activés');
+      if ($('#pref-plein')) $('#pref-plein').innerHTML = A.icone(PLEIN.actif() ? 'reduire' : 'plein') + (PLEIN.actif() ? ' Quitter le plein écran' : ' Plein écran');
+      $('#pref-reset').innerHTML = A.icone('recommencer') + " Recommencer l'histoire"; $('#pref-reset').classList.remove('confirme');
+    };
+    const fermerMenu = () => { menu.hidden = true; bPrefs.setAttribute('aria-expanded', 'false'); };
+    boutonPlein.maj = majPrefs;
+    bPrefs.onclick = e => { e.stopPropagation(); if (menu.hidden) { majPrefs(); menu.hidden = false; bPrefs.setAttribute('aria-expanded', 'true'); } else fermerMenu(); };
+    menu.onclick = e => e.stopPropagation();
+    document.addEventListener('click', () => { if (!menu.hidden) fermerMenu(); });
+    $('#pref-son').onclick = () => { SON.unlock(); const m = SON.toggle(); majPrefs(); toast(m ? 'Son et musique coupés' : 'Son et musique activés'); };
+    if ($('#pref-plein')) $('#pref-plein').onclick = () => { if (PLEIN.actif()) PLEIN.sortir(); else PLEIN.entrer(); fermerMenu(); };
+    // Recommencer : un second toucher confirme (pour éviter un effacement par erreur)
+    $('#pref-reset').onclick = () => {
+      const b = $('#pref-reset');
+      if (b.classList.contains('confirme')) { location.href = location.pathname + '?reset=1'; return; }
+      b.classList.add('confirme'); b.innerHTML = A.icone('recommencer') + ' Sûr ? Touche encore pour tout effacer';
+      clearTimeout(b.t); b.t = setTimeout(majPrefs, 4000);
+    };
     $$('.perle').forEach(p => p.onclick = () => { const n = +p.dataset.n; if (n <= State.unlocked) show(n); else toast('Termine d\'abord le chapitre ' + (n - 1) + ' !'); });
   }
   function updateFil(n) {
@@ -145,11 +168,20 @@
     <h1 class="titre">La nuit de la Petite Souris</h1>
     <p class="sous">${esc(C.ville)} · ${esc(nuitTexte())}</p>
   </div>
-  <a class="recommencer" href="?reset=1" title="Efface la progression (pour les parents)">Recommencer</a>
 </section>`;
     },
     mount(r) {
       heure('—'); MUS.ambiance('accueil');
+      // Recadrage : sur un écran en hauteur, on resserre sur le château et la maison, puis on ajoute du ciel
+      const svgC = $('.ciel-svg', r), boite = $('.ch0 .ciel', r);
+      this.cadre = () => {
+        const W = boite.clientWidth || 1, H = boite.clientHeight || 1, ideal = 480 * W / H;
+        if (ideal >= 800) { svgC.setAttribute('viewBox', '0 0 800 480'); svgC.setAttribute('preserveAspectRatio', 'xMidYMax slice'); return; }
+        const vw = Math.max(ideal, 620), vh = vw * H / W, x0 = Math.max(0, Math.min(800 - vw, 330 - vw / 2));
+        svgC.setAttribute('viewBox', `${x0.toFixed(0)} ${(480 - vh).toFixed(0)} ${vw.toFixed(0)} ${vh.toFixed(0)}`);
+        svgC.setAttribute('preserveAspectRatio', 'xMidYMax meet');
+      };
+      this.cadre(); window.addEventListener('resize', this.cadre);
       NARR.dire(B(D.accueil));
       NARR.action(A.icone('lanterne') + ' ' + T(D.accueil.bouton), async () => {
         SON.unlock(); SON.play('lanterne');
@@ -164,6 +196,7 @@
         await fondu(() => show(1, { scene: State.unlocked > 1 ? 0 : State.scene }), 900);
       });
     },
+    unmount() { window.removeEventListener('resize', this.cadre); },
   };
 
   // ---------- Chapitre 1 : le voyage en six scènes ----------
@@ -207,15 +240,17 @@
   const Ch2 = {
     render() {
       return `<section class="ch ch2">
-  <h2 class="decor-titre"><span class="decor-heure">2 h 31</span>Chut ! ${esc(C.chat)} dort.</h2>
+  <h2 class="decor-titre"><span class="decor-heure">La nuit dernière à 2 h 31</span>Chut ! ${esc(C.chat)} dort.</h2>
   <div class="jeu-wrap">${A.jeuSVG()}</div>
-  <div class="jauge" aria-live="polite"><div class="jauge-in" id="jauge"></div><span id="fromages">Il reste 5 fromages</span></div>
+  <div class="jauge" aria-live="polite"><div class="jauge-in" id="jauge"></div><span id="fromages">Encore 5 bonds jusqu'à la porte</span>
+    <svg class="jauge-porte" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 22V5a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v17z" fill="#8B5A3C" stroke="#5c3a24" stroke-width="1.5"/><circle cx="15.5" cy="13" r="1.4" fill="#FFC857"/></svg>
+    <svg class="jauge-souris" id="jauge-souris" viewBox="0 0 130 100" aria-hidden="true"><use href="#souris-side"/></svg></div>
   <button class="btn btn-grand btn-or btn-tenir" id="btn-avancer">${A.icone('patte')} Avancer <small>reste appuyé</small></button>
 </section>`;
     },
     mount(r) {
       const svg = $('.jeu', r), souris = $('#jeu-souris', svg), chat = $('#chat', svg), bulle = $('#bulle', svg);
-      const btn = $('#btn-avancer', r), jauge = $('#jauge', r), fromages = $('#fromages', r);
+      const btn = $('#btn-avancer', r), jauge = $('#jauge', r), fromages = $('#fromages', r), mini = $('#jauge-souris', r);
       const self = this; let p = 0, tient = false, etat = 'dort', pris = 0, gagne = false, sonne = false, dernier = null, pasT = 0, premierCycle = true;
       heure('02:31'); MUS.ambiance('jeu');
       NARR.dire(B(D.jeu.intro));
@@ -234,8 +269,9 @@
       };
       const rendu = () => {
         souris.setAttribute('transform', `translate(${(40 + p * 7.8).toFixed(1)},300)`);
-        jauge.style.width = p + '%';
-        const n = Math.ceil((100 - p) / 20); fromages.textContent = n <= 0 ? 'Arrivée !' : `Il reste ${n} fromage${n > 1 ? 's' : ''}`;
+        jauge.style.width = p + '%'; mini.style.left = `calc(${p}% * .86 + 4px)`;
+        const n = Math.ceil((100 - p) / 20);
+        fromages.textContent = n <= 0 ? 'Arrivée à la porte !' : n === 1 ? "Plus qu'un bond jusqu'à la porte !" : `Encore ${n} bonds jusqu'à la porte`;
       };
       const vue = () => {
         sonne = true; pris++; p = Math.max(0, p - 12);
@@ -286,14 +322,14 @@
   const Ch3 = {
     render() {
       return `<section class="ch ch3">
-  <div class="barre"><h2 class="decor-titre"><span class="decor-heure">2 h 47</span>La caméra de ${esc(C.souris)}</h2><div class="actions"><button class="btn btn-petit" id="btn-passer">${A.icone('vite')} Passer</button><button class="btn btn-petit" id="btn-revoir" hidden>Revoir</button></div></div>
-  <div class="cam" id="cam">
+  <div class="barre"><h2 class="decor-titre"><span class="decor-heure">La nuit dernière à 2 h 47</span>La caméra de ${esc(C.souris)}</h2><div class="actions"><button class="btn btn-petit" id="btn-revoir" hidden>Revoir</button></div></div>
+  <div class="cam-wrap"><div class="cam" id="cam">
     <div class="cam-hud"><span class="rec">● REC</span><span class="cam-nom" id="cam-nom">CAM 1 · SALON</span><span class="cam-ts" id="cam-ts">${dateCam()} 02:47:00</span></div>
     ${A.camSVG()}
     <div class="dets" id="dets"></div>
     <div class="cam-grain" aria-hidden="true"></div>
-    <div class="preuve"><span>PREUVE</span><small>FIN DE L'ENREGISTREMENT</small></div>
-  </div>
+    <div class="preuve"><small>FIN DE L'ENREGISTREMENT</small></div>
+  </div></div>
 </section>`;
     },
     mount(r) {
@@ -326,28 +362,28 @@
         [0.6, () => chuchote(D.camera.intro)],
         [1.4, () => det('cheminee', 'CHEMINÉE – ÉTEINTE', 25, 40, 50, 43, 'bas')],
         [2.6, () => { mv(cs2, 40, 200); mv(bat, 90, 236); SON.play('pas'); }],
-        [4.6, () => det('souris', 'PETITE SOURIS – 99 %', 10, 66, 20, 20)],
+        [4.6, () => det('souris', 'PETITE SOURIS', 10, 66, 20, 20)],
         [6.2, () => { mv(cs2, 70, 56); mv(bat, 120, 92); SON.play('pas'); rm('cheminee'); }],
-        [8.2, () => { mv(bat, 160, 84); det('souris', 'PETITE SOURIS – 99 %', 17, 18, 20, 20); }],
-        [9.6, () => { det('bateau', 'BILLET 5 € – SÈCHE ' + lieu, 38, 26, 30, 12); chuchote(D.camera.cheminee); }],
-        [12.5, () => { cs2.classList.add('coucou'); det('souris', 'PETITE SOURIS – 100 % (COUCOU)', 17, 18, 20, 20); }],
+        [8.2, () => { mv(bat, 160, 84); det('souris', 'PETITE SOURIS', 17, 18, 20, 20); }],
+        [9.6, () => { det('bateau', 'BATEAU BILLET – SÈCHE ' + lieu, 38, 26, 30, 12); chuchote(D.camera.cheminee); }],
+        [12.5, () => { cs2.classList.add('coucou'); det('souris', 'PETITE SOURIS (COUCOU)', 17, 18, 20, 20); }],
         [14.5, () => { cs2.classList.remove('coucou'); mv(cs2, -90, 200); SON.play('pas'); rm('souris'); }],
         [16, () => { salon.setAttribute('hidden', ''); chambre.removeAttribute('hidden'); nom.textContent = 'CAM 2 · CHAMBRE'; dets.innerHTML = ''; SON.play('bip'); chuchote(D.camera.chambre); }],
-        [17, () => det('clem', (C.enfant + ' – DORT').toUpperCase(), 22, 46, 34, 26)],
-        [18.2, () => det('nico', (C.poupee + ' – DORT AUSSI').toUpperCase(), 48, 50, 20, 18, 'bas')],
+        [17, () => det('clem', (C.enfant + ' – DORT').toUpperCase(), 16, 46, 58, 20)],
+        [18.2, () => det('nico', (C.poupee + ' – DORT AUSSI').toUpperCase(), 45, 40, 9, 17)],
         [19.6, () => { mv(cs1, 60, 232); SON.play('pas'); }],
-        [21.6, () => det('souris', 'PETITE SOURIS – 99 %', 14, 76, 20, 20)],
-        [23.4, () => { mv(cs1, 32, 118); SON.play('pas'); }],
-        [25.4, () => det('souris', 'PETITE SOURIS – 99 %', 7, 38, 20, 20)],
+        [21.6, () => det('souris', 'PETITE SOURIS', 14, 76, 20, 20)],
+        [23.4, () => { mv(cs1, 62, 122); SON.play('pas'); }],
+        [25.4, () => det('souris', 'PETITE SOURIS', 15, 40, 18, 18, 'bas')],
         [26.6, () => { dent.classList.add('prise'); chuchote(D.camera.dent); }],
-        [27.4, () => det('dent', 'DENT – TROUVÉE', 26, 54, 8, 8)],
-        [29.4, () => { mot.classList.add('pose'); SON.play('papier'); rm('dent'); det('mot', 'PETIT MOT – SOUS L\'OREILLER', 24, 54, 10, 8); }],
-        [31.6, () => det('nico', (C.poupee + ' – RONFLE UN PEU').toUpperCase(), 48, 50, 20, 18, 'bas')],
-        [33.4, () => { mv(cs1, 170, 236); SON.play('pas'); rm('mot'); det('souris', 'PETITE SOURIS – 99 %', 42, 78, 20, 20); }],
-        [35.4, () => det('lit', 'SOUS LE LIT – MONSTRES : 0', 14, 79, 26, 7)],
+        [27.4, () => det('dent', 'DENT – TROUVÉE', 30, 54, 5, 6, 'droite')],
+        [29.4, () => { mot.classList.add('pose'); SON.play('papier'); rm('dent'); det('mot', 'PETIT MOT – SOUS L\'OREILLER', 28, 54, 8, 7, 'droite'); }],
+        [31.6, () => det('nico', (C.poupee + ' – RONFLE UN PEU').toUpperCase(), 45, 40, 9, 17)],
+        [33.4, () => { mv(cs1, 220, 236); SON.play('pas'); rm('mot'); det('souris', 'PETITE SOURIS', 55, 78, 18, 18); }],
+        [35.4, () => det('lit', 'SOUS LE LIT – MONSTRES : 0', 8, 79, 20, 6)],
         [37.4, () => det('chaussette', 'CHAUSSETTE – PERDUE DEPUIS MARDI', 4, 86, 12, 10, 'droite')],
         [39.4, () => { mv(cs1, -90, 236); SON.play('pas'); rm('souris'); chuchote(D.camera.fin); }],
-        [42, () => { cam.classList.add('fin'); $('#btn-passer', r).hidden = true; $('#btn-revoir', r).hidden = false; SON.play('alerte'); heure('02:52'); NARR.action(T(D.camera.bouton) + ' ' + A.icone('suite'), () => { complete(3); badge('hibou'); show(4); }); }],
+        [42, () => { cam.classList.add('fin'); $('#btn-revoir', r).hidden = false; SON.play('alerte'); heure('02:52'); NARR.action(T(D.camera.bouton) + ' ' + A.icone('suite'), () => { complete(3); badge('hibou'); show(4); }); }],
       ];
       const finAt = evenements[evenements.length - 1][0];
       let debut = null, idx = 0, fini = false;
@@ -365,11 +401,9 @@
         cancelAnimationFrame(self.raf); fini = false; debut = null; idx = 0; pause = false;
         cam.classList.remove('fin'); cam.classList.add('instant'); dets.innerHTML = ''; NARR.action(null);
         chambre.setAttribute('hidden', ''); salon.removeAttribute('hidden'); nom.textContent = 'CAM 1 · SALON'; dent.classList.remove('prise'); mot.classList.remove('pose'); cs2.classList.remove('coucou');
-        evenements[0][1](); $('#btn-passer', r).hidden = false; $('#btn-revoir', r).hidden = true;
+        evenements[0][1](); $('#btn-revoir', r).hidden = true;
         requestAnimationFrame(() => { cam.classList.remove('instant'); self.raf = requestAnimationFrame(boucle); });
       };
-      const passer = () => { cancelAnimationFrame(self.raf); pause = false; cam.classList.add('instant'); while (idx < evenements.length) evenements[idx++][1](); horo(finAt); fini = true; NARR.dire(B(D.camera.fin), { vite: 'instant' }); };
-      $('#btn-passer', r).onclick = () => { SON.unlock(); passer(); };
       $('#btn-revoir', r).onclick = () => lancer();
       lancer();
       if (RM || tTest > 0) requestAnimationFrame(() => cam.classList.add('instant'));
@@ -386,11 +420,10 @@
     },
     render() {
       return `<section class="ch ch4">
-  <div class="barre"><h2 class="decor-titre"><span class="decor-heure">3 h 02</span>Une lettre pour ${esc(C.enfant)}</h2><div class="actions"><button class="btn btn-petit" id="btn-tout" hidden>Tout montrer</button></div></div>
+  <div class="barre"><h2 class="decor-titre"><span class="decor-heure">La nuit dernière à 3 h 02</span>Une lettre pour ${esc(C.enfant)}</h2><div class="actions"><button class="btn btn-petit" id="btn-tout" hidden>Tout montrer</button></div></div>
   <div class="env-stage" id="env-stage">${A.enveloppeSVG(esc(C.enfant))}</div>
   <div class="lettre-stage" id="lettre-stage" hidden>
     <div class="papier" id="papier"></div>
-    <p class="lire-avec">${A.icone('etoile')} ${esc(T(D.lireAvec))}</p>
   </div>
 </section>`;
     },
@@ -401,7 +434,7 @@
       let ecrit = false;
       const n = lignes.length;
       const els = lignes.map((l, i) => { const p = document.createElement('p'); p.className = 'ligne' + (i === n - 3 || i === n - 2 ? ' sign' : '') + (i === n - 1 ? ' ps' : ''); p.dataset.txt = l; papier.appendChild(p); return p; });
-      const termine = () => { $('#btn-tout', r).hidden = true; NARR.cacher(false); NARR.dire(B(D.lettreFin)); NARR.action(A.icone('etoile') + ' ' + T(D.boutonLettre), () => { complete(4); badge('amie'); show(5); }); };
+      const termine = () => { $('#btn-tout', r).hidden = true; NARR.cacher(false); NARR.dire(B(D.lettreFin)); NARR.action(A.icone('billet') + ' ' + T(D.boutonLettre), () => { complete(4); badge('amie'); badge('billet'); show(5); }); };
       const montreTout = () => { if (ecrit) return; ecrit = true; clearTimeout(self.t); els.forEach(p => { p.textContent = p.dataset.txt; p.classList.add('vue'); }); termine(); };
       // La lettre s'écrit lentement, mot par mot, en très gros caractères
       const ecrire = () => {
@@ -433,12 +466,11 @@
     render() {
       const qs = 'badges=' + encodeURIComponent(State.badges.join(',')) + '&secret=' + (State.secret ? 1 : 0) + '&nuit=' + State.nuit + '&etoiles=' + nbEtoiles();
       return `<section class="ch ch5">
-  <h2 class="decor-titre"><span class="decor-heure">3 h 40</span>Bravo ${esc(C.enfant)} !</h2>
+  <h2 class="decor-titre"><span class="decor-heure">La nuit dernière à 3 h 40</span>Bravo ${esc(C.enfant)} !</h2>
   <div class="confettis" aria-hidden="true"></div>
   <div class="diplome-wrap">${window.CERTIFICAT.html({ badges: State.badges.concat(State.badges.indexOf('jumelle') < 0 ? ['jumelle'] : []), secret: State.secret, nuitTexte: nuitTexte(), etoiles: nbEtoiles(), total: totalEtoiles })}</div>
   <div class="fin">
     <a class="btn btn-grand btn-or" id="btn-imprimer" href="certificat.html?${qs}" target="_blank" rel="noopener">${A.icone('imprimer')} Imprimer le diplôme</a>
-    <button class="btn btn-grand btn-petit" id="btn-billet" ${State.badges.indexOf('billet') >= 0 ? 'hidden' : ''}>${A.icone('billet')} J'ai trouvé mon billet !</button>
     <button class="btn btn-petit" id="btn-revoir5">Revoir l'histoire</button>
   </div>
 </section>`;
@@ -451,7 +483,7 @@
       if (premiere) SON.play('fanfare');
       NARR.dire(B(D.diplome));
       if (!RM) { const c = $('.confettis', r); const couleurs = ['#FFC857', '#D64045', '#F2A3B5', '#3E7C8F', '#F3EFE6']; for (let i = 0; i < 40; i++) { const s = document.createElement('i'); s.style.left = (Math.random() * 100) + '%'; s.style.background = couleurs[i % couleurs.length]; s.style.animationDelay = (Math.random() * 2.5) + 's'; s.style.animationDuration = (3 + Math.random() * 3) + 's'; c.appendChild(s); } }
-      $('#btn-billet', r).onclick = () => { badge('billet'); NARR.dire(B(D.billetTrouve)); show(5); };
+      window.CERTIFICAT.brancher($('.diplome-wrap', r));
       $('#btn-revoir5', r).onclick = () => show(1, { scene: 0 });
     },
   };
@@ -469,7 +501,7 @@
   // Plein écran automatique au premier toucher (une seule tentative : si on en sort, le bouton du ruban permet d'y revenir)
   if (PLEIN.api && !PLEIN.appli) {
     const autoPlein = e => {
-      if (e.target && e.target.closest && e.target.closest('#btn-plein')) return;
+      if (e.target && e.target.closest && e.target.closest('.prefs')) return;
       document.removeEventListener('click', autoPlein, true);
       if (!PLEIN.actif()) PLEIN.entrer();
     };

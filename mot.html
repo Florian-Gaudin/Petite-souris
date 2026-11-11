@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Le mot de la Petite Souris</title>
 <link rel="stylesheet" href="css/style.css">
@@ -63,6 +63,14 @@
   <button class="btn btn-petit" id="btn-plein">Plein écran</button>
   <button class="btn btn-petit" id="btn-print">Imprimer (A6)</button>
 </div>
+<script>
+// Pas de zoom en écartant deux doigts (iPhone et iPad ignorent user-scalable=no)
+(function(){ var no=function(e){ e.preventDefault(); };
+  ['gesturestart','gesturechange','gestureend'].forEach(function(n){ document.addEventListener(n, no, { passive:false }); });
+  document.addEventListener('touchmove', function(e){ if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive:false });
+  document.addEventListener('wheel', function(e){ if (e.ctrlKey) e.preventDefault(); }, { passive:false });
+})();
+</script>
 <script src="config.js"></script>
 <script src="js/art.js"></script>
 <script src="vendor/qrcode.js"></script>

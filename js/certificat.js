@@ -36,11 +36,13 @@ window.CERTIFICAT = (function () {
   // opts : { badges: [ids], secret: bool, nuitTexte: "nuit du …", dents, etoiles: n, total: n }
   function html(opts) {
     const C = window.CONFIG, D = window.DATA;
-    const T = s => s.replace(/\{(\w+)\}/g, (m, k) => C[k] != null ? C[k] : m);
+    const T = s => s.replace(/\{(\w+)\}/g, (m, k) => k === 'lieuBillet' ? C.billet.lieu : (C[k] != null ? C[k] : m));
     const gagnes = opts.badges || [];
-    const badges = D.badges.filter(b => !b.secret || opts.secret).map(b => {
-      const ok = gagnes.indexOf(b.id) >= 0;
-      return `<div class="badge-dip ${ok ? '' : 'off'}" title="${ok ? 'Badge gagné' : 'Badge à gagner'}">${window.ART.badgeIcone(b.id, 46)}<span>${esc(T(b.nom))}</span></div>`;
+    const visibles = D.badges.filter(b => !b.secret || opts.secret);
+    const nbGagnes = visibles.filter(b => gagnes.indexOf(b.id) >= 0).length;
+    const badges = visibles.map(b => {
+      const ok = gagnes.indexOf(b.id) >= 0, msg = T(ok ? b.obtenu : b.aGagner);
+      return `<button type="button" class="badge-dip ${ok ? '' : 'off'}" data-nom="${esc(T(b.nom))}" data-ok="${ok ? 1 : 0}" data-info="${esc(msg)}" title="${esc(msg)}">${window.ART.badgeIcone(b.id, 46)}<span>${esc(T(b.nom))}</span></button>`;
     }).join('');
     const derniere = C.dents[C.dents.length - 1];
     const ordinal = derniere.numero === 1 ? '1<sup>re</sup>' : derniere.numero + '<sup>e</sup>';
@@ -59,16 +61,32 @@ window.CERTIFICAT = (function () {
     <div class="dip-etoiles" aria-label="${etoiles} étoiles découvertes sur ${total}">${etoilesSVG}<span>${etoiles} étoile${etoiles > 1 ? 's' : ''} découverte${etoiles > 1 ? 's' : ''} sur ${total}</span></div>
     <div class="dip-milieu">
       <div class="dip-machoire">${machoireSVG(opts.dents)}</div>
-      <div class="dip-badges">${badges}</div>
+      <div class="dip-badges-bloc">
+        <div class="dip-badges-titre">Mes badges <span class="dip-compte">${nbGagnes}/${visibles.length}</span></div>
+        <div class="dip-badges">${badges}</div>
+        <p class="dip-badge-info" aria-live="polite">Touche un badge pour savoir comment il se gagne.</p>
+      </div>
     </div>
     <div class="dip-pied">
       <div class="dip-date">Fait à ${esc(C.ville)},<br>${esc(opts.nuitTexte || '')}</div>
       <div class="dip-tampon">${tamponSVG()}</div>
       <div class="dip-sign"><span class="sign">${esc(C.souris)}</span><small>Petite Souris des Ardennes</small><small>Témoin officiel : ${esc(C.poupee)} (dormait)</small></div>
     </div>
-    <div class="dip-sourire"><span>Dessine ton nouveau sourire ici</span></div>
   </div>
 </div>`;
   }
-  return { html, machoireSVG, tamponSVG };
+  // Survol ou toucher d'un badge : la ligne sous les badges explique comment il a été gagné, ou comment le gagner
+  function brancher(racine) {
+    const info = racine.querySelector('.dip-badge-info'); if (!info) return;
+    const montre = b => {
+      racine.querySelectorAll('.badge-dip.choisi').forEach(x => x.classList.remove('choisi')); b.classList.add('choisi');
+      info.innerHTML = '<b>' + esc(b.dataset.nom) + (b.dataset.ok === '1' ? ' ✓' : ' (à gagner)') + '</b> : ' + esc(b.dataset.info);
+    };
+    racine.querySelectorAll('.badge-dip').forEach(b => {
+      b.addEventListener('click', () => montre(b));
+      b.addEventListener('mouseenter', () => montre(b));
+      b.addEventListener('focus', () => montre(b));
+    });
+  }
+  return { html, machoireSVG, tamponSVG, brancher };
 })();

@@ -19,7 +19,12 @@ window.SCENES = (function () {
 
   let ctx = null, root = null, wrap = null, svg = null, sc = null, courant = -1, jeton = 0;
   let chaine = [], idx = 0, derniere = null, aideT1 = null, aideT2 = null, raf = null, bougeT = null, secretTaps = 0, secretT = null;
-  let occupe = false, jetonBulle = 0, enSecret = false;
+  let occupe = false, enSecret = false;
+  // Partie utile de chaque décor (en largeur) : sur un écran en hauteur, on recadre dessus plutôt que d'ajouter du ciel
+  const ZONES = { chateau: [260, 890], foret: [100, 930], meuse: [0, 1000], place: [230, 910], aiglemont: [20, 860], pantoufle: [90, 960] };
+  const heureTexte = h => { const [hh, mm] = h.split(':'); return 'La nuit dernière à ' + parseInt(hh, 10) + ' h ' + mm; };
+  // À la fin de certaines scènes, avant le « pont »
+  const FIN = { place() { const g = $('.tap[data-el="marionnettiste"]', svg); if (g) g.classList.add('montre'); } };
   const T = s => ctx.T(s);
   const bulle = b => b ? { txt: T(b.txt), expr: b.expr } : null;
 
@@ -28,8 +33,9 @@ window.SCENES = (function () {
     chateau: {
       lanterne() { svg.classList.add('allume'); SON.play('lanterne'); },
       feuillage(g, sub, etape, deuxieme) {
-        if (deuxieme && !g.classList.contains('envol')) { g.classList.add('envol'); SON.play('hulotte'); setTimeout(() => SON.play('buisson'), 300); return; }
+        if (deuxieme && !g.classList.contains('envol')) { g.classList.remove('encore'); g.classList.add('envol'); SON.play('hulotte'); setTimeout(() => SON.play('buisson'), 300); return; }
         g.classList.remove('secoue'); void g.getBBox(); g.classList.add('secoue'); SON.play('buisson'); setTimeout(() => SON.play('hulotte'), 500);
+        if (!g.classList.contains('envol')) g.classList.add('encore');
       },
       sac() { SON.play('papier'); },
     },
@@ -151,7 +157,7 @@ window.SCENES = (function () {
     fermer();
     const mien = ++jeton;
     courant = n; sc = D.scenes[n];
-    root.innerHTML = frise(n) + `<div class="decor-wrap" id="decor-wrap"><h2 class="decor-titre"><span class="decor-heure">${sc.heure.replace(':', ' h ')}</span>${T(sc.titre)}</h2><div class="secrets" id="secrets" title="Secrets découverts dans cette image"><svg viewBox="0 0 24 24"><use href="#etoile5"/></svg><span id="secrets-n"></span></div>${DESSINS[sc.id](ctx.state.nuit)}</div>`;
+    root.innerHTML = frise(n) + `<div class="decor-wrap" id="decor-wrap"><h2 class="decor-titre"><span class="decor-heure">${heureTexte(sc.heure)}</span>${T(sc.titre)}</h2><div class="secrets" id="secrets" title="Secrets découverts dans cette image"><svg viewBox="0 0 24 24"><use href="#etoile5"/></svg><span id="secrets-n"></span></div>${DESSINS[sc.id](ctx.state.nuit)}</div>`;
     wrap = $('#decor-wrap', root); svg = $('svg.decor', root);
     svg.insertAdjacentHTML('beforeend', `<g class="main-aide" aria-hidden="true"><use href="#main" x="-20" y="-6" width="60" height="70"/></g>`);
     ctx.heure(sc.heure); MUS.ambiance(sc.ambiance);
@@ -178,8 +184,8 @@ window.SCENES = (function () {
     NARR.action(null); compteSecrets();
     await NARR.dire(derniere = bulle(sc.intro));
     if (mien !== jeton) return;
-    const ok = await NARR.attendre();
-    if (mien !== jeton || !ok) return; // un élément a été touché pendant l'attente : la suite s'en charge
+    const direct = !sc.elements[chaine[0]].demande && !(courant === 0 && !ctx.state.indices);
+    if (!direct) { const ok = await NARR.attendre(); if (mien !== jeton || !ok) return; }
     if (courant === 0 && !ctx.state.indices) {
       // Première scène : Quenotte explique les secrets à découvrir
       await NARR.dire(derniere = bulle(D.indices)); if (mien !== jeton) return;
@@ -200,14 +206,19 @@ window.SCENES = (function () {
     // Hauteur disponible : de la position réelle du cadre jusqu'au bandeau (marge de 30 px)
     const haut = wrap.getBoundingClientRect().top + (window.pageYOffset || 0);
     const dispo = window.innerHeight - haut - band - 30;
-    const H = Math.max(200, Math.min(dispo, W * 1.7));
-    let ext = H * 1000 / W;
-    if (ext < 600) {
+    const H = Math.max(200, dispo);
+    const vwIdeal = 600 * W / H; // largeur de décor qui remplit la hauteur sans ciel en plus
+    if (vwIdeal >= 1000) {
       // Écran large et bas (tablette en paysage) : la scène entière, un peu moins large, centrée
       svg.setAttribute('viewBox', '0 0 1000 600'); svg.style.width = Math.round(H / 0.6) + 'px'; svg.style.height = H + 'px';
     } else {
-      ext = Math.min(1700, Math.round(ext));
-      svg.setAttribute('viewBox', `0 ${600 - ext} 1000 ${ext}`); svg.style.width = '100%'; svg.style.height = Math.round(ext * W / 1000) + 'px';
+      // Écran en hauteur : on recadre sur la partie utile (décor plus grand), puis on ajoute du ciel si besoin
+      const z = ZONES[sc.id] || [0, 1000];
+      const vw = Math.min(1000, Math.max(vwIdeal, z[1] - z[0]));
+      const vh = Math.min(1700, vw * H / W);
+      const x0 = Math.max(0, Math.min(1000 - vw, (z[0] + z[1]) / 2 - vw / 2));
+      svg.setAttribute('viewBox', `${x0.toFixed(0)} ${(600 - vh).toFixed(0)} ${vw.toFixed(0)} ${vh.toFixed(0)}`);
+      svg.style.width = '100%'; svg.style.height = Math.round(vh * W / vw) + 'px';
     }
   }
   function compteSecrets() {
@@ -232,18 +243,6 @@ window.SCENES = (function () {
       await NARR.dire(derniere = b, deja ? { vite: 'instant' } : {}); if (mien !== jeton) return;
     } else if (derniere) NARR.dire(derniere, { vite: 'instant' });
   }
-  // Après une bulle bonus (et un toucher), on revient à ce qu'il y a à faire
-  async function rappel(mien, mienBulle) {
-    const ok = await NARR.attendre();
-    if (mien !== jeton) return;
-    if (mienBulle !== jetonBulle) return; // un autre secret a pris la place : c'est lui qui rendra la main
-    NARR.masquerAction(false);
-    enSecret = false; svg.classList.remove('secret');
-    if (!ok || occupe) return;
-    // Retour à l'histoire principale : la demande, la main d'aide et le toucher sur l'élément
-    if (idx < chaine.length) { await demande(); return; }
-    if (derniere) NARR.dire(derniere, { vite: 'instant' });
-  }
 
   function onTap(g, e) {
     const id = g.dataset.el, el = sc.elements[id];
@@ -252,7 +251,7 @@ window.SCENES = (function () {
     if (sc.bonus.indexOf(id) >= 0) { bonus(g, id, el); return; }
     const pos = chaine.indexOf(id);
     // Pendant la lecture d'un secret, l'histoire principale attend le bouton « Suite »
-    if (enSecret) { SON.play('toc'); g.classList.remove('refus'); void g.getBBox(); g.classList.add('refus'); return; }
+    if (enSecret || NARR.interrompu) { SON.play('toc'); g.classList.remove('refus'); void g.getBBox(); g.classList.add('refus'); return; }
     if (pos < idx) {
       // Élément obligatoire déjà fait : certains rejouent leur animation
       if (REJOUE[id]) { const act = ACTIONS[sc.id][id]; if (act) act(g); }
@@ -269,25 +268,25 @@ window.SCENES = (function () {
     if (secretTaps >= 3) { secretTaps = 0; ctx.scene13(); }
   }
 
+  // Un secret se touche à tout moment : l'histoire se met en pause le temps de son texte, puis reprend
   async function bonus(g, id, el) {
-    // Pendant la traversée ou la réponse à l'élément obligatoire : on attend (l'élément frémit pour le dire)
-    if (occupe) { SON.play('toc'); g.classList.remove('refus'); void g.getBBox(); g.classList.add('refus'); return; }
-    const mien = jeton, mienBulle = ++jetonBulle;
+    const mien = jeton;
     const premiere = !g.classList.contains('vu') && !g.classList.contains('deja');
     const deuxieme = g.classList.contains('vu');
     g.classList.add('vu');
     const act = ACTIONS[sc.id][id]; if (act) act(g, null, 0, deuxieme);
     if (premiere) { ctx.etoile(sc.id, id); compteSecrets(); }
-    NARR.masquerAction(true); // le bouton Continuer attend la fin du secret
+    mainsIndices(false);
     enSecret = true; svg.classList.add('secret'); aideStop();
-    await NARR.dire(bulle(deuxieme && el.bulle2 ? el.bulle2 : el.bulle));
-    if (mien !== jeton) return;
-    rappel(mien, mienBulle);
+    const ok = await NARR.interrompre(bulle(deuxieme && el.bulle2 ? el.bulle2 : el.bulle));
+    if (mien !== jeton || !ok) return; // scène changée, ou un autre secret a pris la place
+    enSecret = false; svg.classList.remove('secret');
+    if (!occupe && idx < chaine.length && $('.tap.cible', svg)) aideLance();
   }
 
   async function obligatoire(g, id, el, e) {
     if (occupe) return;
-    const mien = jeton; jetonBulle++;
+    const mien = jeton;
     aideStop();
     const act = ACTIONS[sc.id][id];
     if (el.etapes) {
@@ -322,13 +321,27 @@ window.SCENES = (function () {
     await fini(mien);
   }
 
+  // La souris trottine vers la droite et sort de l'image
+  async function sortie() {
+    if (!svg) return;
+    const q = sc.id === 'meuse' ? $('.rive-d', svg) : $('.quenotte:not(.rive-g)', svg);
+    if (!q) return;
+    const grp = document.createElementNS('http://www.w3.org/2000/svg', 'g'); grp.setAttribute('class', 'depart');
+    q.parentNode.insertBefore(grp, q);
+    const lueur = sc.id === 'meuse' ? null : $('.lueur', svg); if (lueur) grp.appendChild(lueur);
+    grp.appendChild(q); q.classList.add('trotte');
+    void grp.getBBox(); grp.classList.add('part');
+    for (let i = 0; i < 4 && !RM; i++) { SON.play('pas'); await wait(320); }
+    await wait(RM ? 100 : 250);
+  }
   async function fini(mien) {
     ctx.sceneFaite(courant);
+    if (FIN[sc.id]) FIN[sc.id]();
     $$('.pastille', root).forEach(p => { if (+p.dataset.n <= ctx.state.scene) p.disabled = false; });
     if (sc.pont) { await NARR.dire(derniere = bulle(sc.pont)); if (mien !== jeton) return; }
     const dernier = courant >= D.scenes.length - 1;
     if (dernier) NARR.action(A.icone('patte') + ' ' + T(sc.bouton), () => ctx.finChapitre(), 'btn-rouge');
-    else NARR.action('Continuer ' + A.icone('suite'), () => { SON.play('clic'); NARR.action(null); ctx.fondu(() => ouvrir(courant + 1)); });
+    else NARR.action('Scène suivante ' + A.icone('suite'), async () => { SON.play('clic'); NARR.action(null); const n = courant + 1; await sortie(); ctx.fondu(() => ouvrir(n)); });
   }
 
   return {

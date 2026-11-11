@@ -5,6 +5,7 @@ window.NARR = (function () {
   const RM = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const BULLES = { sourire: '', joie: '★', surprise: '!', chuchote: 'chut', clin: '♪', triste: '…' };
   let el = null, texte = null, portrait = null, bulle = null, actions = null, timer = null, enCours = null, jeton = 0, attente = null;
+  let courante = null, inter = null; // inter : l'histoire principale mise en pause pendant un secret
 
   function init() {
     el = document.getElementById('bandeau');
@@ -60,8 +61,19 @@ window.NARR = (function () {
     const fin = enCours.fin; enCours = null; if (fin) fin();
   }
 
-  // dire({ txt, expr, vite }) : affiche la phrase, résout quand tout est visible
+  // dire({ txt, expr, vite }) : affiche la phrase de l'histoire, résout quand tout est visible.
+  // Pendant un secret, la phrase attend en coulisse et s'affichera au retour.
   function dire(b, opts) {
+    if (inter) {
+      if (inter.attente) { const f = inter.attente; inter.attente = null; f(false); }
+      if (inter.dire) { const f = inter.dire; inter.dire = null; f(); }
+      inter.bulle = b;
+      return new Promise(res => { inter.dire = res; });
+    }
+    courante = b;
+    return afficher(b, opts);
+  }
+  function afficher(b, opts) {
     opts = opts || {};
     clearTimeout(timer); const mien = ++jeton;
     // Une bulle remplacée libère ceux qui l'attendaient (et annule l'attente d'un toucher)
@@ -87,14 +99,39 @@ window.NARR = (function () {
       suivant();
     });
   }
+  // Un secret interrompt l'histoire : son texte s'affiche, puis « Suite » rend la main à l'histoire,
+  // exactement où elle en était (texte, attente du bouton Suite, bouton d'action).
+  // Résout true au retour, false si un autre secret a pris la place.
+  function interrompre(b) {
+    if (!inter) {
+      clearTimeout(timer); jeton++;
+      inter = { bulle: courante, dire: enCours ? enCours.fin : null, attente: attente, resolve: null };
+      enCours = null; attente = null; actions.hidden = true;
+    } else if (inter.resolve) { const r = inter.resolve; inter.resolve = null; r(false); }
+    el.classList.remove('attente'); el.classList.add('interrompu');
+    return new Promise(res => {
+      inter.resolve = res;
+      afficher(b).then(() => { if (inter && inter.resolve === res) el.classList.add('attente'); });
+    });
+  }
+  function restaurer() {
+    const i = inter; inter = null;
+    el.classList.remove('attente', 'interrompu'); actions.hidden = false;
+    if (i.bulle) { courante = i.bulle; afficher(i.bulle, { vite: 'instant' }); }
+    if (i.dire) i.dire();
+    if (i.attente) { attente = i.attente; el.classList.add('attente'); }
+    if (i.resolve) i.resolve(true);
+  }
   // Un toucher : montre tout le texte, ou passe à la suite si on attendait
   function continuer() {
     if (enCours) { toutMontrer(); return true; }
+    if (inter) { restaurer(); return true; }
     if (attente) { const f = attente; attente = null; el.classList.remove('attente'); f(true); return true; }
     return false;
   }
   // Attend un toucher sur le bandeau avant la suite. Résout false si une autre bulle a pris la place.
   function attendre() {
+    if (inter) { if (inter.attente) { const f = inter.attente; inter.attente = null; f(false); } return new Promise(res => { inter.attente = res; }); }
     if (attente) { const f = attente; attente = null; f(false); }
     el.classList.add('attente');
     return new Promise(res => { attente = res; });
@@ -107,8 +144,5 @@ window.NARR = (function () {
     actions.appendChild(b); b.classList.add('pop'); return b;
   }
   function cacher(on) { el.classList.toggle('cache', !!on); }
-  // Masque provisoirement le bouton d'action (pendant une bulle bonus), sans le perdre
-  function masquerAction(on) { actions.hidden = !!on; }
-
-  return { init, dire, attendre, continuer, action, masquerAction, cacher, expression, get attend() { return !!attente || !!enCours; }, get lit() { return !!enCours; }, get visible() { return !el.classList.contains('cache'); } };
+  return { init, dire, attendre, continuer, interrompre, action, cacher, expression, get interrompu() { return !!inter; }, get attend() { return !!attente || !!enCours; }, get lit() { return !!enCours; }, get visible() { return !el.classList.contains('cache'); } };
 })();
