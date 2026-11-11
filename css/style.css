@@ -66,22 +66,22 @@ p{margin:.4rem 0}
 @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
 /* ---------- Bandeau de narration (Quenotte parle) ---------- */
-.bandeau{position:fixed;left:0;right:0;bottom:0;z-index:25;background:rgba(255,246,224,.94);color:var(--encre);border-top:3px solid var(--lanterne);box-shadow:0 -10px 30px rgba(0,0,0,.35);backdrop-filter:blur(8px);padding:10px max(12px,env(safe-area-inset-left,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-right,0px));transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer}
+.bandeau{position:fixed;left:0;right:0;bottom:0;z-index:25;max-height:42vh;background:rgba(255,246,224,.94);color:var(--encre);border-top:3px solid var(--lanterne);box-shadow:0 -10px 30px rgba(0,0,0,.35);backdrop-filter:blur(8px);padding:7px max(12px,env(safe-area-inset-left,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-right,0px));transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer}
 .bandeau.cache{transform:translateY(110%)}
-.bandeau-in{max-width:960px;margin:0 auto;display:grid;grid-template-columns:52px 1fr;grid-template-rows:auto 46px;grid-template-areas:"portrait texte" "actions actions";gap:6px 10px;align-items:start}
-.bandeau-portrait{grid-area:portrait;position:relative;width:52px;height:52px}
+.bandeau-in{max-width:960px;margin:0 auto;display:grid;grid-template-columns:44px 1fr;grid-template-rows:auto 40px;grid-template-areas:"portrait texte" "actions actions";gap:6px 10px;align-items:start}
+.bandeau-portrait{grid-area:portrait;position:relative;width:44px;height:44px}
 .portrait{width:100%;height:100%;display:block;filter:drop-shadow(0 3px 4px rgba(0,0,0,.25))}
 .portrait.hop{animation:hop .5s ease-out}
 @keyframes hop{0%{transform:scale(1)}40%{transform:scale(1.1) rotate(-4deg)}100%{transform:scale(1)}}
 .bandeau-bulle{position:absolute;right:-8px;top:-6px;min-width:22px;height:22px;padding:0 6px;border-radius:12px;background:#fff;border:2px solid var(--lanterne);color:var(--rouge);font:800 .8rem var(--display);display:none;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,.2)}
 .bandeau-bulle.on{display:inline-flex;animation:pop .3s ease-out}
 /* Hauteur fixe : tout l'écran reste visible, un texte trop long défile dans le cadre */
-.bandeau-texte{grid-area:texte;margin:0;font-size:1rem;font-weight:600;line-height:1.42;word-spacing:.06em;letter-spacing:.005em;height:10em;overflow-y:auto;overscroll-behavior:contain;align-self:start;text-wrap:pretty;padding-right:4px}
-.bandeau-actions{min-height:46px}
+.bandeau-texte{grid-area:texte;margin:0;font-size:1rem;font-weight:600;line-height:1.38;word-spacing:.06em;letter-spacing:.005em;height:5.6em;overflow-y:auto;overscroll-behavior:contain;align-self:start;text-wrap:pretty;padding-right:4px}
+.bandeau-actions{min-height:40px}
 .bandeau.chuchote .bandeau-texte{font-style:italic;color:#3a3550}
 .bandeau-texte .mot{opacity:0;transition:opacity .35s ease-out}
 .bandeau-texte .mot.vu{opacity:1}
-.bandeau-suite{grid-area:actions;display:none;justify-self:end;align-items:center;gap:6px;min-height:44px;padding:0 16px 0 18px;border-radius:999px;background:var(--lanterne);color:#3b2a00;font-size:1.05rem;font-weight:800;box-shadow:0 4px 0 var(--lanterne2);animation:suite 1.2s ease-in-out infinite}
+.bandeau-suite{grid-area:actions;display:none;justify-self:end;align-items:center;gap:6px;min-height:40px;padding:0 16px 0 18px;border-radius:999px;background:var(--lanterne);color:#3b2a00;font-size:1.05rem;font-weight:800;box-shadow:0 4px 0 var(--lanterne2);animation:suite 1.2s ease-in-out infinite}
 .bandeau-suite b{font-size:1.3em;line-height:1}
 .bandeau.attente{border-top-color:#ffdc8a}
 .bandeau.attente .bandeau-suite{display:inline-flex}
@@ -89,7 +89,7 @@ p{margin:.4rem 0}
 @keyframes suite{0%,100%{transform:translateX(0) scale(1)}50%{transform:translateX(4px) scale(1.05)}}
 .bandeau-actions{grid-area:actions;display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
 .bandeau-actions:empty{display:none}
-.bandeau-actions .btn{min-height:46px;font-size:1.1rem;width:100%;max-width:420px}
+.bandeau-actions .btn{min-height:40px;font-size:1.05rem;width:100%;max-width:420px;border-radius:14px}
 /* Expressions du portrait */
 .portrait .yeux-grands,.portrait .yeux-doux,.portrait .oeil-clin,.portrait .bouche-joie,.portrait .bouche-o,.portrait .bouche-triste,.portrait .patte-chut{display:none}
 .portrait[data-expr="joie"] .bouche-sourire{display:none}.portrait[data-expr="joie"] .bouche-joie{display:block}
@@ -296,6 +296,14 @@ p{margin:.4rem 0}
 .decor-pantoufle .revele .zzz{opacity:1}
 .decor-pantoufle .revele .z{animation:zz 1.6s ease-in-out infinite}
 .decor-pantoufle .revele .z.petit{animation-delay:.5s}
+.decor-pantoufle .pendule{opacity:0;transform:scale(.4);transform-box:fill-box;transform-origin:center;transition:transform .6s cubic-bezier(.3,1.4,.5,1),opacity .3s}
+.decor-pantoufle .tap.vu .pendule{opacity:1;transform:none}
+.decor-pantoufle .tap[data-el="fenetre"] .vitre{transition:fill .6s}
+.decor-pantoufle .tap[data-el="fenetre"].vu .vitre{fill:#6b5a2a}
+.decor-pantoufle .fleur{transform-box:fill-box;transform-origin:50% 100%}
+.decor-pantoufle .tap.vu .fleur{animation:fleur .7s ease-out}
+.decor-pantoufle .tap.vu .fleur:nth-child(3){animation-delay:.1s}.decor-pantoufle .tap.vu .fleur:nth-child(4){animation-delay:.2s}
+@keyframes fleur{0%{transform:scale(1)}40%{transform:scale(1.35) rotate(-8deg)}70%{transform:scale(1.1) rotate(6deg)}100%{transform:scale(1)}}
 .decor-pantoufle .moustaches{transform-box:fill-box;transform-origin:center}
 .decor-pantoufle .tap.vu .moustaches{animation:fretille .2s ease-in-out 6}
 @keyframes fretille{0%,100%{transform:rotate(0)}50%{transform:rotate(3deg)}}
@@ -303,8 +311,15 @@ p{margin:.4rem 0}
 .decor-pantoufle .tap.vu .battant{transform:scaleX(.86) skewY(3deg)}
 
 /* ---------- Chapitre 2 : le jeu ---------- */
+.scene.ch-2{height:calc(100vh - var(--fil-h) - 1px - env(safe-area-inset-top,0px));height:calc(100dvh - var(--fil-h) - 1px - env(safe-area-inset-top,0px));padding-bottom:calc(var(--bandeau-h) + 10px);display:flex;flex-direction:column;overflow:hidden}
+.ch2{flex:1;min-height:0;display:flex;flex-direction:column}
+.ch2 .decor-titre{flex:none;margin:2px 0 6px}
+.ch2 .jeu-wrap{flex:1 1 auto;min-height:90px;display:flex;align-items:center;justify-content:center;background:var(--nuit)}
+.ch2 .jeu{width:100%;height:100%;max-height:none;min-height:0}
+.ch2 .jauge{flex:none;margin:8px 0}
+.ch2 .btn-tenir{flex:none;min-height:76px;width:100%}
 .jeu-wrap{border-radius:16px;overflow:hidden;border:2px solid #2e3768}
-.jeu{width:100%;height:auto;display:block;max-height:calc(100vh - var(--fil-h) - var(--bandeau-h) - 230px);min-height:200px}
+.jeu{width:100%;height:auto;display:block}
 .jeu .z{font-family:var(--display);font-weight:800;font-size:30px;fill:#F3EFE6}
 .jeu .z.petit{font-size:22px}
 .jeu #zzz{opacity:1;transition:opacity .2s}

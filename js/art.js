@@ -32,7 +32,7 @@ window.ART = (function () {
   // Fond de scène : ciel (prolongé vers le haut pour les écrans en hauteur), étoiles, lune (optionnelle)
   function fond(nuit, seed, luneOpts) {
     const defs = `<defs>${CIEL}${luneOpts ? luneSVG(nuit, luneOpts.x, luneOpts.y, luneOpts.r, 'ml' + seed) : ''}</defs>`;
-    return defs + `<rect x="0" y="-700" width="1000" height="700" fill="#141A3A"/><rect width="1000" height="600" fill="url(#gciel)"/>` + etoiles(130, 1000, 600, seed, -700);
+    return defs + `<rect x="0" y="-1100" width="1000" height="1100" fill="#141A3A"/><rect width="1000" height="600" fill="url(#gciel)"/>` + etoiles(170, 1000, 600, seed, -1100);
   }
 
   // Quenotte de profil, à l'échelle : w = largeur en unités de la scène (le symbole fait 130 × 100)
@@ -207,6 +207,7 @@ ${etoiles(60, 800, 480, 7)}
   function jeuSVG() {
     return `<svg class="jeu" viewBox="0 0 1000 500" role="img" aria-label="La souris doit passer devant le chat endormi pour atteindre la porte">
 <defs>${CIEL}</defs>
+<rect x="0" y="-1500" width="1000" height="1500" fill="#141A3A"/>${etoiles(70, 1000, 500, 9, -1500)}
 <rect width="1000" height="500" fill="url(#gciel)"/>
 ${etoiles(40, 1000, 500, 5)}
 <rect x="840" y="220" width="160" height="200" fill="#2A3470"/><rect x="840" y="210" width="160" height="14" fill="#3A4690"/>

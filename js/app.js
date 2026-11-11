@@ -250,9 +250,17 @@
       window.addEventListener('blur', up);
       document.addEventListener('keydown', self.kd = e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat && e.target === document.body) { down(e); } });
       document.addEventListener('keyup', self.ku = e => { if (e.key === ' ' || e.key === 'Enter') up(); });
+      // Le décor remplit son cadre : le ciel s'étire vers le haut, le sol reste en bas
+      const wrapJeu = $('.jeu-wrap', r);
+      self.cadre = () => {
+        const W = wrapJeu.clientWidth || 1, H = wrapJeu.clientHeight || 1;
+        const ext = Math.max(500, Math.min(2000, Math.round(H * 1000 / W)));
+        svg.setAttribute('viewBox', `0 ${500 - ext} 1000 ${ext}`);
+      };
+      self.cadre(); window.addEventListener('resize', self.cadre);
       rendu(); cycle(); self.raf = requestAnimationFrame(boucle);
     },
-    unmount() { clearTimeout(this.t); cancelAnimationFrame(this.raf); SON.ronfleStop(); document.removeEventListener('keydown', this.kd); document.removeEventListener('keyup', this.ku); },
+    unmount() { window.removeEventListener('resize', this.cadre); clearTimeout(this.t); cancelAnimationFrame(this.raf); SON.ronfleStop(); document.removeEventListener('keydown', this.kd); document.removeEventListener('keyup', this.ku); },
   };
 
   // ---------- Chapitre 3 : la caméra de la souris ----------

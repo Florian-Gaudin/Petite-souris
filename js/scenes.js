@@ -56,8 +56,8 @@ window.SCENES = (function () {
     pantoufle: {
       yeux() { $('.chat-dort', svg).classList.add('revele'); SON.play('mmh'); },
       quenotte() { SON.play('clic'); },
-      moustache() { SON.play('ronron'); },
-      porte() { SON.play('grince'); },
+      fleurs() { SON.play('papier'); },
+      fenetre() { SON.play('allume'); },
     },
   };
   // Petites animations qui suivent l'élément obligatoire, avant la réponse de Quenotte
@@ -196,17 +196,17 @@ window.SCENES = (function () {
     if (!svg || !wrap) return;
     const W = wrap.clientWidth || 700;
     const mesure = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bandeau-h')) || 0;
-    const band = Math.max(mesure, W > 700 ? 150 : 200);
+    const band = mesure || (W > 700 ? 180 : 160);
     // Hauteur disponible : de la position réelle du cadre jusqu'au bandeau (marge de 30 px)
     const haut = wrap.getBoundingClientRect().top + (window.pageYOffset || 0);
     const dispo = window.innerHeight - haut - band - 30;
-    const H = Math.max(200, Math.min(dispo, W * 1.15));
+    const H = Math.max(200, Math.min(dispo, W * 1.7));
     let ext = H * 1000 / W;
     if (ext < 600) {
       // Écran large et bas (tablette en paysage) : la scène entière, un peu moins large, centrée
       svg.setAttribute('viewBox', '0 0 1000 600'); svg.style.width = Math.round(H / 0.6) + 'px'; svg.style.height = H + 'px';
     } else {
-      ext = Math.min(1300, Math.round(ext));
+      ext = Math.min(1700, Math.round(ext));
       svg.setAttribute('viewBox', `0 ${600 - ext} 1000 ${ext}`); svg.style.width = '100%'; svg.style.height = Math.round(ext * W / 1000) + 'px';
     }
   }
