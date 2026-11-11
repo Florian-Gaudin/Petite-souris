@@ -84,7 +84,8 @@
   }
   function complete(n) { if (State.unlocked < n + 1) { State.unlocked = n + 1; save(); } }
   function buildFil() {
-    const perles = [1, 2, 3, 4, 5].map(i => `<button class="perle" data-n="${i}" aria-label="Chapitre ${i}"><span>${i}</span></button>`).join('');
+    const maison = `<button class="perle maison" data-n="0" aria-label="Revenir au début de l'histoire" title="Revenir au début"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="#fff"/></svg></button>`;
+    const perles = maison + [1, 2, 3, 4, 5].map(i => `<button class="perle" data-n="${i}" aria-label="Chapitre ${i}"><span>${i}</span></button>`).join('');
     $('#fil').innerHTML = `<div class="fil-in">
       <div class="ruban" aria-label="Progression de l'histoire"><div class="fil-ligne"></div>${perles}<div class="fil-souris"><svg viewBox="0 0 130 100"><use href="#souris-side"/></svg></div></div>
       <div class="heure" id="heure" aria-label="Heure dans l'histoire">—</div>
@@ -95,7 +96,7 @@
   }
   function updateFil(n) {
     $$('.perle').forEach(p => { const i = +p.dataset.n; p.classList.toggle('faite', i < State.unlocked); p.classList.toggle('active', i === n); p.classList.toggle('ouverte', i <= State.unlocked); });
-    const s = $('.fil-souris'); if (s) s.style.left = n === 0 ? '6%' : [16, 33, 50, 67, 84][n - 1] + '%';
+    const s = $('.fil-souris'); if (s) s.style.left = n === 0 ? '5%' : [16, 33, 50, 67, 84][n - 1] + '%';
     document.body.dataset.chapitre = n;
   }
   // Fondu au noir entre deux tableaux : on assombrit, on change, on rallume

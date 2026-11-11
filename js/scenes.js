@@ -68,6 +68,10 @@ window.SCENES = (function () {
     aiglemont: { girouette: async () => { await wait(RM ? 100 : 2300); svg.classList.add('trouve'); SON.play('allume'); await wait(400); } },
     pantoufle: { yeux: () => wait(RM ? 100 : 900) },
   };
+  // Quand un élément devient la cible, certains passent au premier plan (le billet, d'abord caché derrière Quenotte)
+  const DEVANT = {
+    meuse: { billet(g) { g.setAttribute('transform', 'translate(222,334)'); svg.insertBefore(g, $('.main-aide', svg)); g.classList.add('devant'); } },
+  };
   // Éléments obligatoires que l'on peut retoucher après coup (ils rejouent leur animation)
   const REJOUE = { marionnettiste: 1, girouette: 1, yeux: 0, lanterne: 0 };
 
@@ -203,7 +207,7 @@ window.SCENES = (function () {
     $$('.tap.cible', svg).forEach(g => g.classList.remove('cible'));
     if (idx >= chaine.length) return;
     const id = chaine[idx], el = sc.elements[id], g = $(`.tap[data-el="${id}"]`, svg);
-    if (g) g.classList.add('cible');
+    if (g) { g.classList.add('cible'); const dv = DEVANT[sc.id] && DEVANT[sc.id][id]; if (dv && !g.classList.contains('devant')) dv(g); }
     aideLance();
     if (el.demande) {
       const b = bulle(el.demande), deja = derniere && derniere.txt === b.txt; // déjà lue : on la remet d'un coup
