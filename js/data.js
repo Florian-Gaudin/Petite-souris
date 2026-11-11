@@ -93,7 +93,7 @@ window.DATA = {
     {
       id: "pantoufle", titre: "{chat}", heure: "02:31", ambiance: "pantoufle",
       intro: { txt: "Le jardin est tout calme… Chut ! Il y a quelque chose devant la porte. Deux grands yeux brillent dans le noir. Touche-les, doucement.", expr: "chuchote" },
-      oblig: ["yeux", "quenotte"], bonus: ["moustache", "porte"],
+      oblig: ["yeux", "quenotte"], bonus: ["fleurs", "fenetre"],
       elements: {
         yeux: {
           reponse: { txt: "C'est {chat}, le chat du voisin ! Il dort sur le seuil et il a l'oreille fine. Si je le réveille, il va miauler, et {poupee} va se réveiller. Je ne veux surtout pas ça.", expr: "surprise" },
@@ -102,8 +102,8 @@ window.DATA = {
           demande: { txt: "Je sais, je sais… j'ai un plan. Touche-moi, je t'explique !", expr: "chuchote" },
           reponse: { txt: "{enfant}, j'ai besoin de toi. Quand {chat} dort, j'avance. Quand il ouvre les yeux, je m'arrête. Tu m'aides ?", expr: "sourire" },
         },
-        moustache: { bulle: { txt: "Il ronronne dans son sommeil. Ses moustaches frétillent, il doit rêver de croquettes.", expr: "chuchote" } },
-        porte: { bulle: { txt: "La porte grince, tout doux ! C'est par là que je vais passer, si {chat} ne se réveille pas.", expr: "chuchote" } },
+        fleurs: { bulle: { txt: "Un pot de fleurs sur le pas de la porte… Elles sentent bon ! Je m'y cache une seconde : personne ne voit une souris entre les pétales.", expr: "clin" } },
+        fenetre: { bulle: { txt: "Par la fenêtre, j'aperçois la pendule du salon : il est 2 h 31. Vite, il ne faut pas traîner !", expr: "surprise" } },
       },
       pont: null,
       bouton: "Aider {souris} !",

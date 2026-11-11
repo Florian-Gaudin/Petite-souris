@@ -34,7 +34,7 @@ ${A.fond(nuit, 21, { x: 830, y: 95, r: 34 })}
 ${tap('feuillage', 'Le feuillage de l’arbre', `${halo(803, 255, 105)}
   <g class="feuillage"><circle cx="755" cy="285" r="56" fill="#1E3F36"/><circle cx="850" cy="280" r="58" fill="#1E3F36"/><circle cx="800" cy="228" r="66" fill="#24483E"/><circle cx="765" cy="238" r="42" fill="#2F5D50"/><circle cx="836" cy="236" r="38" fill="#2F5D50"/></g>
   <g transform="translate(800,250)"><g class="hulotte"><path class="aile ag" d="M-16 6q-26 6-22 34q14-6 22-24z" fill="#8B5A3C"/><path class="aile ad" d="M16 6q26 6 22 34q-14-6-22-24z" fill="#8B5A3C"/><ellipse cx="0" cy="20" rx="19" ry="24" fill="#8B5A3C"/><ellipse cx="0" cy="24" rx="10" ry="16" fill="#C9A98A"/><circle cx="0" cy="-4" r="18" fill="#A0724A"/><path d="M-16-14l-6-14 14 6zM16-14l6-14-14 6z" fill="#A0724A"/><circle cx="-7" cy="-6" r="7.5" fill="#FFF4D6"/><circle cx="7" cy="-6" r="7.5" fill="#FFF4D6"/><circle cx="-7" cy="-6" r="3.5" fill="#2B2B33"/><circle cx="7" cy="-6" r="3.5" fill="#2B2B33"/><path d="M-3 1l3 6 3-6z" fill="#FFC857"/></g></g>`)}
-<rect class="noir" x="0" y="-700" width="1000" height="1300" fill="#050816" opacity=".45"/>
+<rect class="noir" x="0" y="-1100" width="1000" height="1700" fill="#050816" opacity=".45"/>
 ${lueur(L.x, L.y, 150)}
 ${A.souris(sx, sy, sw, 'class="quenotte"')}
 ${tap('lanterne', 'La lanterne de Quenotte', `${halo(L.x.toFixed(0), L.y.toFixed(0), 40)}<circle cx="${L.x.toFixed(0)}" cy="${L.y.toFixed(0)}" r="44" fill="transparent"/>`)}
@@ -51,22 +51,22 @@ ${tap('sac', 'Le sac de Quenotte', `${halo(0, 10, 56)}
     const L = A.pointSouris(sx, sy, sw, 'lanterne');
     const champi = (x, y, s, i) => `<g class="champi" data-sub="${i}" transform="translate(${x},${y}) scale(${s})"><circle class="champi-lueur" cx="0" cy="-16" r="70" fill="url(#halo-or)"/><rect x="-10" y="-10" width="20" height="34" rx="7" fill="#E9E2D6"/><path class="chapeau" d="M-36-6q36-48 72 0z" fill="#6b4a5a"/><circle class="pois" cx="-12" cy="-22" r="4" fill="#9a7a8a"/><circle class="pois" cx="10" cy="-30" r="3" fill="#9a7a8a"/><circle class="pois" cx="18" cy="-14" r="3.5" fill="#9a7a8a"/></g>`;
     let fars = '';
-    [60, 150, 240, 330, 420, 520, 610, 700, 790, 880, 960].forEach((x, i) => { fars += `<rect x="${x}" y="-700" width="${18 + (i % 3) * 5}" height="500" fill="#141c3c"/>`; });
+    [60, 150, 240, 330, 420, 520, 610, 700, 790, 880, 960].forEach((x, i) => { fars += `<rect x="${x}" y="-1100" width="${18 + (i % 3) * 5}" height="1600" fill="#141c3c"/>`; });
     return `<svg class="decor decor-foret" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="La grande forêt des Ardennes, la nuit">
 ${A.fond(nuit, 31, null)}
-<rect x="0" y="-700" width="1000" height="1300" fill="#0d1430" opacity=".45"/>
+<rect x="0" y="-1100" width="1000" height="1700" fill="#0d1430" opacity=".45"/>
 ${fars}
 <path d="M0 600V480Q500 460 1000 480V600Z" fill="#14271f"/>
 <path d="M-20 560Q300 470 520 500T1020 470" fill="none" stroke="#2b3b36" stroke-width="70" stroke-linecap="round"/>
 <g fill="#1a1226"><rect x="30" y="0" width="52" height="490"/><path d="M10 490q46-30 92 0z"/><rect x="560" y="0" width="58" height="490"/><path d="M540 490q49-30 98 0z"/><rect x="905" y="0" width="62" height="490"/><path d="M885 490q51-30 102 0z"/></g>
-<g fill="#0f2a22"><rect x="0" y="-700" width="1000" height="740"/><ellipse cx="100" cy="30" rx="260" ry="115"/><ellipse cx="220" cy="-150" rx="320" ry="130" fill="#132e26"/><ellipse cx="700" cy="-230" rx="360" ry="140" fill="#0c2219"/><ellipse cx="420" cy="-420" rx="420" ry="160" fill="#11291f"/><ellipse cx="880" cy="-520" rx="300" ry="150" fill="#0c2219"/><ellipse cx="120" cy="-600" rx="300" ry="130" fill="#132e26"/><ellipse cx="500" cy="10" rx="310" ry="125"/><ellipse cx="900" cy="30" rx="260" ry="115"/></g>
+<g fill="#0f2a22"><rect x="0" y="-1100" width="1000" height="1140"/><ellipse cx="100" cy="30" rx="260" ry="115"/><ellipse cx="220" cy="-150" rx="320" ry="130" fill="#132e26"/><ellipse cx="700" cy="-230" rx="360" ry="140" fill="#0c2219"/><ellipse cx="420" cy="-420" rx="420" ry="160" fill="#11291f"/><ellipse cx="880" cy="-520" rx="300" ry="150" fill="#0c2219"/><ellipse cx="120" cy="-600" rx="300" ry="130" fill="#132e26"/><ellipse cx="500" cy="10" rx="310" ry="125"/><ellipse cx="900" cy="30" rx="260" ry="115"/></g>
 <g class="brume" fill="#cfd3ee" opacity=".08"><ellipse cx="300" cy="505" rx="220" ry="26"/><ellipse cx="750" cy="525" rx="260" ry="30"/></g>
 ${tap('champignons', 'Les champignons lumineux', `${halo(330, 455, 60)}${halo(480, 480, 60)}${halo(600, 452, 60)}${champi(330, 470, 1, 0)}${champi(480, 496, 1.15, 1)}${champi(600, 466, 0.95, 2)}`)}
 ${tap('buisson', 'Un buisson qui tremble', `${halo(0, -10, 85)}
   <g class="renard"><path d="M40 10q40-30 40 10" fill="none" stroke="#E07A3F" stroke-width="12" stroke-linecap="round"/><path d="M72 18q14-6 10 8" fill="none" stroke="#FFF4D6" stroke-width="10" stroke-linecap="round"/><ellipse cx="10" cy="14" rx="42" ry="20" fill="#E07A3F"/><ellipse cx="4" cy="22" rx="24" ry="10" fill="#FFF4D6"/><circle cx="-36" cy="2" r="19" fill="#E07A3F"/><path d="M-48-10l-6-20 16 10zM-24-10l6-20-16 10z" fill="#E07A3F"/><path d="M-52 6q-10 4-14 10 6 2 14 0z" fill="#FFF4D6"/><circle cx="-58" cy="12" r="3" fill="#2B2B33"/><circle cx="-40" cy="-1" r="3.2" fill="#2B2B33"/><circle cx="-39" cy="-2" r="1" fill="#fff"/><g fill="#E07A3F"><rect x="-18" y="26" width="10" height="14" rx="4"/><rect x="18" y="26" width="10" height="14" rx="4"/></g></g>
   <g class="buisson"><circle cx="-40" cy="-6" r="34" fill="#1E3F36"/><circle cx="0" cy="-26" r="42" fill="#24483E"/><circle cx="44" cy="-6" r="36" fill="#1E3F36"/><circle cx="6" cy="4" r="34" fill="#2F5D50"/></g>`, 'transform="translate(830,470)"')}
 ${tap('luciole', 'Une luciole', `<animateMotion dur="18s" repeatCount="indefinite" path="M200 300C350 200 500 380 650 280S850 200 900 320S600 420 400 340S220 380 200 300"/>${halo(0, 0, 44)}<circle r="34" fill="transparent"/><circle class="lum" r="16" fill="url(#halo-or)"/><circle r="4.5" fill="#FFF4D6"/>`)}
-<rect class="dore" x="0" y="-700" width="1000" height="1300" fill="#FFC857" opacity="0"/>
+<rect class="dore" x="0" y="-1100" width="1000" height="1700" fill="#FFC857" opacity="0"/>
 ${lueur(L.x, L.y, 120)}
 ${A.souris(sx, sy, sw, 'class="quenotte trotte"')}
 </svg>`;
@@ -165,12 +165,12 @@ ${A.souris(sx, sy, sw, 'class="quenotte trotte"')}
 ${A.fond(nuit, 71, { x: 120, y: 90, r: 24 })}
 <path d="M0 600V430Q200 410 400 420T1000 400V600Z" fill="#1E3F36"/>
 <rect x="560" y="110" width="440" height="390" fill="#E9E2D6"/><rect x="540" y="84" width="460" height="30" fill="#D64045"/><rect x="560" y="114" width="440" height="6" fill="#c9bfae"/>
-<rect x="860" y="170" width="80" height="96" fill="#2b3470"/><path d="M900 170v96M860 218h80" stroke="#F3EFE6" stroke-width="3"/><rect x="860" y="170" width="80" height="96" fill="none" stroke="#F3EFE6" stroke-width="4"/>
+${tap('fenetre', 'La fenêtre du salon', `${halo(900, 218, 64)}<rect class="vitre" x="860" y="170" width="80" height="96" fill="#2b3470"/><g class="pendule"><circle cx="900" cy="218" r="26" fill="#FFF6E0" stroke="#8B5A3C" stroke-width="4"/><path d="M900 218l7-13M900 218l-3 19" stroke="#2B2B33" stroke-width="3" stroke-linecap="round"/><circle cx="900" cy="218" r="2.5" fill="#2B2B33"/></g><path d="M900 170v96M860 218h80" stroke="#F3EFE6" stroke-width="3"/><rect x="860" y="170" width="80" height="96" fill="none" stroke="#F3EFE6" stroke-width="4"/>`)}
 <g fill="#6b6560">${cloture}<rect x="20" y="420" width="320" height="8"/><rect x="20" y="460" width="320" height="8"/></g>
 <rect y="490" width="1000" height="110" fill="#1A2A26"/>
 <g fill="#2F5D50"><ellipse cx="420" cy="482" rx="60" ry="34"/><ellipse cx="90" cy="486" rx="70" ry="34"/><ellipse cx="960" cy="486" rx="50" ry="28"/></g>
-<g><path d="M470 490l6-34h36l6 34z" fill="#B05E3B"/><circle cx="488" cy="446" r="12" fill="#D64045"/><circle cx="500" cy="440" r="10" fill="#F2A3B5"/><circle cx="476" cy="440" r="9" fill="#FFC857"/></g>
-${tap('porte', 'La porte de la maison', `${halo(0, -95, 95)}<path d="M-74 0v-170a74 74 0 0 1 148 0V0z" fill="#4a3324"/><g class="battant"><path d="M-60 0v-168a60 60 0 0 1 120 0V0z" fill="#8B5A3C"/><rect x="-42" y="-150" width="34" height="62" rx="4" fill="#6E4630"/><rect x="8" y="-150" width="34" height="62" rx="4" fill="#6E4630"/><rect x="-42" y="-74" width="34" height="56" rx="4" fill="#6E4630"/><rect x="8" y="-74" width="34" height="56" rx="4" fill="#6E4630"/><circle cx="44" cy="-80" r="6" fill="#C9A227"/></g>`, 'transform="translate(700,482)"')}
+${tap('fleurs', 'Un pot de fleurs', `${halo(0, -22, 50)}<path d="M-24 8l6-34h36l6 34z" fill="#B05E3B"/><g class="fleur"><path d="M-6-26v-18" stroke="#2F5D50" stroke-width="3"/><circle cx="-6" cy="-46" r="11" fill="#D64045"/><circle cx="-6" cy="-46" r="4" fill="#FFC857"/></g><g class="fleur"><path d="M10-26v-14" stroke="#2F5D50" stroke-width="3"/><circle cx="10" cy="-42" r="10" fill="#F2A3B5"/><circle cx="10" cy="-42" r="3.5" fill="#FFC857"/></g><g class="fleur"><path d="M-18-26v-10" stroke="#2F5D50" stroke-width="3"/><circle cx="-18" cy="-38" r="8" fill="#FFC857"/><circle cx="-18" cy="-38" r="3" fill="#D64045"/></g>`, 'transform="translate(364,482)"')}
+<g transform="translate(700,482)"><path d="M-74 0v-170a74 74 0 0 1 148 0V0z" fill="#4a3324"/><g class="battant"><path d="M-60 0v-168a60 60 0 0 1 120 0V0z" fill="#8B5A3C"/><rect x="-42" y="-150" width="34" height="62" rx="4" fill="#6E4630"/><rect x="8" y="-150" width="34" height="62" rx="4" fill="#6E4630"/><rect x="-42" y="-74" width="34" height="56" rx="4" fill="#6E4630"/><rect x="8" y="-74" width="34" height="56" rx="4" fill="#6E4630"/><circle cx="44" cy="-80" r="6" fill="#C9A227"/></g></g>
 <rect x="600" y="482" width="200" height="14" fill="#A79E95"/>
 <g class="chat-dort" transform="translate(616,420) scale(.9)">
   <path class="queue" d="M-70 50C-110 60-115 10-80 20" fill="none" stroke="#20222e" stroke-width="14" stroke-linecap="round"/>
@@ -178,7 +178,7 @@ ${tap('porte', 'La porte de la maison', `${halo(0, -95, 95)}<path d="M-74 0v-170
   <g class="rayures" fill="none" stroke="#C9833A" stroke-width="6" stroke-linecap="round"><path d="M-40 22q6 12 2 24M-16 18q6 14 2 28M8 18q6 14 2 28"/></g>
   <circle class="fourrure" cx="70" cy="22" r="36" fill="#20222e"/>
   <path class="fourrure" d="M40 0l-4-30 26 14zM100 0l4-30-26 14z" fill="#20222e"/><path class="oreilles" d="M43-4l-2-14 12 7zM97-4l2-14-12 7z" fill="#F2A3B5"/>
-  ${tap('moustache', 'Les moustaches de Pantoufle', `${halo(104, 40, 32)}<g class="moustaches" stroke="#cfd3ee" stroke-width="2" stroke-linecap="round"><path d="M50 34l-26-4M50 38l-26 4M90 34l26-4M90 38l26 4"/></g><circle cx="100" cy="36" r="30" fill="transparent"/>`)}
+  <g class="moustaches" stroke="#cfd3ee" stroke-width="2" stroke-linecap="round"><path d="M50 34l-26-4M50 38l-26 4M90 34l26-4M90 38l26 4"/></g>
   <path class="nez" d="M66 34h8l-4 5z" fill="#F2A3B5"/><path class="bouche" d="M70 39q-5 6-10 2M70 39q5 6 10 2" fill="none" stroke="#2B2B33" stroke-width="2"/>
   ${tap('yeux', 'Deux yeux qui brillent dans le noir', `${halo(70, 20, 52)}<g class="yeux-brillent"><ellipse cx="58" cy="20" rx="9" ry="6.5" fill="#FFC857"/><ellipse cx="84" cy="20" rx="9" ry="6.5" fill="#FFC857"/><ellipse cx="58" cy="20" rx="2.2" ry="5" fill="#2B2B33"/><ellipse cx="84" cy="20" rx="2.2" ry="5" fill="#2B2B33"/></g><g class="yeux-fermes" fill="none" stroke="#2B2B33" stroke-width="3" stroke-linecap="round"><path d="M50 22q8 6 16 0M76 22q8 6 16 0"/></g>`)}
   <path d="M40 50q30 12 60 0" fill="none" stroke="#D64045" stroke-width="5"/><circle cx="70" cy="58" r="6" fill="#FFC857"/>
