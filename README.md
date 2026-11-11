@@ -1,19 +1,34 @@
 # La nuit de la Petite Souris
 
-Une petite expérience web (site statique, sans compte, sans suivi) qui raconte la visite de Quenotte, la Petite Souris, pendant la nuit : suivi sur la carte, mini-jeu avec le chat, caméra de la souris, lettre à écouter, diplôme à imprimer.
+Une petite expérience web (site statique, sans compte, sans suivi) racontée à la première personne par Quenotte, la Petite Souris : six scènes illustrées de son voyage nocturne (château, forêt, Meuse, place Ducale, Aiglemont, le chat Pantoufle), un mini-jeu avec le chat, la caméra de la souris, une lettre qui s'écrit mot à mot, et un diplôme à imprimer.
 
 ## Les fichiers
 
 | Fichier | Rôle |
 |---|---|
-| `config.js` | **Le seul fichier à modifier** : adresse du site (QR code), prénoms, dents, billet, voix. |
-| `index.html` | L'histoire en 6 écrans (accueil + 5 chapitres). |
-| `mot.html` | Le mot de la souris avec le QR code, à afficher en plein écran sur l'ordinateur (ou à imprimer en A6). |
+| `config.js` | **Le seul fichier à modifier** : adresse du site (QR code), prénoms, dents, endroit où sèche le billet. |
+| `index.html` | L'histoire : accueil, puis 5 chapitres. |
+| `mot.html` | Le mot de la souris avec le QR code, à glisser sous l'oreiller (impression A6) ou à afficher en plein écran. Il dit où chercher le cadeau. |
 | `certificat.html` | Le diplôme, mis en page pour une impression A4. |
-| `js/data.js` | Tous les textes : journal de bord, lettre, badges, chapitre secret. |
-| `js/art.js` | Les dessins (SVG faits maison). |
+| `js/data.js` | Tous les textes de Quenotte : scènes, mini-jeu, caméra, lettre, badges. |
+| `js/decors.js` | Les six décors illustrés du chapitre 1 (SVG faits maison) et leurs éléments à toucher. |
+| `js/scenes.js` | Le déroulé des scènes : élément obligatoire, bonus, étoiles, main qui montre, « Continuer ». |
+| `js/narration.js` | Le bandeau de lecture en bas de l'écran (portrait, expressions, texte par groupes de mots). |
+| `js/musique.js` | La musique d'ambiance générée en code (boîte à musique, une variation par chapitre). |
+| `js/audio.js` | Les effets sonores générés en code. |
+| `js/art.js` | Symboles, icônes, portrait de Quenotte, décors des autres chapitres. |
+| `js/app.js` | Les chapitres, la progression, le fil rouge. |
 | `css/`, `fonts/`, `vendor/` | Styles, polices embarquées (licence OFL), générateur de QR code (MIT). |
 | `outils/serveur.js` | Mini serveur pour tester sur l'ordinateur. |
+
+## Comment ça se joue
+
+- **Chapitre 1, six scènes.** Dans chaque scène, un élément brille fort : c'est l'élément obligatoire (lanterne, champignons, billet à plier en trois touches, Grand Marionnettiste, girouette, Pantoufle). Le toucher débloque « Continuer ». Deux autres éléments scintillent doucement : ce sont les bonus (hulotte, sac, renard, luciole, poisson, reflet de la lune, pigeon, fromage, lampadaire, fenêtre de la chambre, moustache, porte). Chaque bonus donne une **étoile de découverte** ; 6 étoiles donnent le badge Exploratrice, 12 le badge Œil de lynx.
+- Après 4 secondes sans toucher, une petite main montre l'élément ; après 8 secondes, le halo grossit. Un toucher à côté fait juste bouger la scène.
+- **Narration.** Quenotte parle dans le bandeau du bas. Le texte apparaît par petits groupes de mots ; un toucher sur le bandeau affiche tout d'un coup.
+- **Son.** La musique démarre au premier toucher. Le bouton haut-parleur coupe musique et effets.
+- **Billet.** Dans l'histoire, le billet de 5 € sert de bateau sur la Meuse puis sèche sur la cheminée (éteinte !) : c'est là qu'il faut poser le vrai billet. Le mot A6 sous l'oreiller et la lettre indiquent cet endroit. Sur le diplôme, un bouton « J'ai trouvé mon billet ! » donne le badge correspondant.
+- **Chapitre secret.** Une fois que le Grand Marionnettiste a fait coucou, le toucher trois fois de suite ouvre la 13e scène.
 
 ## Mettre en ligne sur GitHub Pages
 
@@ -21,19 +36,14 @@ Le dépôt prévu est `https://github.com/Florian-Gaudin/Petite-souris.git`, don
 
 1. Dans ce dossier, dans un terminal :
    ```
-   git init
    git add .
-   git commit -m "La nuit de la Petite Souris"
-   git branch -M main
-   git remote add origin https://github.com/Florian-Gaudin/Petite-souris.git
-   git push -u origin main
+   git commit -m "mise à jour"
+   git push
    ```
-   (Si le dépôt est déjà initialisé, seules les trois dernières lignes manquent.)
+   (Première fois : `git remote add origin https://github.com/Florian-Gaudin/Petite-souris.git` puis `git push -u origin main`.)
 2. Sur github.com, ouvrir le dépôt → **Settings** → **Pages** → « Build and deployment » : Source = *Deploy from a branch*, Branch = **main** et dossier **/ (root)** → **Save**.
 3. Attendre une à deux minutes. Le site est à l'adresse ci-dessus. Le dépôt doit être **public** pour que GitHub Pages gratuit fonctionne.
-4. Ouvrir l'adresse sur le téléphone pour vérifier, puis ouvrir `https://florian-gaudin.github.io/Petite-souris/mot.html` sur l'ordinateur : le QR code pointe vers le site.
-
-Pour mettre à jour le site plus tard : modifier les fichiers, puis `git add . && git commit -m "mise à jour" && git push`.
+4. Ouvrir l'adresse sur la tablette pour vérifier, puis imprimer `mot.html` en A6 (ou l'afficher sur l'ordinateur) : le QR code pointe vers le site.
 
 ## Tester sur l'ordinateur
 
@@ -43,42 +53,10 @@ Pour mettre à jour le site plus tard : modifier les fichiers, puis `git add . &
 
 ## Réinitialiser et sauter des chapitres
 
-- Lien discret **« Recommencer »** en bas à droite de l'écran d'accueil : efface la progression, les badges et la date mémorisée.
+- Lien discret **« Recommencer »** en bas à droite de l'écran d'accueil : efface la progression, les étoiles, les badges et la date mémorisée.
 - Dans l'adresse : `index.html?reset=1` fait la même chose.
-- `index.html?chapitre=3` débloque et ouvre directement le chapitre 3 (de 0 à 5), pratique pour tester.
-- Les perles du ruban rouge en haut permettent de revoir un chapitre déjà débloqué.
+- `index.html?chapitre=3` débloque et ouvre directement le chapitre 3 (de 0 à 5).
+- `index.html?chapitre=1&scene=4` ouvre directement la scène 4 du voyage (de 0 à 5).
+- `index.html?chapitre=3&t=20` avance de 20 secondes dans la caméra.
+- Les perles du ruban rouge en haut permettent de revoir un chapitre déjà débloqué ; les pastilles sous le ruban permettent de revoir une scène déjà vue.
 - La progression est mémorisée **dans le navigateur de l'appareil** (localStorage). La tablette et l'ordinateur ont donc chacun leur progression.
-
-## Changer l'adresse du QR code
-
-Modifier la ligne `url` dans `config.js`, enregistrer, puis recharger `mot.html` : le QR code est regénéré sur place, hors ligne. Si l'adresse contient encore `VOTRE-COMPTE`, un bandeau rouge le signale.
-
-## La date de la nuit
-
-Elle est calculée au premier lancement sur l'appareil (avant midi : la nuit qui vient de finir ; après midi : la nuit qui vient), puis figée dans la mémoire du navigateur. Pour la forcer, écrire par exemple `nuit: "2026-11-10"` (le soir du départ) dans `config.js`. Le lien « Recommencer » recalcule la date.
-
-## Le matin
-
-1. Sur l'ordinateur, ouvrir `mot.html` (en ligne ou en local), bouton « Plein écran ».
-2. Clémentine scanne le QR code avec l'appareil photo de la tablette (iPad : l'appareil photo reconnaît les QR codes ; Android : appareil photo ou Google Lens).
-3. Le son ne démarre qu'après son premier toucher sur « Allumer la lanterne ». Le bouton haut-parleur en haut à droite coupe ou remet le son ; « Écouter » lit les textes à voix haute (voix française de la tablette).
-4. À la fin, « Imprimer le diplôme » ouvre `certificat.html` avec les badges gagnés. Depuis l'ordinateur, ouvrir `certificat.html` affiche le diplôme avec tous les badges (ajouter `?secret=1` si elle a trouvé la 13e scène).
-
-Le billet plié en bateau est posé sur la cheminée : la caméra montre Quenotte qui l'y dépose « pour qu'il sèche », et la lettre l'envoie le chercher.
-
-## Chapitre secret
-
-Sur la carte (chapitre 1), toucher trois fois le Grand Marionnettiste ouvre la 13e scène. Pour le désactiver : `secret: false` dans `config.js`.
-
-## Les prochaines dents
-
-1. Dans `config.js`, ajouter la nouvelle dent dans `dents` (position `bas-centrale-gauche` ou `bas-centrale-droite` pour l'instant ; d'autres positions peuvent être ajoutées dans `js/certificat.js`, fonction `machoireSVG`).
-2. Changer si besoin le lieu du billet (`billet.lieu`) ou désactiver le bateau (`billet.bateau: false`).
-3. Adapter quelques statuts du journal de bord et la lettre dans `js/data.js`.
-4. Sur la tablette, utiliser « Recommencer » pour repartir du début avec la nouvelle date.
-
-## Accessibilité et confidentialité
-
-- `prefers-reduced-motion` est respecté : sans animations, la souris saute d'étape en étape et la vidéo s'affiche sans scintillement.
-- Aucun service tiers : polices, sons (fabriqués en code) et QR code sont embarqués. Aucun cookie, aucune statistique.
-- Le site est public sur GitHub Pages : il ne contient que le prénom de l'enfant et le nom du village. Les pages demandent aux moteurs de recherche de ne pas les indexer (`noindex`).

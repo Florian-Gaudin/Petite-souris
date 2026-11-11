@@ -33,7 +33,7 @@ window.CERTIFICAT = (function () {
 </svg>`;
   }
 
-  // opts : { badges: [ids], secret: bool, nuitTexte: "nuit du …", dents }
+  // opts : { badges: [ids], secret: bool, nuitTexte: "nuit du …", dents, etoiles: n, total: n }
   function html(opts) {
     const C = window.CONFIG, D = window.DATA;
     const T = s => s.replace(/\{(\w+)\}/g, (m, k) => C[k] != null ? C[k] : m);
@@ -44,6 +44,10 @@ window.CERTIFICAT = (function () {
     }).join('');
     const derniere = C.dents[C.dents.length - 1];
     const ordinal = derniere.numero === 1 ? '1<sup>re</sup>' : derniere.numero + '<sup>e</sup>';
+    const total = opts.total || D.scenes.reduce((n, s) => n + s.bonus.length, 0);
+    const etoiles = Math.max(0, Math.min(total, opts.etoiles || 0));
+    let etoilesSVG = '';
+    for (let i = 0; i < total; i++) etoilesSVG += `<svg class="dip-etoile ${i < etoiles ? '' : 'off'}" viewBox="0 0 24 24" aria-hidden="true"><use href="#etoile5"/></svg>`;
     return `<div class="diplome">
   <div class="dip-bord">
     <div class="dip-coin c1"></div><div class="dip-coin c2"></div><div class="dip-coin c3"></div><div class="dip-coin c4"></div>
@@ -51,7 +55,8 @@ window.CERTIFICAT = (function () {
     <div class="dip-sous">de dent de lait perdue</div>
     <div class="dip-decerne">décerné à</div>
     <div class="dip-nom">${esc(C.enfant)}</div>
-    <p class="dip-texte">qui a perdu sa <b>${ordinal} dent de lait</b>, une incisive centrale du bas,<br>et qui a aidé ${esc(C.souris)} à passer devant le chat ${esc(C.chat)}.</p>
+    <p class="dip-texte">qui a perdu sa <b>${ordinal} dent de lait</b>, une incisive centrale du bas, qui a guidé ${esc(C.souris)} jusqu'à sa maison et l'a aidée à passer devant le chat ${esc(C.chat)}.<br>Son billet de 5 € a traversé la Meuse en bateau.</p>
+    <div class="dip-etoiles" aria-label="${etoiles} étoiles de découverte sur ${total}">${etoilesSVG}<span>${etoiles} étoile${etoiles > 1 ? 's' : ''} de découverte sur ${total}</span></div>
     <div class="dip-milieu">
       <div class="dip-machoire">${machoireSVG(opts.dents)}</div>
       <div class="dip-badges">${badges}</div>

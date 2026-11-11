@@ -1,4 +1,5 @@
-// Sons fabriqués en code (Web Audio). Rien ne joue avant le premier toucher.
+// Effets sonores fabriqués en code (Web Audio). Rien ne joue avant le premier toucher.
+// La musique d'ambiance (musique.js) se branche sur la même sortie : le bouton son coupe tout.
 window.SON = (function () {
   'use strict';
   let ctx = null, master = null, ronfleTimer = null, debloque = false;
@@ -25,22 +26,24 @@ window.SON = (function () {
     g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol || 0.3, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
     o.connect(g).connect(master); o.start(t0); o.stop(t0 + dur + 0.05);
   }
-  function bruit(dur, vol, when, freq) {
+  function bruit(dur, vol, when, freq, q) {
     if (!debloque) return;
     const c = ensure(); if (!c) return;
     const t0 = c.currentTime + (when || 0);
     const buf = c.createBuffer(1, Math.max(1, Math.floor(c.sampleRate * dur)), c.sampleRate);
     const d = buf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     const s = c.createBufferSource(); s.buffer = buf;
-    const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq || 1200;
+    const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq || 1200; if (q) f.Q.value = q;
     const g = c.createGain(); g.gain.setValueAtTime(vol || 0.2, t0); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
     s.connect(f).connect(g).connect(master); s.start(t0);
   }
   const sons = {
     lanterne() { tone(660, 0.15, 'triangle', 0.25); tone(990, 0.35, 'triangle', 0.2, 0.12); },
     badge() { [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.25, 'triangle', 0.22, i * 0.12)); },
+    etoile() { [1319, 1760, 2093].forEach((f, i) => tone(f, 0.3, 'sine', 0.16, i * 0.07)); tone(2637, 0.5, 'sine', 0.1, 0.22); },
     fanfare() { [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, 0.4, 'triangle', 0.2, i * 0.14)); tone(1568, 0.8, 'triangle', 0.18, 0.75); },
     clic() { tone(900, 0.05, 'square', 0.05); },
+    toc() { tone(420, 0.06, 'triangle', 0.12); },
     pas() { bruit(0.05, 0.07, 0, 600); },
     mmh() { tone(300, 0.18, 'sawtooth', 0.1); tone(420, 0.3, 'sawtooth', 0.1, 0.16); },
     baillement() { tone(200, 0.8, 'triangle', 0.12, 0, 420); },
@@ -48,8 +51,24 @@ window.SON = (function () {
     bip() { tone(1200, 0.08, 'square', 0.07); },
     cachet() { bruit(0.12, 0.35, 0, 900); bruit(0.25, 0.2, 0.08, 500); },
     papier() { bruit(0.3, 0.12, 0, 2500); },
+    pli() { bruit(0.12, 0.18, 0, 3000); bruit(0.08, 0.1, 0.1, 1800); },
     crayon() { bruit(0.04, 0.05, 0, 2600); },
     plouf() { tone(500, 0.2, 'sine', 0.2, 0, 180); bruit(0.3, 0.1, 0.05, 800); },
+    eau() { bruit(0.6, 0.06, 0, 500, 0.7); bruit(0.5, 0.05, 0.3, 700, 0.7); },
+    champignon() { tone(880, 0.25, 'sine', 0.18, 0, 1320); tone(1760, 0.4, 'sine', 0.08, 0.1); },
+    hulotte() { tone(420, 0.35, 'sine', 0.16, 0, 380); tone(400, 0.5, 'sine', 0.16, 0.45, 340); },
+    renard() { bruit(0.08, 0.2, 0, 1500, 2); tone(700, 0.15, 'triangle', 0.08, 0.05, 500); },
+    buisson() { bruit(0.25, 0.14, 0, 1800); bruit(0.2, 0.1, 0.18, 1400); },
+    pigeon() { tone(520, 0.1, 'sine', 0.12, 0, 640); tone(520, 0.1, 'sine', 0.12, 0.15, 640); tone(500, 0.2, 'sine', 0.1, 0.3, 420); },
+    croque() { bruit(0.07, 0.18, 0, 900, 1); bruit(0.07, 0.14, 0.12, 1100, 1); },
+    girouette() { [0, 0.12, 0.22, 0.3, 0.37, 0.43].forEach(t => bruit(0.04, 0.1, t, 2200, 3)); tone(660, 0.3, 'triangle', 0.1, 0.6); },
+    gresille() { [0, 0.05, 0.13, 0.2, 0.31].forEach(t => bruit(0.03, 0.12, t, 3200, 4)); },
+    grince() { tone(180, 0.7, 'sawtooth', 0.05, 0, 260); tone(360, 0.5, 'sawtooth', 0.03, 0.2, 420); },
+    ronron() { [0, 0.5, 1].forEach(t => tone(70, 0.45, 'sawtooth', 0.05, t, 60)); },
+    pantin() { [784, 988, 784, 1175].forEach((f, i) => tone(f, 0.12, 'square', 0.05, i * 0.14)); },
+    luciole() { tone(2093, 0.12, 'sine', 0.08); tone(2637, 0.18, 'sine', 0.06, 0.1); },
+    ronds() { tone(1047, 0.3, 'sine', 0.08, 0, 880); tone(880, 0.4, 'sine', 0.06, 0.2, 700); },
+    allume() { tone(523, 0.2, 'triangle', 0.14); tone(784, 0.3, 'triangle', 0.1, 0.15); },
   };
   function ronfleStart() {
     if (ronfleTimer || muet) return;
@@ -63,7 +82,15 @@ window.SON = (function () {
   return {
     // À appeler depuis un geste de l'utilisateur (toucher, clic) : autorise les sons
     unlock() { debloque = true; return ensure(); },
-    play(n) { try { if (!muet && sons[n]) sons[n](); } catch (e) { } },
+    contexte() { return ensure(); },
+    get master() { ensure(); return master; },
+    play(n) {
+      try {
+        if (muet || !sons[n]) return;
+        sons[n]();
+        if (window.MUSIQUE) window.MUSIQUE.baisser();
+      } catch (e) { }
+    },
     ronfleStart, ronfleStop,
     get muet() { return muet; },
     toggle() {

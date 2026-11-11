@@ -14,6 +14,7 @@
   .mot-texte{display:flex;flex-direction:column;align-items:center;gap:12px}
   .mot h1{font-size:clamp(1.8rem,4.6vw,3.4rem);font-weight:800;max-width:16ch;text-shadow:0 3px 14px rgba(0,0,0,.5)}
   .mot .souris{width:clamp(140px,22vw,260px);height:auto;filter:drop-shadow(0 12px 24px rgba(0,0,0,.45))}
+  .mot .cadeau{font-size:clamp(1.3rem,3vw,2rem);font-weight:800;color:var(--lanterne);max-width:22ch;margin:0}
   .mot .inv{font-size:clamp(1.1rem,2.4vw,1.6rem);color:var(--muet);max-width:26ch}
   .mot .sign{font-family:var(--hand);font-size:clamp(1.4rem,3vw,2.2rem);color:var(--lanterne);display:flex;align-items:center;gap:10px}
   .mot .sign svg{width:1.3em;height:1.3em;fill:var(--lanterne)}
@@ -33,6 +34,7 @@
     .mot{grid-template-columns:1fr;gap:4mm;max-width:none}
     .mot h1{font-size:17pt;text-shadow:none;color:#1F2235}
     .mot .souris{width:28mm;filter:none}
+    .mot .cadeau{font-size:14pt;color:#D64045}
     .mot .inv{font-size:10pt;color:#333}
     .mot .sign{font-size:15pt;color:#1F2235}.mot .sign svg{fill:#1F2235}
     .qr{box-shadow:none;padding:0;border-radius:0}.qr svg{width:48mm}
@@ -47,7 +49,8 @@
   <div class="mot-texte">
     <svg class="souris" viewBox="0 0 220 240" aria-hidden="true"><use href="#souris-face"/></svg>
     <h1 id="titre"></h1>
-    <p class="inv">Quelqu'un a laissé un film, une lettre et un diplôme pour toi…</p>
+    <p class="cadeau" id="cadeau"></p>
+    <p class="inv">Et j'ai filmé mon voyage pour toi : une histoire, une lettre et un diplôme t'attendent.</p>
     <p class="sign"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#patte"/></svg><span id="signature"></span></p>
   </div>
   <div class="qr-wrap">
@@ -67,7 +70,8 @@
 (function(){
   document.body.insertAdjacentHTML('afterbegin', ART.symboles());
   const C = window.CONFIG;
-  document.getElementById('titre').textContent = C.enfant + ', quelqu\'un est venu cette nuit…';
+  document.getElementById('titre').textContent = 'Merci pour ta dent, ' + C.enfant + ' !';
+  document.getElementById('cadeau').textContent = 'Mon cadeau sèche ' + C.billet.lieu + ' !';
   document.getElementById('signature').textContent = C.souris;
   document.getElementById('url').textContent = C.url;
   if (!C.url || /VOTRE-COMPTE/i.test(C.url)) document.getElementById('alerte').hidden = false;
