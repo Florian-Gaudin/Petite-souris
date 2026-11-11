@@ -31,6 +31,12 @@ Une petite expérience web (site statique, sans compte, sans suivi) racontée à
 - **Billet.** Dans l'histoire, le billet de 5 € sert de bateau sur la Meuse puis sèche sur la cheminée (éteinte !) : c'est là qu'il faut poser le vrai billet. Le mot A6 sous l'oreiller et la lettre indiquent cet endroit. Sur le diplôme, un bouton « J'ai trouvé mon billet ! » donne le badge correspondant.
 - **Chapitre secret.** Une fois que le Grand Marionnettiste a fait coucou, le toucher trois fois de suite ouvre la 13e scène.
 
+## Plein écran et web app
+
+- **Android et iPad** : la page passe en plein écran au premier toucher (les navigateurs l'interdisent sans geste). Un bouton dans le ruban du haut permet d'en sortir ou d'y revenir.
+- **Comme une vraie application** : ouvrir le lien, puis « Ajouter à l'écran d'accueil » (menu ⋮ de Chrome sur Android, bouton Partager de Safari sur iPhone et iPad). L'icône Petite Souris s'ouvre ensuite en plein écran, sans barre d'adresse. **C'est la seule solution sur iPhone**, où Safari ne permet pas le plein écran d'une page.
+- Fichiers concernés : `manifest.webmanifest` et le dossier `icones/`.
+
 ## Mettre en ligne sur GitHub Pages
 
 Le dépôt prévu est `https://github.com/Florian-Gaudin/Petite-souris.git`, donc l'adresse du site sera **https://florian-gaudin.github.io/Petite-souris/** (déjà renseignée dans `config.js`).

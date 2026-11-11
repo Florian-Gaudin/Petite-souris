@@ -32,7 +32,7 @@ p{margin:.4rem 0}
 .perle.maison svg{width:18px;height:18px}
 .perle.maison.active{background:var(--lanterne);border-color:var(--lanterne)}
 .perle.maison.active svg path{fill:#3b2a00}
-.perle[data-n="1"]{left:16%}.perle[data-n="2"]{left:33%}.perle[data-n="3"]{left:50%}.perle[data-n="4"]{left:67%}.perle[data-n="5"]{left:84%}
+.perle[data-n="1"]{left:21%}.perle[data-n="2"]{left:37.5%}.perle[data-n="3"]{left:54%}.perle[data-n="4"]{left:70.5%}.perle[data-n="5"]{left:87%}
 .perle.faite{background:var(--rouge);color:#fff}
 .perle.active{background:var(--lanterne);border-color:var(--lanterne);color:#3b2a00;transform:scale(1.15)}
 .perle:not(.ouverte){opacity:.55}
@@ -41,6 +41,15 @@ p{margin:.4rem 0}
 .heure{font-family:var(--mono);font-size:1.05rem;color:var(--lanterne);min-width:3.4em;text-align:center;font-variant-numeric:tabular-nums}
 .btn-ico{width:48px;height:48px;border-radius:50%;border:2px solid #3d4a95;background:#1b2250;color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
 .btn-ico .ico{width:26px;height:26px}
+@media (max-width:440px){
+  .fil-in{gap:6px}
+  .btn-ico{width:40px;height:40px}
+  .btn-ico .ico{width:22px;height:22px}
+  .heure{min-width:3em;font-size:.95rem}
+  .perle{width:26px;height:26px;margin:-13px 0 0 -13px;font-size:.78rem;border-width:2.5px}
+  .perle.maison svg{width:15px;height:15px}
+  .fil-souris{width:32px;height:25px;margin:-29px 0 0 -16px}
+}
 
 /* ---------- Mise en page générale ---------- */
 .scene{max-width:960px;margin:0 auto;padding:10px max(14px,env(safe-area-inset-left,0px)) calc(var(--bandeau-h) + 24px) max(14px,env(safe-area-inset-right,0px))}

@@ -83,20 +83,39 @@
     D.badges.filter(b => b.etoiles && n >= b.etoiles).forEach(b => setTimeout(() => badge(b.id), 1500));
   }
   function complete(n) { if (State.unlocked < n + 1) { State.unlocked = n + 1; save(); } }
+  // ---------- Plein écran ----------
+  // Aucun navigateur n'autorise le plein écran sans geste : on le demande au premier toucher.
+  // Sur iPhone, l'API n'existe pas : il faut « Ajouter à l'écran d'accueil » (web app).
+  const PLEIN = {
+    api: !!(document.fullscreenEnabled || document.webkitFullscreenEnabled),
+    appli: !!((window.matchMedia && window.matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches) || navigator.standalone),
+    actif() { return !!(document.fullscreenElement || document.webkitFullscreenElement); },
+    entrer() {
+      const el = document.documentElement;
+      try {
+        const p = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' }) : (el.webkitRequestFullscreen && el.webkitRequestFullscreen());
+        if (p && p.catch) p.catch(() => { });
+      } catch (e) { }
+    },
+    sortir() { try { const p = document.exitFullscreen ? document.exitFullscreen() : (document.webkitExitFullscreen && document.webkitExitFullscreen()); if (p && p.catch) p.catch(() => { }); } catch (e) { } },
+  };
+  function boutonPlein() { const b = $('#btn-plein'); if (b) b.innerHTML = A.icone(PLEIN.actif() ? 'reduire' : 'plein'); }
   function buildFil() {
     const maison = `<button class="perle maison" data-n="0" aria-label="Revenir au début de l'histoire" title="Revenir au début"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="#fff"/></svg></button>`;
     const perles = maison + [1, 2, 3, 4, 5].map(i => `<button class="perle" data-n="${i}" aria-label="Chapitre ${i}"><span>${i}</span></button>`).join('');
     $('#fil').innerHTML = `<div class="fil-in">
       <div class="ruban" aria-label="Progression de l'histoire"><div class="fil-ligne"></div>${perles}<div class="fil-souris"><svg viewBox="0 0 130 100"><use href="#souris-side"/></svg></div></div>
       <div class="heure" id="heure" aria-label="Heure dans l'histoire">—</div>
+      ${PLEIN.api && !PLEIN.appli ? `<button class="btn-ico" id="btn-plein" aria-label="Plein écran">${A.icone('plein')}</button>` : ''}
       <button class="btn-ico" id="btn-son" aria-label="Couper ou remettre le son et la musique">${A.icone(SON.muet ? 'muet' : 'son')}</button>
     </div>`;
+    if ($('#btn-plein')) $('#btn-plein').onclick = e => { e.stopPropagation(); if (PLEIN.actif()) PLEIN.sortir(); else PLEIN.entrer(); };
     $('#btn-son').onclick = () => { SON.unlock(); const m = SON.toggle(); $('#btn-son').innerHTML = A.icone(m ? 'muet' : 'son'); toast(m ? 'Son et musique coupés' : 'Son et musique activés'); };
     $$('.perle').forEach(p => p.onclick = () => { const n = +p.dataset.n; if (n <= State.unlocked) show(n); else toast('Termine d\'abord le chapitre ' + (n - 1) + ' !'); });
   }
   function updateFil(n) {
     $$('.perle').forEach(p => { const i = +p.dataset.n; p.classList.toggle('faite', i < State.unlocked); p.classList.toggle('active', i === n); p.classList.toggle('ouverte', i <= State.unlocked); });
-    const s = $('.fil-souris'); if (s) s.style.left = n === 0 ? '5%' : [16, 33, 50, 67, 84][n - 1] + '%';
+    const s = $('.fil-souris'); if (s) s.style.left = n === 0 ? '5%' : [21, 37.5, 54, 70.5, 87][n - 1] + '%';
     document.body.dataset.chapitre = n;
   }
   // Fondu au noir entre deux tableaux : on assombrit, on change, on rallume
@@ -447,6 +466,16 @@
   const GESTES = ['pointerdown', 'touchend', 'click', 'keydown'];
   const premierGeste = () => { SON.unlock(); MUS.demarrer(); GESTES.forEach(g => document.removeEventListener(g, premierGeste)); };
   GESTES.forEach(g => document.addEventListener(g, premierGeste));
+  // Plein écran automatique au premier toucher (une seule tentative : si on en sort, le bouton du ruban permet d'y revenir)
+  if (PLEIN.api && !PLEIN.appli) {
+    const autoPlein = e => {
+      if (e.target && e.target.closest && e.target.closest('#btn-plein')) return;
+      document.removeEventListener('click', autoPlein, true);
+      if (!PLEIN.actif()) PLEIN.entrer();
+    };
+    document.addEventListener('click', autoPlein, true);
+  }
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(n => document.addEventListener(n, boutonPlein));
 
   const h = parseInt((location.hash || '').slice(1), 10);
   if (demande != null) show(demande);
