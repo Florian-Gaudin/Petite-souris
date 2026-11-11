@@ -17,7 +17,9 @@ window.NARR = (function () {
     texte = el.querySelector('#bandeau-texte'); portrait = el.querySelector('.portrait'); bulle = el.querySelector('.bandeau-bulle'); actions = el.querySelector('#bandeau-actions');
     el.addEventListener('click', e => {
       if (e.target.closest('.bandeau-actions')) return;
-      continuer();
+      if (e.target.closest('.bandeau-suite')) { continuer(); return; }
+      // Ailleurs sur le bandeau : on montre seulement tout le texte, on n'avance pas
+      if (enCours) toutMontrer();
     });
     // La hauteur du bandeau est transmise au reste de la page (pour ne jamais cacher la scène)
     const mesure = () => { document.documentElement.style.setProperty('--bandeau-h', el.offsetHeight + 'px'); };
@@ -94,6 +96,8 @@ window.NARR = (function () {
     actions.appendChild(b); b.classList.add('pop'); return b;
   }
   function cacher(on) { el.classList.toggle('cache', !!on); }
+  // Masque provisoirement le bouton d'action (pendant une bulle bonus), sans le perdre
+  function masquerAction(on) { actions.hidden = !!on; }
 
-  return { init, dire, attendre, continuer, action, cacher, expression, get attend() { return !!attente || !!enCours; }, get visible() { return !el.classList.contains('cache'); } };
+  return { init, dire, attendre, continuer, action, masquerAction, cacher, expression, get attend() { return !!attente || !!enCours; }, get lit() { return !!enCours; }, get visible() { return !el.classList.contains('cache'); } };
 })();
