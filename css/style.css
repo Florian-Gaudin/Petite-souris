@@ -106,6 +106,8 @@ p{margin:.4rem 0}
 .portrait .sourcils{transition:transform .3s}
 
 /* ---------- Chapitre 0 ---------- */
+.scene.ch-0{height:calc(100vh - var(--fil-h) - 1px - env(safe-area-inset-top,0px));height:calc(100dvh - var(--fil-h) - 1px - env(safe-area-inset-top,0px));padding-bottom:calc(var(--bandeau-h) + 8px);display:flex;flex-direction:column;overflow:hidden}
+.scene.ch-0 .ch0{flex:1;min-height:0}
 .ch0{position:relative;min-height:calc(100vh - var(--fil-h) - var(--bandeau-h) - 34px);display:flex;flex-direction:column;justify-content:flex-end;margin:-10px calc(-1 * max(14px,env(safe-area-inset-left,0px))) 0 calc(-1 * max(14px,env(safe-area-inset-right,0px)));padding:0 max(16px,env(safe-area-inset-left,0px)) 16px;border-radius:0 0 18px 18px;overflow:hidden}
 .ch0 .ciel{position:absolute;inset:0;overflow:hidden;z-index:0}
 .ciel-svg{width:100%;height:100%;display:block}
