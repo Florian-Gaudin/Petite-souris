@@ -34,10 +34,12 @@
   const pad = n => String(n).padStart(2,'0');
   const p = new URLSearchParams(location.search);
   let etat = {};
-  try { etat = JSON.parse(localStorage.getItem('souris.v1') || '{}'); } catch(e) {}
+  try { etat = JSON.parse(localStorage.getItem('souris.v2') || '{}'); } catch(e) {}
   // Priorité : paramètres d'adresse (envoyés par la tablette) > mémoire locale > tout gagné
   const tous = DATA.badges.filter(b => !b.secret).map(b => b.id);
   const badges = p.has('badges') ? p.get('badges').split(',').filter(Boolean) : (etat.badges && etat.badges.length ? etat.badges : tous);
+  const total = DATA.scenes.reduce((n, s) => n + s.bonus.length, 0);
+  const etoiles = p.has('etoiles') ? parseInt(p.get('etoiles'), 10) || 0 : Object.keys(etat.etoiles || {}).reduce((n, k) => n + (etat.etoiles[k] || []).length, 0) || total;
   const secret = p.has('secret') ? p.get('secret') === '1' : !!etat.secret;
   if (secret && badges.indexOf('scene13') < 0) badges.push('scene13');
   let nuit = p.get('nuit') || CONFIG.nuit || etat.nuit;
@@ -45,7 +47,7 @@
   const d1 = new Date(nuit + 'T12:00:00'), d2 = new Date(d1); d2.setDate(d2.getDate() + 1);
   const mois = new Intl.DateTimeFormat('fr-FR', { month: 'long' }); const m1 = mois.format(d1), m2 = mois.format(d2);
   const nuitTexte = m1 === m2 ? `nuit du ${d1.getDate()} au ${d2.getDate()} ${m2} ${d2.getFullYear()}` : `nuit du ${d1.getDate()} ${m1} au ${d2.getDate()} ${m2} ${d2.getFullYear()}`;
-  document.getElementById('diplome').innerHTML = CERTIFICAT.html({ badges: badges.concat(badges.indexOf('jumelle') < 0 ? ['jumelle'] : []), secret, nuitTexte });
+  document.getElementById('diplome').innerHTML = CERTIFICAT.html({ badges: badges.concat(badges.indexOf('jumelle') < 0 ? ['jumelle'] : []), secret, nuitTexte, etoiles, total });
   document.getElementById('btn-print').onclick = () => window.print();
 })();
 </script>

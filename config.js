@@ -29,15 +29,10 @@ window.CONFIG = {
     { numero: 2, position: "bas-centrale-droite" },
   ],
 
-  // Le billet : plié en bateau (true) et déposé où ? La vidéo et la lettre s'adaptent.
-  billet: { bateau: true, lieu: "sur la cheminée" },
+  // Où le billet (plié en bateau sur la Meuse) sèche jusqu'au matin. Le vrai billet doit être posé là,
+  // sur une cheminée ÉTEINTE. La lettre et le mot sous l'oreiller donnent cet endroit.
+  billet: { lieu: "sur la cheminée" },
 
-  // Chapitre secret (toucher 3 fois le Grand Marionnettiste sur la carte)
+  // Chapitre secret (toucher 3 fois le Grand Marionnettiste, une fois qu'il a fait coucou)
   secret: true,
-
-  // Voix (synthèse vocale) : vitesse et hauteur (1 = normal)
-  tts: { rate: 0.95, pitch: 1.2 },
-
-  // Durées en secondes : trajet sur la carte, vidéo de la caméra
-  durees: { suivi: 60, camera: 42 },
 };

@@ -9,6 +9,10 @@
 .dip-decerne{margin-top:14px;font-size:.95rem;color:#5c4a1e}
 .dip-nom{font-family:'Baloo 2','Trebuchet MS',sans-serif;font-weight:800;font-size:clamp(2.2rem,9vw,3.6rem);color:#D64045;line-height:1.1}
 .dip-texte{font-size:clamp(.95rem,3vw,1.1rem);line-height:1.5;margin:10px auto 0;max-width:34em}
+.dip-etoiles{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:3px;margin-top:10px}
+.dip-etoile{width:22px;height:22px}
+.dip-etoile.off{opacity:.22;filter:grayscale(1)}
+.dip-etoiles span{width:100%;font-size:.78rem;color:#7a6220;font-style:italic;margin-top:2px}
 .dip-milieu{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center;margin-top:14px}
 .dip-machoire{flex:0 1 260px;max-width:100%}
 .machoire{width:100%;height:auto;display:block}
