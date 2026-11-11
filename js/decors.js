@@ -91,13 +91,13 @@ ${tap('bulles', 'Des bulles dans l’eau', `${halo(470, 440, 60)}<g class="bulle
 <path d="M0 600V380Q120 360 240 400L300 600Z" fill="#24483E"/><path d="M0 600V440Q120 430 230 470L260 600Z" fill="#1A2A26"/>
 <path d="M1000 600V360Q900 350 780 400L720 600Z" fill="#24483E"/><path d="M1000 600V430Q900 420 790 460L760 600Z" fill="#1A2A26"/>
 <g fill="#2F5D50"><ellipse cx="60" cy="390" rx="40" ry="18"/><ellipse cx="900" cy="372" rx="46" ry="18"/></g>
-${lueur(L.x, L.y, 110)}
-${A.souris(sx, sy, sw, 'class="quenotte rive-g"')}
 ${tap('billet', 'Le billet de 5 euros à plier', `${halo(0, 0, 84)}
   <g class="pli pli0"><use href="#billet" x="-70" y="-37" width="140" height="74"/></g>
   <g class="pli pli1"><rect x="-70" y="-20" width="140" height="40" rx="3" fill="#B9C4B0" stroke="#7f8c7a" stroke-width="2"/><path d="M-70 0h140" stroke="#8fa08a" stroke-width="2" stroke-dasharray="6 4"/><text x="0" y="12" font-family="Share Tech Mono, monospace" font-size="18" fill="#4a5a4a" text-anchor="middle">5 €</text></g>
   <g class="pli pli2"><path d="M-62 18L0-44l62 62z" fill="#CBD3C4" stroke="#7f8c7a" stroke-width="2"/><rect x="-62" y="18" width="124" height="16" fill="#B9C4B0" stroke="#7f8c7a" stroke-width="2"/><path d="M0-44v62" stroke="#8fa08a" stroke-width="2"/></g>
-  <g class="pli pli3"><use href="#bateau" x="-70" y="-40" width="140" height="74"/></g>`, 'transform="translate(135,330)" data-etape="0"')}
+  <g class="pli pli3"><use href="#bateau" x="-70" y="-40" width="140" height="74"/></g>`, 'transform="translate(170,316)" data-etape="0"')}
+${lueur(L.x, L.y, 110)}
+${A.souris(sx, sy, sw, 'class="quenotte rive-g"')}
 <g class="navire" transform="translate(230,440)"><use href="#bateau" x="-70" y="-40" width="140" height="74"/>${A.souris(-52, -106, 110)}</g>
 ${A.souris(800, 296, 150, 'class="quenotte rive-d"')}
 </svg>`;

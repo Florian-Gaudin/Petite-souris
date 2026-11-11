@@ -56,7 +56,7 @@ window.CERTIFICAT = (function () {
     <div class="dip-decerne">décerné à</div>
     <div class="dip-nom">${esc(C.enfant)}</div>
     <p class="dip-texte">qui a perdu sa <b>${ordinal} dent de lait</b>, une incisive centrale du bas, qui a guidé ${esc(C.souris)} jusqu'à sa maison et l'a aidée à passer devant le chat ${esc(C.chat)}.<br>Son billet de 5 € a traversé la Meuse en bateau.</p>
-    <div class="dip-etoiles" aria-label="${etoiles} étoiles de découverte sur ${total}">${etoilesSVG}<span>${etoiles} étoile${etoiles > 1 ? 's' : ''} de découverte sur ${total}</span></div>
+    <div class="dip-etoiles" aria-label="${etoiles} étoiles découvertes sur ${total}">${etoilesSVG}<span>${etoiles} étoile${etoiles > 1 ? 's' : ''} découverte${etoiles > 1 ? 's' : ''} sur ${total}</span></div>
     <div class="dip-milieu">
       <div class="dip-machoire">${machoireSVG(opts.dents)}</div>
       <div class="dip-badges">${badges}</div>

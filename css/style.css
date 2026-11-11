@@ -237,6 +237,7 @@ p{margin:.4rem 0}
 .decor-meuse .pli{display:none}
 .decor-meuse .tap[data-etape="0"] .pli0,.decor-meuse .tap[data-etape="1"] .pli1,.decor-meuse .tap[data-etape="2"] .pli2,.decor-meuse .tap[data-etape="3"] .pli3{display:block;animation:pop .35s ease-out}
 .decor-meuse .tap.parti{opacity:0;transition:opacity .4s}
+.decor-meuse .tap.devant .pli0{animation:pop .5s ease-out}
 .decor-meuse .navire{opacity:0;transition:opacity .4s}
 .decor-meuse .navire.on{opacity:1}
 .decor-meuse .rive-g{transition:opacity .4s}
