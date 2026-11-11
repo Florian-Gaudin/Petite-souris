@@ -28,11 +28,15 @@ p{margin:.4rem 0}
 .ruban{position:relative;flex:1;height:44px;min-width:0}
 .fil-ligne{position:absolute;left:4%;right:4%;top:50%;height:4px;margin-top:-2px;background:var(--rouge);border-radius:2px}
 .perle{position:absolute;top:50%;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:3px solid var(--rouge);background:var(--nuit);color:var(--muet);font:700 .85rem var(--display);padding:0;cursor:pointer}
+.perle.maison{left:5%;background:var(--rouge);border-color:var(--rouge);display:grid;place-items:center}
+.perle.maison svg{width:18px;height:18px}
+.perle.maison.active{background:var(--lanterne);border-color:var(--lanterne)}
+.perle.maison.active svg path{fill:#3b2a00}
 .perle[data-n="1"]{left:16%}.perle[data-n="2"]{left:33%}.perle[data-n="3"]{left:50%}.perle[data-n="4"]{left:67%}.perle[data-n="5"]{left:84%}
 .perle.faite{background:var(--rouge);color:#fff}
 .perle.active{background:var(--lanterne);border-color:var(--lanterne);color:#3b2a00;transform:scale(1.15)}
 .perle:not(.ouverte){opacity:.55}
-.fil-souris{position:absolute;top:50%;left:6%;width:38px;height:30px;margin:-34px 0 0 -19px;transition:left .8s cubic-bezier(.4,0,.2,1);pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}
+.fil-souris{position:absolute;top:50%;left:5%;width:38px;height:30px;margin:-34px 0 0 -19px;transition:left .8s cubic-bezier(.4,0,.2,1);pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}
 .fil-souris svg{width:100%;height:100%}
 .heure{font-family:var(--mono);font-size:1.05rem;color:var(--lanterne);min-width:3.4em;text-align:center;font-variant-numeric:tabular-nums}
 .btn-ico{width:48px;height:48px;border-radius:50%;border:2px solid #3d4a95;background:#1b2250;color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
@@ -135,6 +139,13 @@ p{margin:.4rem 0}
 
 /* Éléments à toucher, halos, main qui montre */
 .tap{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tap:focus{outline:none}
+.decor.occupe .indice{opacity:.25}
+.decor.occupe .indice use{animation:none}
+.decor.occupe .tap.bonus .halo{opacity:.15;animation:none}
+.decor.secret .tap.cible .halo{animation:none;opacity:.3}
+.tap.refus{animation:refus .4s ease-in-out}
+@keyframes refus{0%,100%{transform:translateX(0)}30%{transform:translateX(-4px)}70%{transform:translateX(4px)}}
 .decor .noir,.decor .dore,.decor .lueur,.decor .lueur-maison,.decor .lampe-lueur,.decor .champi-lueur,.decor .brume,.decor .main-aide,.decor .navire,.decor .etoile{pointer-events:none}
 .tap .halo{opacity:0;transform-box:fill-box;transform-origin:center;pointer-events:all}
 .tap.bonus .halo{opacity:.55;animation:scintille 2.6s ease-in-out infinite}
@@ -172,8 +183,16 @@ p{margin:.4rem 0}
 .decor-chateau .tap.secoue .feuillage{animation:secoue .25s ease-in-out 6}
 @keyframes feuille{0%,100%{transform:rotate(0)}50%{transform:rotate(1.5deg)}}
 @keyframes secoue{0%,100%{transform:rotate(0)}50%{transform:rotate(-4deg)}}
-.decor-chateau .hulotte{opacity:0;transform:scale(.4) translateY(30px);transform-box:fill-box;transform-origin:center;transition:transform .7s cubic-bezier(.3,1.4,.5,1),opacity .4s}
-.decor-chateau .tap.vu .hulotte{opacity:1;transform:translateY(-70px)}
+.decor-chateau .hulotte{opacity:0;transform:translateY(40px) scale(.5);transform-box:view-box;transform-origin:0 0;transition:transform .8s cubic-bezier(.3,1.4,.5,1),opacity .4s}
+.decor-chateau .tap.vu .hulotte{opacity:1;transform:translateY(-62px)}
+.decor-chateau .hulotte .aile{transform-box:view-box;transition:transform .3s}
+.decor-chateau .aile.ag{transform-origin:-16px 6px}.decor-chateau .aile.ad{transform-origin:16px 6px}
+.decor-chateau .tap.envol .hulotte{animation:envol 2.6s ease-in forwards}
+.decor-chateau .tap.envol .aile.ag{animation:aile-g .25s ease-in-out 10}
+.decor-chateau .tap.envol .aile.ad{animation:aile-d .25s ease-in-out 10}
+@keyframes envol{0%{transform:translateY(-62px);opacity:1}30%{transform:translate(-60px,-140px) scale(.95)}100%{transform:translate(-520px,-560px) scale(.55);opacity:0}}
+@keyframes aile-g{0%,100%{transform:rotate(0)}50%{transform:rotate(55deg)}}
+@keyframes aile-d{0%,100%{transform:rotate(0)}50%{transform:rotate(-55deg)}}
 .decor-chateau .billet-sac{transition:transform .8s cubic-bezier(.3,1.3,.5,1)}
 .decor-chateau .tap.vu .billet-sac{transform:translateY(-38px)}
 
@@ -190,7 +209,7 @@ p{margin:.4rem 0}
 .decor-foret .tap.vu .buisson{animation:none}
 @keyframes tremble-buisson{0%,70%,100%{transform:rotate(0)}75%{transform:rotate(-3deg)}80%{transform:rotate(3deg)}85%{transform:rotate(-2deg)}90%{transform:rotate(2deg)}}
 .decor-foret .renard{opacity:0;transition:transform 1.1s cubic-bezier(.3,1,.4,1),opacity .5s}
-.decor-foret .tap.vu .renard{opacity:1;transform:translateX(-128px)}
+.decor-foret .tap.vu .renard{opacity:1;transform:translateX(-100px)}
 .decor-foret .tap[data-el="luciole"] .lum{animation:luciole 1.6s ease-in-out infinite}
 .decor-foret .tap.vole .lum{animation-duration:.5s}
 @keyframes luciole{0%,100%{opacity:.5;transform:scale(.8)}50%{opacity:1;transform:scale(1.3)}}
@@ -378,6 +397,10 @@ p{margin:.4rem 0}
 .tableau svg{width:100%;height:auto;border-radius:12px;display:block}
 .tab-txt{font-size:1.2rem;text-align:center;margin:0;min-height:2.6em}
 .tab-actions{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+
+/* ---------- Fondu au noir entre les tableaux ---------- */
+#voile-noir{position:fixed;inset:0;z-index:35;background:#05070f;opacity:0;pointer-events:none;transition:opacity .7s ease-in-out}
+#voile-noir.on{opacity:1;pointer-events:auto}
 
 /* ---------- Toast ---------- */
 #toast{position:fixed;left:0;right:0;top:calc(var(--fil-h) + 12px + env(safe-area-inset-top,0px));display:flex;justify-content:center;pointer-events:none;z-index:40;opacity:0;transform:translateY(-16px);transition:opacity .3s,transform .3s}
