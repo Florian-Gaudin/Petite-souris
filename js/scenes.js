@@ -19,7 +19,7 @@ window.SCENES = (function () {
 
   let ctx = null, root = null, wrap = null, svg = null, sc = null, courant = -1, jeton = 0;
   let chaine = [], idx = 0, derniere = null, aideT1 = null, aideT2 = null, raf = null, bougeT = null, secretTaps = 0, secretT = null;
-  let occupe = false, jetonBulle = 0;
+  let occupe = false, jetonBulle = 0, enSecret = false;
   const T = s => ctx.T(s);
   const bulle = b => b ? { txt: T(b.txt), expr: b.expr } : null;
 
@@ -205,15 +205,21 @@ window.SCENES = (function () {
     const id = chaine[idx], el = sc.elements[id], g = $(`.tap[data-el="${id}"]`, svg);
     if (g) g.classList.add('cible');
     aideLance();
-    if (el.demande) { await NARR.dire(derniere = bulle(el.demande)); if (mien !== jeton) return; }
+    if (el.demande) {
+      const b = bulle(el.demande), deja = derniere && derniere.txt === b.txt; // déjà lue : on la remet d'un coup
+      await NARR.dire(derniere = b, deja ? { vite: 'instant' } : {}); if (mien !== jeton) return;
+    } else if (derniere) NARR.dire(derniere, { vite: 'instant' });
   }
   // Après une bulle bonus (et un toucher), on revient à ce qu'il y a à faire
   async function rappel(mien, mienBulle) {
     const ok = await NARR.attendre();
     if (mien !== jeton) return;
+    if (mienBulle !== jetonBulle) return; // un autre secret a pris la place : c'est lui qui rendra la main
     NARR.masquerAction(false);
-    if (!ok || mienBulle !== jetonBulle || occupe) return;
-    if (idx < chaine.length && !$('.tap.cible', svg)) { await demande(); return; }
+    enSecret = false; svg.classList.remove('secret');
+    if (!ok || occupe) return;
+    // Retour à l'histoire principale : la demande, la main d'aide et le toucher sur l'élément
+    if (idx < chaine.length) { await demande(); return; }
     if (derniere) NARR.dire(derniere, { vite: 'instant' });
   }
 
@@ -221,8 +227,10 @@ window.SCENES = (function () {
     const id = g.dataset.el, el = sc.elements[id];
     if (!el) return;
     SON.unlock();
-    if (sc.bonus.indexOf(id) >= 0) { bonus(g, id, el); aideLance(); return; }
+    if (sc.bonus.indexOf(id) >= 0) { bonus(g, id, el); return; }
     const pos = chaine.indexOf(id);
+    // Pendant la lecture d'un secret, l'histoire principale attend le bouton « Suite »
+    if (enSecret) { SON.play('toc'); g.classList.remove('refus'); void g.getBBox(); g.classList.add('refus'); return; }
     if (pos < idx) {
       // Élément obligatoire déjà fait : certains rejouent leur animation
       if (REJOUE[id]) { const act = ACTIONS[sc.id][id]; if (act) act(g); }
@@ -247,6 +255,7 @@ window.SCENES = (function () {
     const act = ACTIONS[sc.id][id]; if (act) act(g, null, 0, deuxieme);
     if (premiere) { ctx.etoile(sc.id, id); compteSecrets(); }
     NARR.masquerAction(true); // le bouton Continuer attend la fin du secret
+    enSecret = true; svg.classList.add('secret'); aideStop();
     await NARR.dire(bulle(deuxieme && el.bulle2 ? el.bulle2 : el.bulle));
     if (mien !== jeton) return;
     rappel(mien, mienBulle);
