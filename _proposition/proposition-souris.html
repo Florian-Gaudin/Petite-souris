@@ -1,0 +1,396 @@
+<title>Nuit de la Petite Souris</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Patrick+Hand&family=Share+Tech+Mono&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout : une bande « ciel de nuit » en ouverture, puis des sections papier dans une colonne de 940 px ; les tuiles passent en une colonne sur téléphone. */
+:root{
+  --bg:#F6EFE1; --fg:#1F2235; --muted:#5F6175; --line:#E0D5BE; --card:#FFF9EC; --card-2:#F9EFD9;
+  --night:#141A3A; --night-2:#273066; --night-fg:#F3EFE6;
+  --lantern:#FFC857; --rouge:#D64045; --rose:#F2A3B5; --souris:#A79E95; --ventre:#EFE8DD;
+  --foret:#2F5D50; --foret-2:#1E3F36; --meuse:#3E7C8F; --cam:#39FF14; --cam-bg:#06180B; --or:#C9A227; --encre:#1F2235; --papier:#FFF6E0;
+  --display:'Baloo 2','Trebuchet MS',sans-serif; --body:'Baloo 2','Segoe UI',sans-serif; --hand:'Patrick Hand','Segoe Print','Comic Sans MS',cursive; --mono:'Share Tech Mono',Consolas,monospace; --serif:'Libre Baskerville',Georgia,serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#0E1230; --fg:#F3EFE6; --muted:#B9B5C8; --line:#2E3768; --card:#1A2050; --card-2:#202760; color-scheme:dark } }
+:root[data-theme="dark"]{ --bg:#0E1230; --fg:#F3EFE6; --muted:#B9B5C8; --line:#2E3768; --card:#1A2050; --card-2:#202760; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.5}
+.wrap{max-width:940px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:1.7rem;font-weight:800;margin-bottom:.35rem}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:.4rem 0}
+section{padding-block:2.2rem;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+.eyebrow{font-family:var(--mono);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 .6rem}
+.hero{background:radial-gradient(circle at 15% 20%, #2b356f 0, transparent 35%),radial-gradient(circle at 85% 70%, #1d2558 0, transparent 40%),var(--night);color:var(--night-fg);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(1.5px 1.5px at 12% 30%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 30% 12%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 48% 40%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 64% 18%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 80% 35%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 90% 12%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 22% 70%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 70% 80%,#fff 50%,transparent 51%);opacity:.8;pointer-events:none}
+.hero-in{display:flex;gap:2rem;align-items:center;flex-wrap:wrap;padding-block:2.6rem 2rem;position:relative}
+.hero-text{flex:1 1 320px;min-width:0}
+.hero .eyebrow{color:var(--lantern)}
+.hero h1{font-size:clamp(2.1rem,6vw,3.4rem);font-weight:800}
+.hero .lead{font-size:1.25rem;margin-top:.6rem}
+.hero .alts{color:#cfd3ee;font-size:.95rem;margin:.6rem 0 0}
+.hero-art{flex:0 1 300px;margin:0;text-align:center}
+.hero-art svg{width:min(280px,70vw);height:auto;filter:drop-shadow(0 12px 24px rgba(0,0,0,.45))}
+.hero-art figcaption{font-family:var(--hand);font-size:1.15rem;color:var(--lantern);margin-top:.4rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0;padding:0;list-style:none}
+.chips li{background:var(--card-2);border:1px solid var(--line);border-radius:999px;padding:.3rem .8rem;font-weight:700;font-size:.95rem}
+.quote{font-family:var(--hand);font-size:1.35rem;border-left:4px solid var(--rouge);padding:.2rem .9rem;margin:.9rem 0;color:var(--fg)}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1rem;min-width:0}
+.tile h3{margin-bottom:.3rem}
+.tile p{color:var(--muted);font-size:.95rem}
+.night-tile{background:var(--night);color:var(--night-fg);border-color:#2f3a7a}
+.night-tile p{color:#cfd3ee}
+.night-tile svg{width:100%;height:auto;display:block}
+.swatches{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));margin-top:.8rem}
+.sw{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.sw i{display:block;height:64px}
+.sw b{display:block;padding:.4rem .6rem 0;font-size:.95rem}
+.sw span{display:block;padding:0 .6rem .5rem;font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.types{display:grid;gap:.8rem;margin-top:.8rem}
+.type{display:grid;grid-template-columns:150px 1fr;gap:1rem;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem}
+.type small{display:block;color:var(--muted);font-size:.85rem}
+.type .sample{font-size:1.5rem;min-width:0;overflow-wrap:anywhere}
+@media (max-width:560px){.type{grid-template-columns:1fr}}
+.cam{position:relative;background:var(--cam-bg);color:var(--cam);font-family:var(--mono);border-radius:10px;overflow:hidden;aspect-ratio:4/3;max-width:100%;border:2px solid #1d4d26}
+.cam::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 2px,transparent 2px 4px);pointer-events:none;mix-blend-mode:multiply}
+.cam-top{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;padding:.5rem .7rem;font-size:.85rem;z-index:2}
+.rec{color:#ff5a5a;animation:blink 1.2s steps(1) infinite}
+@keyframes blink{50%{opacity:.15}}
+.cam svg{position:absolute;inset:0;width:100%;height:100%}
+.box{position:absolute;border:2px solid var(--cam);border-radius:3px;font-size:.72rem;z-index:2}
+.box span{position:absolute;left:-2px;bottom:100%;background:var(--cam);color:#03230a;padding:.1rem .35rem;white-space:nowrap;font-weight:700}
+.box.below span{bottom:auto;top:100%}
+.box.right span{left:auto;right:-2px}
+.paper{background:var(--papier);color:var(--encre);border-radius:10px;padding:1rem 1.1rem;position:relative;box-shadow:inset 0 0 0 1px #e6d6ae;font-family:var(--hand);font-size:1.25rem;line-height:1.35}
+.paper .seal{position:absolute;right:14px;top:-14px;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ee6b74,#b4232f 70%);box-shadow:0 3px 6px rgba(0,0,0,.25);display:grid;place-items:center}
+.cert{background:var(--papier);color:var(--encre);border:3px double var(--or);border-radius:6px;padding:.9rem 1rem;font-family:var(--serif);text-align:center;margin-top:.8rem}
+.cert .t{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:#7a6220}
+.cert .n{font-family:var(--display);font-weight:800;font-size:1.5rem;margin:.2rem 0}
+.cert svg{width:160px;max-width:100%;height:auto;margin:.3rem auto;display:block}
+.timeline{list-style:none;margin:.8rem 0 0;padding:0;display:grid;gap:.35rem}
+.timeline li{display:grid;grid-template-columns:72px 1fr;gap:.8rem;align-items:baseline}
+.timeline time{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--rouge);font-weight:700}
+.timeline li.key{background:var(--card-2);border-radius:8px;padding:.3rem .5rem;margin-inline:-.5rem}
+.ideas{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));margin-top:.8rem}
+.idea{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--rouge);border-radius:12px;padding:.9rem 1rem;min-width:0}
+.idea.bonus{border-left-color:var(--lantern)}
+.idea h3{margin-bottom:.25rem}
+.idea p{margin:.25rem 0;font-size:.95rem}
+.idea .prep{color:var(--muted);font-size:.88rem}
+.flow{display:grid;gap:.6rem;margin-top:.8rem}
+.flow div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem}
+.flow b{font-family:var(--display)}
+.flow ul{margin:.3rem 0 0;padding-left:1.2rem}
+.flow li{margin:.15rem 0;font-size:.95rem}
+.badge{display:inline-block;background:var(--lantern);color:#3b2a00;border-radius:999px;padding:.1rem .6rem;font-size:.82rem;font-weight:800;margin-left:.3rem;vertical-align:middle}
+.qa{list-style:none;padding:0;margin:.8rem 0 0;display:grid;gap:.6rem;counter-reset:q}
+.qa li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;counter-increment:q}
+.qa li::before{content:counter(q) ". ";font-weight:800;color:var(--rouge)}
+.qa small{display:block;color:var(--muted);margin-top:.15rem}
+.ok{background:var(--rouge);color:#fff;border-radius:12px;padding:1rem 1.2rem;margin-top:1.2rem;font-size:1.1rem}
+.ok b{font-family:var(--display)}
+@media (prefers-reduced-motion:reduce){.rec{animation:none}}
+@media print{
+  @page{size:A4;margin:12mm}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  :root{--bg:#FFFFFF;--fg:#1F2235;--muted:#5F6175;--line:#D9D0BC;--card:#FFF9EC;--card-2:#F7EDD6}
+  body{font-size:12px}
+  .wrap{max-width:none}
+  .hero-in{padding-block:1.4rem 1rem}
+  .hero h1{font-size:2.2rem}
+  .hero-art svg{width:200px;filter:none}
+  section{padding-block:1.1rem}
+  h2{font-size:1.35rem}
+  .tile,.idea,.sw,.type,.flow div,.qa li,.timeline li,.ok,.hero{break-inside:avoid}
+  h2,h3,.eyebrow{break-after:avoid;page-break-after:avoid}
+  .eyebrow+h2{break-before:avoid;page-break-before:avoid}
+  .grid{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .ideas{grid-template-columns:1fr 1fr}
+  .tile{padding:.7rem}
+  .tile p{font-size:.85rem}
+  .box{font-size:.6rem}
+  .rec{animation:none}
+}
+</style>
+
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-text">
+      <p class="eyebrow">Proposition à valider · nuit du 10 au 11 novembre 2026</p>
+      <h1>La nuit de la Petite Souris</h1>
+      <p class="lead">Une seule histoire, six écrans, et une souris qui s'appelle <strong>Quenotte</strong>.</p>
+      <p class="alts">« Quenotte », c'est le mot des enfants pour une petite dent. Deux regards de l'atelier créatif l'ont choisi aussi. Si vous préférez : <b>Noisette</b> ou <b>Pirouette</b>.</p>
+    </div>
+    <figure class="hero-art">
+      <svg viewBox="0 0 220 240" role="img" aria-label="Quenotte : une souris grise aux grandes oreilles roses, écharpe rouge, lanterne à la main et sac à dos en coquille de noix">
+        <defs><radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFC857" stop-opacity=".6"/><stop offset="1" stop-color="#FFC857" stop-opacity="0"/></radialGradient></defs>
+        <circle cx="44" cy="178" r="52" fill="url(#glow)"/>
+        <path d="M150 206 C 202 216, 206 164, 172 160" fill="none" stroke="#A79E95" stroke-width="7" stroke-linecap="round"/>
+        <ellipse cx="161" cy="152" rx="16" ry="21" fill="#8B5A3C"/>
+        <ellipse cx="110" cy="166" rx="50" ry="54" fill="#A79E95"/>
+        <ellipse cx="110" cy="178" rx="30" ry="36" fill="#EFE8DD"/>
+        <path d="M128 130 L 152 142" stroke="#6E4630" stroke-width="4" stroke-linecap="round"/>
+        <ellipse cx="90" cy="218" rx="15" ry="8" fill="#E7B4B4"/>
+        <ellipse cx="130" cy="218" rx="15" ry="8" fill="#E7B4B4"/>
+        <circle cx="68" cy="58" r="24" fill="#A79E95"/><circle cx="68" cy="58" r="14" fill="#F2A3B5"/>
+        <circle cx="152" cy="58" r="24" fill="#A79E95"/><circle cx="152" cy="58" r="14" fill="#F2A3B5"/>
+        <circle cx="110" cy="92" r="44" fill="#A79E95"/>
+        <ellipse cx="110" cy="109" rx="18" ry="12" fill="#EFE8DD"/>
+        <ellipse cx="110" cy="104" rx="6" ry="4.5" fill="#E98BA0"/>
+        <path d="M103 113 q7 6 14 0" fill="none" stroke="#2B2B33" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="95" cy="90" r="5.5" fill="#2B2B33"/><circle cx="125" cy="90" r="5.5" fill="#2B2B33"/>
+        <circle cx="97" cy="88" r="2" fill="#fff"/><circle cx="127" cy="88" r="2" fill="#fff"/>
+        <g stroke="#6B6560" stroke-width="1.4" stroke-linecap="round"><path d="M92 107 L 64 101"/><path d="M92 111 L 64 113"/><path d="M128 107 L 156 101"/><path d="M128 111 L 156 113"/></g>
+        <path d="M70 132 q40 20 80 0 v15 q-40 20 -80 0z" fill="#D64045"/>
+        <path d="M76 141 q34 16 68 0" fill="none" stroke="#B5323B" stroke-width="2"/>
+        <path d="M128 144 q8 20 4 38 h15 q4 -18 -4 -38z" fill="#D64045"/>
+        <g stroke="#FFF4D6" stroke-width="2" stroke-linecap="round"><path d="M134 180 v6"/><path d="M140 181 v6"/></g>
+        <ellipse cx="66" cy="152" rx="12" ry="9" fill="#A79E95" transform="rotate(-28 66 152)"/>
+        <path d="M56 160 L 47 172" stroke="#6E4630" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M32 174 h26 l-3 -7 h-20z" fill="#6E4630"/>
+        <rect x="31" y="174" width="28" height="28" rx="6" fill="#FFC857" stroke="#B9801A" stroke-width="2"/>
+        <ellipse cx="45" cy="188" rx="6" ry="8" fill="#FFF4D6"/>
+        <ellipse cx="154" cy="154" rx="12" ry="9" fill="#A79E95" transform="rotate(28 154 154)"/>
+      </svg>
+      <figcaption>Quenotte, collectrice officielle des dents de lait des Ardennes</figcaption>
+    </figure>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section>
+  <p class="eyebrow">Le personnage</p>
+  <h2>Qui est Quenotte ?</h2>
+  <p>Une petite souris grise des Ardennes, reconnaissable partout à son <b>écharpe rouge tricotée</b> (c'est aussi le fil rouge de la progression en haut de chaque écran), sa <b>lanterne</b> en capuchon de gland et son <b>sac à dos</b> en coquille de noix.</p>
+  <ul class="chips"><li>Courageuse (sauf avec les chats)</li><li>Très gourmande (pauses fromage)</li><li>Très organisée (elle note tout, avec l'heure)</li><li>Polie et douce (elle ne réveille jamais personne)</li><li>Un peu vantarde (« 99 % discrète »)</li></ul>
+  <p class="quote">« Chut… 99 % discrète. Le 1 % qui reste, c'est le fromage. »</p>
+  <p>Elle compte tout et se trompe souvent en riant, elle est vite essoufflée dans les montées (« Aiglemont, ça MONTE ! »), son juron est « Nom d'une quenotte ! » et elle signe « Bisous à moustaches ».</p>
+  <p>Sa voix à l'écran (bouton <b>Écouter</b>) : la synthèse vocale en français, un peu plus aiguë que normale, pour faire « voix de souris ». Ses phrases sont courtes, lisibles en CE1.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Ses compagnons de route</p>
+  <h2>Pantoufle et le Château des Dents de Lait</h2>
+  <div class="grid">
+    <div class="tile night-tile">
+      <svg viewBox="0 0 240 160" role="img" aria-label="Pantoufle, le chat du voisin : gros chat roux endormi, avec un collier rouge et une clochette">
+        <ellipse cx="110" cy="112" rx="78" ry="38" fill="#E8A552"/>
+        <g fill="none" stroke="#C9833A" stroke-width="6" stroke-linecap="round"><path d="M70 84 q6 12 2 24"/><path d="M92 80 q6 14 2 28"/><path d="M114 80 q6 14 2 28"/></g>
+        <path d="M40 120 C 10 130, 12 90, 44 96" fill="none" stroke="#E8A552" stroke-width="12" stroke-linecap="round"/>
+        <path d="M40 120 C 10 130, 12 90, 44 96" fill="none" stroke="#C9833A" stroke-width="3" stroke-dasharray="8 10" stroke-linecap="round"/>
+        <circle cx="170" cy="92" r="34" fill="#E8A552"/>
+        <path d="M142 72 l-4 -28 l24 14z" fill="#E8A552"/><path d="M198 72 l4 -28 l-24 14z" fill="#E8A552"/>
+        <path d="M145 68 l-2 -14 l12 7z" fill="#F2A3B5"/><path d="M195 68 l2 -14 l-12 7z" fill="#F2A3B5"/>
+        <g fill="none" stroke="#2B2B33" stroke-width="2.5" stroke-linecap="round"><path d="M152 92 q7 6 14 0"/><path d="M176 92 q7 6 14 0"/></g>
+        <path d="M166 104 l8 0 l-4 5z" fill="#F2A3B5"/>
+        <path d="M170 109 q-5 6 -10 2 M170 109 q5 6 10 2" fill="none" stroke="#2B2B33" stroke-width="1.6"/>
+        <g stroke="#8A5A2B" stroke-width="1.4"><path d="M150 104 l-22 -4"/><path d="M150 108 l-22 4"/><path d="M190 104 l22 -4"/><path d="M190 108 l22 4"/></g>
+        <path d="M140 118 q30 12 60 0" fill="none" stroke="#D64045" stroke-width="5"/>
+        <circle cx="170" cy="127" r="6" fill="#FFC857" stroke="#B9801A" stroke-width="1.5"/>
+        <text x="200" y="42" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="22" fill="#F3EFE6">z</text>
+        <text x="214" y="26" font-family="'Baloo 2',sans-serif" font-weight="800" font-size="16" fill="#F3EFE6">z</text>
+      </svg>
+      <h3>Pantoufle, le chat du voisin</h3>
+      <p>Gros chat roux, jamais méchant, juste très curieux. Il dort au milieu du chemin et parle en dormant (« zzz… croquettes… »). Il bâille et sa queue frétille juste avant d'ouvrir un œil : c'est le signal pour s'arrêter dans le jeu. Autres noms possibles : Raymond, ou Gonzague « qui se prend pour un duc », comme le fondateur de Charleville.</p>
+    </div>
+    <div class="tile night-tile">
+      <svg viewBox="0 0 320 180" role="img" aria-label="Le Château des Dents de Lait, petit château blanc entre les sapins de la forêt des Ardennes, une fenêtre éclairée">
+        <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#141A3A"/><stop offset="1" stop-color="#273066"/></linearGradient></defs>
+        <rect width="320" height="180" fill="url(#sky)"/>
+        <path d="M262 28 a18 18 0 1 0 14 28 a14 14 0 1 1 -14 -28z" fill="#FFF4D6"/>
+        <g fill="#fff" opacity=".8"><circle cx="30" cy="30" r="1.4"/><circle cx="90" cy="18" r="1.1"/><circle cx="150" cy="40" r="1.3"/><circle cx="210" cy="22" r="1"/><circle cx="300" cy="70" r="1.2"/></g>
+        <g fill="#1E3F36"><path d="M0 150 l30 -70 l30 70z"/><path d="M40 150 l34 -84 l34 84z"/><path d="M230 150 l34 -84 l34 84z"/><path d="M270 150 l30 -70 l30 70z"/></g>
+        <g fill="#F3EFE6"><rect x="118" y="80" width="18" height="70"/><rect x="184" y="80" width="18" height="70"/><rect x="132" y="98" width="56" height="52"/>
+        <rect x="116" y="72" width="5" height="9"/><rect x="124" y="72" width="5" height="9"/><rect x="132" y="72" width="5" height="9"/><rect x="182" y="72" width="5" height="9"/><rect x="190" y="72" width="5" height="9"/><rect x="198" y="72" width="5" height="9"/></g>
+        <path d="M127 80 l-12 0 l12 -22 l12 22z M193 80 l-12 0 l12 -22 l12 22z" fill="#D64045"/>
+        <rect x="152" y="112" width="16" height="22" rx="8" fill="#FFC857"/>
+        <path d="M154 150 q6 -14 12 0z" fill="#8B5A3C"/>
+        <g fill="#2F5D50"><path d="M70 160 l26 -60 l26 60z"/><path d="M200 160 l26 -60 l26 60z"/></g>
+        <rect y="150" width="320" height="30" fill="#1A2A26"/>
+        <path d="M160 150 q20 10 40 30" fill="none" stroke="#D64045" stroke-width="2" stroke-dasharray="4 5"/>
+      </svg>
+      <h3>Le Château des Dents de Lait</h3>
+      <p>Caché dans les Rochers des Quatre Fils Aymon, au fond de la forêt des Ardennes, tout blanc parce que ses murs sont faits de dents de lait bien rangées. Dans la salle des jumelles, la première incisive de Clémentine attend la deuxième sur un coussin. Les quatre chevaliers de pierre et leur cheval-fée Bayard montent la garde, et ne parlent que la nuit.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Direction artistique</p>
+  <h2>Nuit d'hiver dans les Ardennes, en papier découpé</h2>
+  <p>Style <b>théâtre d'ombres et papier découpé</b> (un clin d'œil aux marionnettes de Charleville) : des silhouettes simples en couches, des lumières chaudes dans une nuit froide, un léger grain. Tout est dessiné en SVG et CSS, aucune image protégée, aucune requête vers un service tiers.</p>
+  <div class="swatches">
+    <div class="sw"><i style="background:#141A3A"></i><b>Nuit profonde</b><span>#141A3A · fonds</span></div>
+    <div class="sw"><i style="background:#273066"></i><b>Bleu de minuit</b><span>#273066 · ciel, collines</span></div>
+    <div class="sw"><i style="background:#FFC857"></i><b>Lanterne</b><span>#FFC857 · boutons, lumières</span></div>
+    <div class="sw"><i style="background:#D64045"></i><b>Écharpe rouge</b><span>#D64045 · fil rouge, alertes</span></div>
+    <div class="sw"><i style="background:#A79E95"></i><b>Souris</b><span>#A79E95 · pelage</span></div>
+    <div class="sw"><i style="background:#F2A3B5"></i><b>Rose museau</b><span>#F2A3B5 · oreilles, nez</span></div>
+    <div class="sw"><i style="background:#2F5D50"></i><b>Forêt des Ardennes</b><span>#2F5D50 · sapins</span></div>
+    <div class="sw"><i style="background:#3E7C8F"></i><b>Meuse</b><span>#3E7C8F · rivière</span></div>
+    <div class="sw"><i style="background:#39FF14"></i><b>Vert caméra</b><span>#39FF14 sur #06180B</span></div>
+    <div class="sw"><i style="background:#FFF6E0;border-bottom:1px solid #e6d6ae"></i><b>Papier</b><span>#FFF6E0 · lettre, diplôme</span></div>
+    <div class="sw"><i style="background:#C9A227"></i><b>Or du tampon</b><span>#C9A227 · certificat</span></div>
+  </div>
+  <div class="types">
+    <div class="type"><div><b>Baloo 2</b><small>Titres, boutons, textes · OFL</small></div><div class="sample" style="font-family:var(--display);font-weight:800">Clémentine, quelqu'un est venu cette nuit…</div></div>
+    <div class="type"><div><b>Patrick Hand</b><small>Lettre, signature, mot A6 · OFL</small></div><div class="sample" style="font-family:var(--hand)">Merci de m'avoir aidée avec le chat ! Quenotte</div></div>
+    <div class="type"><div><b>Share Tech Mono</b><small>Caméra, horodatages · OFL</small></div><div class="sample" style="font-family:var(--mono);font-size:1.2rem">02:47:13 · REC · PETITE SOURIS 99 %</div></div>
+    <div class="type"><div><b>Libre Baskerville</b><small>Certificat officiel · OFL</small></div><div class="sample" style="font-family:var(--serif);font-size:1.2rem">Certificat officiel de dent perdue</div></div>
+  </div>
+  <p style="color:var(--muted);font-size:.9rem;margin-top:.6rem">Les quatre polices seront hébergées dans le dossier du site (pas d'appel à Google Fonts). L'écriture « manuscrite » reste droite et bien détachée pour une lectrice débutante.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Ambiances</p>
+  <h2>Trois mondes, une même nuit</h2>
+  <div class="grid">
+    <div class="tile night-tile">
+      <svg viewBox="0 0 320 200" role="img" aria-label="Carte illustrée : forêt et château à gauche, Charleville avec ses arcades et le Grand Marionnettiste au centre, la Meuse, puis la colline d'Aiglemont et la maison à droite">
+        <rect width="320" height="200" fill="#1B2250"/>
+        <g fill="#1E3F36"><path d="M0 120 l22 -44 l22 44z"/><path d="M30 118 l20 -40 l20 40z"/><path d="M8 150 l18 -36 l18 36z"/><path d="M44 148 l16 -32 l16 32z"/></g>
+        <g fill="#F3EFE6"><rect x="66" y="78" width="8" height="30"/><rect x="88" y="78" width="8" height="30"/><rect x="72" y="88" width="18" height="20"/></g>
+        <path d="M70 78 l-5 0 l5 -9 l5 9z M92 78 l-5 0 l5 -9 l5 9z" fill="#D64045"/>
+        <rect x="78" y="94" width="6" height="8" rx="3" fill="#FFC857"/>
+        <rect x="120" y="96" width="80" height="34" fill="#2A3470"/>
+        <g fill="#1B2250"><path d="M126 130 v-14 a6 6 0 0 1 12 0 v14z"/><path d="M142 130 v-14 a6 6 0 0 1 12 0 v14z"/><path d="M158 130 v-14 a6 6 0 0 1 12 0 v14z"/><path d="M174 130 v-14 a6 6 0 0 1 12 0 v14z"/></g>
+        <g fill="#FFC857"><rect x="130" y="102" width="5" height="6"/><rect x="166" y="102" width="5" height="6"/></g>
+        <path d="M120 96 l40 -14 l40 14z" fill="#3A4690"/>
+        <rect x="206" y="70" width="14" height="60" fill="#2A3470"/>
+        <circle cx="213" cy="84" r="5" fill="#F3EFE6"/><path d="M213 89 v18 M213 96 l-7 6 M213 96 l7 6 M213 107 l-5 9 M213 107 l5 9" stroke="#F3EFE6" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M0 150 q60 10 120 0 t120 0 t80 0 v18 q-40 8 -80 0 t-120 0 t-120 0z" fill="#3E7C8F"/>
+        <path d="M20 160 q10 -4 20 0 M90 162 q10 -4 20 0 M180 158 q10 -4 20 0 M250 162 q10 -4 20 0" stroke="#7FB8C7" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M232 160 l10 -8 l10 8z" fill="#FFF4D6"/><path d="M226 162 h32 l-5 6 h-22z" fill="#A6D7E3"/>
+        <text x="242" y="159" font-family="'Share Tech Mono',monospace" font-size="7" fill="#1B2250" text-anchor="middle">5 €</text>
+        <path d="M200 200 q60 -60 120 -40 v40z" fill="#2F5D50"/>
+        <g><rect x="272" y="150" width="26" height="20" fill="#F3EFE6"/><path d="M268 150 l17 -14 l17 14z" fill="#D64045"/><rect x="282" y="156" width="7" height="8" fill="#FFC857"/></g>
+        <path d="M82 108 C 100 140, 130 142, 160 132 S 220 150, 236 158 S 262 160, 282 170" fill="none" stroke="#D64045" stroke-width="2.5" stroke-dasharray="5 5" stroke-linecap="round"/>
+        <g><circle cx="160" cy="132" r="7" fill="#A79E95"/><circle cx="155" cy="126" r="3.5" fill="#F2A3B5"/><circle cx="165" cy="126" r="3.5" fill="#F2A3B5"/><circle cx="158" cy="132" r="1.2" fill="#2B2B33"/><circle cx="162" cy="132" r="1.2" fill="#2B2B33"/></g>
+        <rect x="100" y="150" width="96" height="16" rx="4" fill="#FFF6E0"/>
+        <text x="148" y="161" font-family="'Share Tech Mono',monospace" font-size="8" fill="#1F2235" text-anchor="middle">02:03 Place Ducale : 27 maisons jumelles !</text>
+      </svg>
+      <h3>1 · Le suivi en direct</h3>
+      <p>Carte en papier découpé, trajet en pointillés rouges (l'écharpe !), journal de bord horodaté. Taxi sanglier dans la forêt, 27 maisons jumelles place Ducale, le Grand Marionnettiste qui dort (il ne joue que le jour), puis la traversée de la Meuse devant le vieux moulin, sur le billet de 5 € plié en bateau.</p>
+    </div>
+    <div class="tile">
+      <div class="cam">
+        <div class="cam-top"><span class="rec">● REC</span><span>02:47:13 · CHAMBRE</span></div>
+        <svg viewBox="0 0 320 240">
+          <rect width="320" height="240" fill="#06180B"/>
+          <rect x="30" y="120" width="220" height="80" rx="6" fill="none" stroke="#2fbf2f" stroke-width="2"/>
+          <rect x="30" y="100" width="220" height="24" rx="6" fill="none" stroke="#2fbf2f" stroke-width="2"/>
+          <ellipse cx="80" cy="112" rx="22" ry="14" fill="none" stroke="#39FF14" stroke-width="2"/>
+          <ellipse cx="135" cy="114" rx="14" ry="9" fill="none" stroke="#39FF14" stroke-width="2"/>
+          <path d="M50 130 q100 -12 200 0" fill="none" stroke="#2fbf2f" stroke-width="2"/>
+          <g stroke="#39FF14" stroke-width="2" fill="none"><circle cx="268" cy="176" r="10"/><circle cx="262" cy="166" r="4"/><circle cx="276" cy="166" r="4"/><path d="M278 182 q14 -2 10 -14"/></g>
+          <rect x="236" y="186" width="22" height="12" fill="none" stroke="#39FF14" stroke-width="1.5"/><text x="247" y="195" font-family="monospace" font-size="8" fill="#39FF14" text-anchor="middle">5 €</text>
+        </svg>
+        <div class="box" style="left:14%;top:38%;width:26%;height:22%"><span>CLÉMENTINE – DORT</span></div>
+        <div class="box below" style="left:35%;top:42%;width:16%;height:12%"><span>NICOLAS – DORT AUSSI</span></div>
+        <div class="box right below" style="left:76%;top:62%;width:18%;height:22%"><span>PETITE SOURIS 99 %</span></div>
+        <div class="box below" style="left:12%;top:76%;width:40%;height:8%"><span>SOUS LE LIT – MONSTRES : 0</span></div>
+      </div>
+      <h3>3 · La caméra de Quenotte</h3>
+      <p>Le look d'une caméra de surveillance (vert, grain, balayage, REC, horodatage), mais c'est la petite caméra accrochée au sac de Quenotte, « filmé pour Clémentine ». Deux bosses sous la couette, jamais de visage. Le billet-bateau glisse sous l'oreiller, la dent entre dans le sac, Nicolas reçoit sa médaille.</p>
+    </div>
+    <div class="tile">
+      <div class="paper">
+        <div class="seal" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M7 4 q5 -3 10 0 q3 3 1 9 q-1 7 -3 7 q-2 0 -3 -4 q-1 4 -3 4 q-2 0 -3 -7 q-2 -6 1 -9z" fill="#FFF4D6"/></svg></div>
+        Chère Clémentine,<br>Merci de m'avoir aidée avec le chat ! J'ai fait tout doucement pour ne pas réveiller Nicolas…
+      </div>
+      <div class="cert">
+        <div class="t">Certificat officiel</div>
+        <div class="n">Clémentine</div>
+        <svg viewBox="0 0 160 70" role="img" aria-label="Schéma de la mâchoire du bas : dix dents de lait, les deux incisives centrales marquées 1re et 2e">
+          <path d="M20 10 q60 80 120 0" fill="none" stroke="#C9A227" stroke-width="1.5"/>
+          <g fill="#fff" stroke="#7a6220" stroke-width="1"><rect x="20" y="8" width="11" height="14" rx="3"/><rect x="33" y="22" width="10" height="13" rx="3"/><rect x="45" y="33" width="9" height="12" rx="3"/><rect x="56" y="41" width="9" height="12" rx="3"/><rect x="94" y="41" width="9" height="12" rx="3"/><rect x="105" y="33" width="9" height="12" rx="3"/><rect x="116" y="22" width="10" height="13" rx="3"/><rect x="128" y="8" width="11" height="14" rx="3"/></g>
+          <g fill="#D64045" stroke="#9a2a32" stroke-width="1"><rect x="67" y="45" width="11" height="13" rx="3"/><rect x="81" y="45" width="11" height="13" rx="3"/></g>
+          <text x="72" y="67" font-family="'Baloo 2',sans-serif" font-size="8" font-weight="800" fill="#D64045" text-anchor="middle">1re</text>
+          <text x="87" y="67" font-family="'Baloo 2',sans-serif" font-size="8" font-weight="800" fill="#D64045" text-anchor="middle">2e</text>
+        </svg>
+        <div class="t">Tampon doré · signature de Quenotte · témoin : Nicolas (dormait)</div>
+      </div>
+      <h3>4 et 5 · La lettre et le certificat</h3>
+      <p>Papier crème, encre bleu nuit, cachet de cire en forme de dent. La lettre s'écrit toute seule, lettre par lettre, et se lit à voix haute. Le certificat s'imprime en A4 avec la mâchoire du bas et les badges.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Le fil rouge</p>
+  <h2>Une seule nuit, des horaires qui se suivent</h2>
+  <p>Les heures reviennent partout : dans le journal de bord, sur la caméra, en bas de la lettre, sur le certificat.</p>
+  <ul class="timeline">
+    <li><time>01:12</time><span>Départ du Château des Dents de Lait. Lanterne allumée, sac vide. C'est parti !</span></li>
+    <li><time>01:19</time><span>Les quatre chevaliers de pierre m'ont dit « Bonne route ! » Ils ne parlent que la nuit.</span></li>
+    <li><time>01:27</time><span>Coucou aux nutons dans leur grotte. Ils réparaient une chaussure.</span></li>
+    <li><time>01:38</time><span>Taxi sanglier ! Grognon m'emmène à travers la forêt. Ça sent fort, mais c'est rapide.</span></li>
+    <li><time>01:48</time><span>Pause fromage. Du Rocroi ! Il sent TRÈS fort. Pardon.</span></li>
+    <li><time>02:03</time><span>Charleville, place Ducale : 27 maisons jumelles. J'ai compté deux fois.</span></li>
+    <li><time>02:10</time><span>Le Grand Marionnettiste dort. Le jour, il joue 12 histoires. Je lui chuchote la 13<sup>e</sup> : la tienne.</span></li>
+    <li><time>02:20</time><span>Traversée de la Meuse devant le vieux moulin, sur ton billet de 5 € plié en bateau. Il flotte très bien !</span></li>
+    <li><time>02:26</time><span>Aiglemont, ça MONTE ! Du givre sur l'herbe, les pattes gelées.</span></li>
+    <li class="key"><time>02:31</time><span><b>ALERTE</b> : Pantoufle, le chat du voisin, dort en travers du chemin. Clémentine aide (mini-jeu).</span></li>
+    <li><time>02:40</time><span>Passé ! Merci Clémentine ! Mes moustaches tremblent encore.</span></li>
+    <li class="key"><time>02:47</time><span><b>Caméra</b> : j'entre sur la pointe des pattes. 02:49 dent trouvée, bateau déposé, médaille pour Nicolas. 02:52 détour par la salle de bains, inspection de la brosse à dents.</span></li>
+    <li class="key"><time>03:02</time><span><b>Lettre</b> écrite et signée. Je referme tout doucement. Bonne nuit, Clémentine.</span></li>
+    <li><time>03:40</time><span>Retour au château avant le lever du jour. La dent retrouve sa jumelle.</span></li>
+  </ul>
+</section>
+
+<section>
+  <p class="eyebrow">Pour aller plus loin que le brief</p>
+  <h2>Cinq idées en plus</h2>
+  <div class="ideas">
+    <div class="idea"><h3>1 · Le billet-bateau</h3><p>Sous l'oreiller, Clémentine ne trouve pas un billet à plat mais un petit bateau en papier gris. Elle le déplie : c'est le billet de 5 € ! À l'écran, elle vient de voir ce même bateau traverser la Meuse avec Quenotte à bord. La lettre dit : « Il est plus grand que moi. Déplie-le doucement. »</p><p class="prep">À préparer : plier le billet en bateau, plis doux, 3 minutes. Rien d'écrit dessus.</p></div>
+    <div class="idea"><h3>2 · Le kit de traces dans la chambre</h3><p>Chaque trace est vue dans la vidéo, puis trouvée pour de vrai. Au choix, chacune activable séparément dans la configuration : la <b>médaille de Nicolas</b> « MEILLEUR GARDIEN » accrochée à son cou (2 min) ; le <b>bouton perdu</b> du sac de Quenotte, tombé au pied du lit avec un bout de fil, à garder pour la prochaine dent (1 min) ; l'<b>étiquette sur la brosse à dents</b> « INSPECTION : OK ! Brosse bien les voisines » (2 min) ; et si vous avez le temps, des traces de farine sur une feuille sombre, ou une petite porte en carton sur la plinthe.</p><p class="prep">À préparer : ce que vous choisissez, 5 à 10 minutes en tout. La vidéo et la lettre ne mentionnent que les traces activées.</p></div>
+    <div class="idea"><h3>3 · La 13<sup>e</sup> scène du Grand Marionnettiste</h3><p>Chapitre caché. Le vrai Grand Marionnettiste joue 12 scènes des Quatre Fils Aymon, une par heure, le jour. La nuit, il dort, et Quenotte lui chuchote la 13<sup>e</sup> : l'histoire de la deuxième dent de Clémentine. Si elle touche trois fois le géant sur la carte, un rideau s'ouvre dans son ventre et la scène se joue en trois tableaux, le dernier montrant les deux dents jumelles réunies.</p><p class="prep">Rien.</p></div>
+    <div class="idea"><h3>4 · Les détections qui font rire</h3><p>La caméra « intelligente » repère tout : « NICOLAS – DORT AUSSI (ronfle un peu) », puis « NICOLAS – MÉDAILLÉ (n'a rien vu) », « CHAUSSETTE – PERDUE DEPUIS MARDI », « SOUS LE LIT – MONSTRES : 0 », « PETITE SOURIS – 99 % ». Et Quenotte, vexée, répond dans un P.-S. : « 99 % ?! Et le 1 % qui reste ?! »</p><p class="prep">Rien.</p></div>
+    <div class="idea"><h3>5 · Tout s'écoute</h3><p>Un bouton Écouter sur chaque écran, pas seulement la lettre : les statuts, l'alerte chat, le diplôme. Voix un peu aiguë, une phrase à la fois surlignée, avec l'étiquette rigolote « Traducteur souris → humain ». Les sons (clochette, ronflement du chat qui sert de signal dans le jeu, crayon qui écrit) sont fabriqués en code, sans fichiers audio.</p><p class="prep">Rien.</p></div>
+    <div class="idea bonus"><h3>Bonus · Le pacte des nutons</h3><p>Pour les prochaines dents. Quenotte révèle qu'elle est la cousine des nutons, le petit peuple des Ardennes qui répare la nuit les chaussures laissées devant sa grotte. Elle propose un pacte : « La prochaine fois qu'une dent bouge, laisse-moi un dessin sous l'oreiller, je te répondrai. »</p></div>
+    <div class="idea bonus"><h3>Bonus · La vraie lune</h3><p>La phase de lune de la nuit est calculée pour la date réelle et dessinée dans le ciel. Le 10 novembre 2026, c'est la nouvelle lune : un fil de lune à peine visible, « nuit idéale pour une souris discrète ».</p></div>
+    <div class="idea bonus"><h3>Bonus · Prêt pour les prochaines dents</h3><p>La configuration accepte une liste de dents (date, dent, obstacle de la nuit). À la 3<sup>e</sup> dent, une nouvelle nuit se joue avec un autre obstacle (un hibou, un hérisson) et de nouvelles traces, sans tout recoder.</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Le déroulé</p>
+  <h2>Ce que j'ajuste chapitre par chapitre</h2>
+  <div class="flow">
+    <div><b>Partout</b><ul><li>Un ruban rouge en haut de l'écran : 5 perles, une par chapitre, Quenotte avance dessus. L'heure de la nuit s'affiche à côté.</li><li>Bouton « son » (coupé/actif) et bouton Écouter sur chaque écran. Gros boutons (64 px et plus), tout au pouce.</li><li>« Recommencer » discret en bas de l'accueil, plus des adresses de test (?reset, ?chapitre=3) pour vous.</li></ul></div>
+    <div><b>0 · Accueil</b><ul><li>Ciel de nuit, lune réelle, « Aiglemont, nuit du 10 au 11 novembre », la phrase « Clémentine, quelqu'un est venu cette nuit… » puis un seul gros bouton « Allumer la lanterne ».</li></ul></div>
+    <div><b>1 · Suivi en direct</b> <span class="badge">Badge : Détective de nuit</span><ul><li>Présenté comme le replay de la nuit, environ 60 secondes, bouton « Plus vite ». Le journal de bord s'écrit ligne par ligne avec l'heure, 12 statuts de 01:12 à 02:31.</li><li>Toucher trois fois le Grand Marionnettiste ouvre la 13<sup>e</sup> scène (chapitre secret). Finit sur l'alerte 02:31 et un gros bouton rouge « Aider Quenotte ».</li></ul></div>
+    <div><b>2 · Mini-jeu</b> <span class="badge">Badge : Passe-Chat</span><ul><li>« 1, 2, 3, soleil » : on maintient le gros bouton pour avancer. Avant que Pantoufle ouvre un œil, il bâille, sa queue frétille et ses « zzz » s'arrêtent : on a une seconde pour lâcher.</li><li>Si elle est vue : « Mmh ? », Quenotte se roule en boule et recule d'un pas, Pantoufle se rendort. Jamais de défaite, victoire garantie en 30 à 60 secondes, et le texte dit « grâce à toi ».</li></ul></div>
+    <div><b>3 · Caméra</b> <span class="badge">Badge : Œil de hibou</span><ul><li>Présentée comme la caméra de Quenotte, « filmé pour Clémentine ». Une quarantaine de secondes, horodatage de 02:47:00 à 02:52, bouton « Passer » toujours visible. Deux bosses sous la couette et une mèche de cheveux, jamais de visage.</li><li>Événements : entrée, dent, bateau-billet, médaille de Nicolas, bouton perdu, détour brosse à dents, selon les traces activées. Arrêt sur image final tamponné « PREUVE ».</li></ul></div>
+    <div><b>4 · Lettre</b> <span class="badge">Badge : Amie de Quenotte</span><ul><li>Enveloppe à cachet de cire en forme de dent, on touche pour la briser. Huit lignes maximum, une phrase par ligne, bouton « Écouter » et bouton « Tout montrer ».</li><li>Signée « Quenotte, Petite Souris des Ardennes, 3 h 02 », avec le P.-S. sur le 1 % et, pour les traces, « garde-moi mon bouton ».</li></ul></div>
+    <div><b>5 · Certificat</b> <span class="badge">Diplôme : Dent jumelle, 2<sup>e</sup> grade</span><ul><li>Nom, « fait à Aiglemont, nuit du 10 au 11 novembre 2026 », dent concernée, mâchoire du bas avec les deux incisives centrales marquées 1<sup>re</sup> et 2<sup>e</sup>, les quatre badges plus le badge secret « Scène 13 », tampon doré, signature, « témoin officiel : Nicolas (dormait) ».</li><li>Page d'impression A4 séparée, avec une case « Dessine ton nouveau sourire ».</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Technique, en bref</p>
+  <h2>Un dossier à déposer sur o2switch</h2>
+  <p>Site statique sans aucune dépendance en ligne : un dossier avec index.html, les polices, les scripts. L'hébergement le plus simple est un <b>sous-dossier de votre hébergement o2switch</b> (par exemple votre-domaine.fr/souris/) : on dépose le dossier par le gestionnaire de fichiers cPanel ou FTP, le HTTPS est déjà là, et l'adresse du QR code est courte. GitHub Pages marche aussi mais demande un compte, un dépôt et une activation.</p>
+  <p>Le mot A6 génère son QR code tout seul, hors ligne, à partir de l'adresse écrite dans le fichier de configuration : vous changez l'adresse, vous réimprimez. Choisissez une adresse neutre, sans prénom, par exemple /nuit-2/ : le site sera en ligne.</p>
+  <p>Ordre de travail cette nuit : d'abord la mise en ligne à l'adresse finale et le mot A6 avec son QR code (pour que vous puissiez imprimer tôt), puis l'accueil, la lettre et sa voix, le certificat imprimable, la carte, la caméra, le jeu, et enfin le chapitre secret. Les voix françaises sont testées hors ligne, les polices et le QR code sont embarqués, aucun service tiers n'est appelé.</p>
+</section>
+
+<section>
+  <p class="eyebrow">À valider</p>
+  <h2>Six questions, chacune avec une réponse par défaut</h2>
+  <ol class="qa">
+    <li>L'adresse finale du site ? <small>Par défaut : un sous-dossier de votre hébergement o2switch, sans prénom, par exemple votre-domaine.fr/nuit-2/. Dites-moi l'adresse exacte et je l'écris dans la configuration et le QR code.</small></li>
+    <li>Quenotte, Pantoufle et le Château des Dents de Lait ? <small>Par défaut : oui. Sinon : Noisette ou Pirouette pour la souris, Raymond ou Gonzague pour le chat.</small></li>
+    <li>Quelles traces dans la chambre ? <small>Par défaut : le billet-bateau, la médaille de Nicolas, le bouton perdu et l'étiquette sur la brosse à dents. La farine et la petite porte seulement si vous le dites.</small></li>
+    <li>À quoi ressemble Nicolas ? <small>Par défaut : un poupon aux cheveux courts bruns, pyjama bleu clair, de dos dans le lit.</small></li>
+    <li>Le chat du voisin existe-t-il vraiment ? <small>Par défaut : gros chat roux imaginaire nommé Pantoufle. Si un vrai chat existe, donnez-moi sa couleur et son nom.</small></li>
+    <li>Sur quel appareil le matin ? <small>Par défaut : je teste en largeur tablette (768 px) et téléphone (390 px). Si c'est un iPad, dites-le : la voix française de Safari a ses particularités.</small></li>
+  </ol>
+  <div class="ok"><b>Pour lancer le développement :</b> répondez « OK » (tout par défaut) ou listez vos changements. Je code ensuite chapitre par chapitre, en vous montrant chaque écran en largeur tablette et téléphone.</div>
+</section>
+
+</main>
