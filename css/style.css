@@ -75,11 +75,12 @@ p{margin:.4rem 0}
 .bandeau.chuchote .bandeau-texte{font-style:italic;color:#3a3550}
 .bandeau-texte .mot{opacity:0;transition:opacity .35s ease-out}
 .bandeau-texte .mot.vu{opacity:1}
-.bandeau-suite{grid-area:actions;display:none;justify-self:end;align-items:center;gap:4px;font-size:.95rem;font-weight:700;color:#8a6a10;animation:suite 1.4s ease-in-out infinite}
-.bandeau-suite b{font-size:1.2em}
+.bandeau-suite{grid-area:actions;display:none;justify-self:end;align-items:center;gap:6px;min-height:44px;padding:0 16px 0 18px;border-radius:999px;background:var(--lanterne);color:#3b2a00;font-size:1.05rem;font-weight:800;box-shadow:0 4px 0 var(--lanterne2);animation:suite 1.2s ease-in-out infinite}
+.bandeau-suite b{font-size:1.3em;line-height:1}
+.bandeau.attente{border-top-color:#ffdc8a}
 .bandeau.attente .bandeau-suite{display:inline-flex}
 .bandeau.attente .bandeau-actions:not(:empty)~.bandeau-suite{display:none}
-@keyframes suite{0%,100%{opacity:.55;transform:translateX(0)}50%{opacity:1;transform:translateX(4px)}}
+@keyframes suite{0%,100%{transform:translateX(0) scale(1)}50%{transform:translateX(4px) scale(1.05)}}
 .bandeau-actions{grid-area:actions;display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
 .bandeau-actions:empty{display:none}
 .bandeau-actions .btn{min-height:56px;font-size:1.2rem;width:100%;max-width:420px}

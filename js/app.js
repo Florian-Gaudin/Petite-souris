@@ -313,9 +313,10 @@
       const boucle = now => {
         if (fini) return; if (debut == null) debut = now - tTest * 1000;
         const s = (now - debut) / 1000;
-        while (idx < evenements.length && s >= evenements[idx][0]) evenements[idx++][1]();
+        while (idx < evenements.length && s >= evenements[idx][0] && !pause) evenements[idx++][1]();
         horo(Math.min(s, finAt));
         if (idx >= evenements.length) { fini = true; return; }
+        if (pause) return;
         self.raf = requestAnimationFrame(boucle);
       };
       const lancer = () => {

@@ -91,13 +91,13 @@ ${tap('bulles', 'Des bulles dans l’eau', `${halo(470, 440, 60)}<g class="bulle
 <path d="M0 600V380Q120 360 240 400L300 600Z" fill="#24483E"/><path d="M0 600V440Q120 430 230 470L260 600Z" fill="#1A2A26"/>
 <path d="M1000 600V360Q900 350 780 400L720 600Z" fill="#24483E"/><path d="M1000 600V430Q900 420 790 460L760 600Z" fill="#1A2A26"/>
 <g fill="#2F5D50"><ellipse cx="60" cy="390" rx="40" ry="18"/><ellipse cx="900" cy="372" rx="46" ry="18"/></g>
+${lueur(L.x, L.y, 110)}
+${A.souris(sx, sy, sw, 'class="quenotte rive-g"')}
 ${tap('billet', 'Le billet de 5 euros à plier', `${halo(0, 0, 84)}
   <g class="pli pli0"><use href="#billet" x="-70" y="-37" width="140" height="74"/></g>
   <g class="pli pli1"><rect x="-70" y="-20" width="140" height="40" rx="3" fill="#B9C4B0" stroke="#7f8c7a" stroke-width="2"/><path d="M-70 0h140" stroke="#8fa08a" stroke-width="2" stroke-dasharray="6 4"/><text x="0" y="12" font-family="Share Tech Mono, monospace" font-size="18" fill="#4a5a4a" text-anchor="middle">5 €</text></g>
   <g class="pli pli2"><path d="M-62 18L0-44l62 62z" fill="#CBD3C4" stroke="#7f8c7a" stroke-width="2"/><rect x="-62" y="18" width="124" height="16" fill="#B9C4B0" stroke="#7f8c7a" stroke-width="2"/><path d="M0-44v62" stroke="#8fa08a" stroke-width="2"/></g>
   <g class="pli pli3"><use href="#bateau" x="-70" y="-40" width="140" height="74"/></g>`, 'transform="translate(135,330)" data-etape="0"')}
-${lueur(L.x, L.y, 110)}
-${A.souris(sx, sy, sw, 'class="quenotte rive-g"')}
 <g class="navire" transform="translate(230,440)"><use href="#bateau" x="-70" y="-40" width="140" height="74"/>${A.souris(-52, -106, 110)}</g>
 ${A.souris(800, 296, 150, 'class="quenotte rive-d"')}
 </svg>`;
@@ -178,9 +178,9 @@ ${tap('porte', 'La porte de la maison', `${halo(0, -95, 95)}<path d="M-74 0v-170
   <g class="rayures" fill="none" stroke="#C9833A" stroke-width="6" stroke-linecap="round"><path d="M-40 22q6 12 2 24M-16 18q6 14 2 28M8 18q6 14 2 28"/></g>
   <circle class="fourrure" cx="70" cy="22" r="36" fill="#20222e"/>
   <path class="fourrure" d="M40 0l-4-30 26 14zM100 0l4-30-26 14z" fill="#20222e"/><path class="oreilles" d="M43-4l-2-14 12 7zM97-4l2-14-12 7z" fill="#F2A3B5"/>
-  ${tap('yeux', 'Deux yeux qui brillent dans le noir', `${halo(70, 20, 52)}<g class="yeux-brillent"><ellipse cx="58" cy="20" rx="9" ry="6.5" fill="#FFC857"/><ellipse cx="84" cy="20" rx="9" ry="6.5" fill="#FFC857"/><ellipse cx="58" cy="20" rx="2.2" ry="5" fill="#2B2B33"/><ellipse cx="84" cy="20" rx="2.2" ry="5" fill="#2B2B33"/></g><g class="yeux-fermes" fill="none" stroke="#2B2B33" stroke-width="3" stroke-linecap="round"><path d="M50 22q8 6 16 0M76 22q8 6 16 0"/></g>`)}
+  ${tap('moustache', 'Les moustaches de Pantoufle', `${halo(104, 40, 32)}<g class="moustaches" stroke="#cfd3ee" stroke-width="2" stroke-linecap="round"><path d="M50 34l-26-4M50 38l-26 4M90 34l26-4M90 38l26 4"/></g><circle cx="100" cy="36" r="30" fill="transparent"/>`)}
   <path class="nez" d="M66 34h8l-4 5z" fill="#F2A3B5"/><path class="bouche" d="M70 39q-5 6-10 2M70 39q5 6 10 2" fill="none" stroke="#2B2B33" stroke-width="2"/>
-  ${tap('moustache', 'Les moustaches de Pantoufle', `${halo(95, 34, 40)}<g class="moustaches" stroke="#cfd3ee" stroke-width="2" stroke-linecap="round"><path d="M50 34l-26-4M50 38l-26 4M90 34l26-4M90 38l26 4"/></g><circle cx="100" cy="36" r="30" fill="transparent"/>`)}
+  ${tap('yeux', 'Deux yeux qui brillent dans le noir', `${halo(70, 20, 52)}<g class="yeux-brillent"><ellipse cx="58" cy="20" rx="9" ry="6.5" fill="#FFC857"/><ellipse cx="84" cy="20" rx="9" ry="6.5" fill="#FFC857"/><ellipse cx="58" cy="20" rx="2.2" ry="5" fill="#2B2B33"/><ellipse cx="84" cy="20" rx="2.2" ry="5" fill="#2B2B33"/></g><g class="yeux-fermes" fill="none" stroke="#2B2B33" stroke-width="3" stroke-linecap="round"><path d="M50 22q8 6 16 0M76 22q8 6 16 0"/></g>`)}
   <path d="M40 50q30 12 60 0" fill="none" stroke="#D64045" stroke-width="5"/><circle cx="70" cy="58" r="6" fill="#FFC857"/>
   <g class="zzz"><text x="110" y="-20" class="z">z</text><text x="130" y="-40" class="z petit">z</text></g>
 </g>

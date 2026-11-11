@@ -144,6 +144,7 @@ window.SCENES = (function () {
     // Un toucher à côté : la scène bouge doucement, rien de plus
     svg.addEventListener('pointerdown', e => {
       if (e.target.closest('.tap')) return;
+      if (NARR.attend) { NARR.continuer(); return; }
       wrap.classList.remove('bouge'); void wrap.offsetWidth; wrap.classList.add('bouge');
     });
     $$('.pastille', root).forEach(p => p.onclick = () => { const k = +p.dataset.n; if (k <= ctx.state.scene) ouvrir(k); });
@@ -200,6 +201,7 @@ window.SCENES = (function () {
     SON.unlock();
     if (sc.bonus.indexOf(id) >= 0) { bonus(g, id, el); aideLance(); return; }
     const pos = chaine.indexOf(id);
+    if (occupe && NARR.attend) { NARR.continuer(); return; }
     if (pos < idx) {
       // Élément obligatoire déjà fait : certains rejouent leur animation
       if (REJOUE[id]) { const act = ACTIONS[sc.id][id]; if (act) act(g); }
@@ -253,7 +255,9 @@ window.SCENES = (function () {
     if (apres) { await apres(g); if (mien !== jeton) return; }
     if (el.reponse) {
       await NARR.dire(derniere = bulle(el.reponse)); if (mien !== jeton) return;
-      await NARR.attendre(); if (mien !== jeton) return;
+      // Dernier élément et pas de pont : le bouton arrive tout de suite, sans toucher supplémentaire
+      const direct = idx + 1 >= chaine.length && !sc.pont;
+      if (!direct) { await NARR.attendre(); if (mien !== jeton) return; }
     }
     idx++;
     occupe = false;
