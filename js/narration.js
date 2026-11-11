@@ -24,6 +24,7 @@ window.NARR = (function () {
     // La hauteur du bandeau est transmise au reste de la page (pour ne jamais cacher la scène)
     const mesure = () => { document.documentElement.style.setProperty('--bandeau-h', el.offsetHeight + 'px'); };
     if (window.ResizeObserver) new ResizeObserver(mesure).observe(el); else window.addEventListener('resize', mesure);
+    window.addEventListener('resize', ajuster);
     mesure();
   }
 
@@ -36,6 +37,15 @@ window.NARR = (function () {
     });
     if (cur.length) out.push(cur.join(' '));
     return out;
+  }
+  // Le texte doit tenir en entier dans son cadre : on réduit la police si besoin (jamais de défilement)
+  function ajuster() {
+    if (!texte) return;
+    texte.style.fontSize = '';
+    let fs = parseFloat(getComputedStyle(texte).fontSize) || 16;
+    const min = Math.max(11, fs * 0.66);
+    let n = 0;
+    while (texte.scrollHeight > texte.clientHeight + 1 && fs > min && n++ < 40) { fs -= 0.5; texte.style.fontSize = fs + 'px'; }
   }
   function expression(expr) {
     const e = BULLES.hasOwnProperty(expr) ? expr : 'sourire';
@@ -62,6 +72,7 @@ window.NARR = (function () {
     el.classList.toggle('chuchote', (b && b.expr) === 'chuchote');
     const gs = groupes(t);
     texte.innerHTML = gs.map(g => `<span class="mot">${g.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))}</span>`).join(' ');
+    ajuster(); // tous les mots sont déjà en place (invisibles) : la taille est calculée sur le texte complet
     const spans = Array.prototype.slice.call(texte.querySelectorAll('.mot'));
     return new Promise(resolve => {
       enCours = { fin: resolve };

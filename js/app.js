@@ -115,7 +115,7 @@
   }
   function updateFil(n) {
     $$('.perle').forEach(p => { const i = +p.dataset.n; p.classList.toggle('faite', i < State.unlocked); p.classList.toggle('active', i === n); p.classList.toggle('ouverte', i <= State.unlocked); });
-    const s = $('.fil-souris'); if (s) s.style.left = n === 0 ? '5%' : [16, 33, 50, 67, 84][n - 1] + '%';
+    const s = $('.fil-souris'); if (s) s.style.left = n === 0 ? '5%' : [21, 37.5, 54, 70.5, 87][n - 1] + '%';
     document.body.dataset.chapitre = n;
   }
   // Fondu au noir entre deux tableaux : on assombrit, on change, on rallume
