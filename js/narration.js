@@ -11,14 +11,13 @@ window.NARR = (function () {
     el.innerHTML = `<div class="bandeau-in">
       <div class="bandeau-portrait">${window.ART.portrait()}<span class="bandeau-bulle" aria-hidden="true"></span></div>
       <p class="bandeau-texte" id="bandeau-texte" aria-live="polite"></p>
-      <span class="bandeau-suite" aria-hidden="true">Touche pour continuer <b>▸</b></span>
+      <span class="bandeau-suite" aria-hidden="true">Suite <b>▸</b></span>
       <div class="bandeau-actions" id="bandeau-actions"></div>
     </div>`;
     texte = el.querySelector('#bandeau-texte'); portrait = el.querySelector('.portrait'); bulle = el.querySelector('.bandeau-bulle'); actions = el.querySelector('#bandeau-actions');
     el.addEventListener('click', e => {
       if (e.target.closest('.bandeau-actions')) return;
-      if (enCours) { toutMontrer(); return; }
-      if (attente) { const f = attente; attente = null; el.classList.remove('attente'); f(true); }
+      continuer();
     });
     // La hauteur du bandeau est transmise au reste de la page (pour ne jamais cacher la scène)
     const mesure = () => { document.documentElement.style.setProperty('--bandeau-h', el.offsetHeight + 'px'); };
@@ -75,6 +74,12 @@ window.NARR = (function () {
       suivant();
     });
   }
+  // Un toucher : montre tout le texte, ou passe à la suite si on attendait
+  function continuer() {
+    if (enCours) { toutMontrer(); return true; }
+    if (attente) { const f = attente; attente = null; el.classList.remove('attente'); f(true); return true; }
+    return false;
+  }
   // Attend un toucher sur le bandeau avant la suite. Résout false si une autre bulle a pris la place.
   function attendre() {
     if (attente) { const f = attente; attente = null; f(false); }
@@ -90,5 +95,5 @@ window.NARR = (function () {
   }
   function cacher(on) { el.classList.toggle('cache', !!on); }
 
-  return { init, dire, attendre, action, cacher, expression, get visible() { return !el.classList.contains('cache'); } };
+  return { init, dire, attendre, continuer, action, cacher, expression, get attend() { return !!attente || !!enCours; }, get visible() { return !el.classList.contains('cache'); } };
 })();
