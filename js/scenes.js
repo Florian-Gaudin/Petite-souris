@@ -122,6 +122,22 @@ window.SCENES = (function () {
     aideT2 = setTimeout(() => g.classList.add('grand'), 8000);
   }
 
+  // Pendant le conseil : une main montre chaque étoile à toucher
+  function mainsIndices(on) {
+    if (!svg) return;
+    $$('.main-indice', svg).forEach(m => m.remove());
+    if (!on) return;
+    $$('.tap.bonus', svg).forEach(g => {
+      const h = g.querySelector('.halo'); if (!h) return;
+      let cx, cy;
+      try {
+        const r = h.getBoundingClientRect(), pt = svg.createSVGPoint(); pt.x = r.left + r.width / 2; pt.y = r.top + r.height / 2;
+        const p = pt.matrixTransform(svg.getScreenCTM().inverse()); cx = p.x; cy = p.y - (+h.getAttribute('r') || 40) * 0.8;
+      } catch (e) { return; }
+      svg.insertAdjacentHTML('beforeend', `<g class="main-aide main-indice on" transform="translate(${(cx + 14).toFixed(0)},${(cy + 16).toFixed(0)})" aria-hidden="true"><use href="#main" x="-20" y="-6" width="60" height="70"/></g>`);
+    });
+  }
+
   // ---------- Frise des six scènes ----------
   function frise(n) {
     return `<div class="frise" aria-label="Les étapes du voyage">${D.scenes.map((s, i) => {
@@ -167,7 +183,9 @@ window.SCENES = (function () {
     if (courant === 0 && !ctx.state.indices) {
       // Première scène : Quenotte explique les secrets à découvrir
       await NARR.dire(derniere = bulle(D.indices)); if (mien !== jeton) return;
+      mainsIndices(true);
       const ok2 = await NARR.attendre();
+      mainsIndices(false);
       ctx.state.indices = true; ctx.save();
       if (mien !== jeton || !ok2) return;
     }
