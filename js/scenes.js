@@ -164,7 +164,7 @@ window.SCENES = (function () {
     if (mien !== jeton) return;
     const ok = await NARR.attendre();
     if (mien !== jeton || !ok) return; // un élément a été touché pendant l'attente : la suite s'en charge
-    if (!ctx.state.indices && sc.bonus.length) {
+    if (courant === 0 && !ctx.state.indices) {
       // Première scène : Quenotte explique les secrets à découvrir
       await NARR.dire(derniere = bulle(D.indices)); if (mien !== jeton) return;
       const ok2 = await NARR.attendre();
