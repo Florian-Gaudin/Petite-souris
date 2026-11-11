@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Certificat officiel — La nuit de la Petite Souris</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/diplome.css">
+<style>
+  body{background:#2b3470}
+  .page{max-width:820px;margin:0 auto;padding:16px}
+  .outils{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:0 0 14px}
+  .note{color:var(--muet);font-size:.95rem;text-align:center;margin:10px 0 0}
+  @media print{.outils,.note{display:none!important}.page{max-width:none;padding:0}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="outils">
+    <button class="btn btn-or" id="btn-print">Imprimer (A4)</button>
+    <a class="btn btn-petit" href="index.html#5">Retour à l'histoire</a>
+  </div>
+  <div id="diplome"></div>
+  <p class="note">Impression : A4 portrait, couleurs activées (« imprimer les arrière-plans » dans les options du navigateur), marges par défaut.</p>
+</div>
+<script src="config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/art.js"></script>
+<script src="js/certificat.js"></script>
+<script>
+(function(){
+  document.body.insertAdjacentHTML('afterbegin', ART.symboles());
+  const pad = n => String(n).padStart(2,'0');
+  const p = new URLSearchParams(location.search);
+  let etat = {};
+  try { etat = JSON.parse(localStorage.getItem('souris.v1') || '{}'); } catch(e) {}
+  // Priorité : paramètres d'adresse (envoyés par la tablette) > mémoire locale > tout gagné
+  const tous = DATA.badges.filter(b => !b.secret).map(b => b.id);
+  const badges = p.has('badges') ? p.get('badges').split(',').filter(Boolean) : (etat.badges && etat.badges.length ? etat.badges : tous);
+  const secret = p.has('secret') ? p.get('secret') === '1' : !!etat.secret;
+  if (secret && badges.indexOf('scene13') < 0) badges.push('scene13');
+  let nuit = p.get('nuit') || CONFIG.nuit || etat.nuit;
+  if (!nuit || !/^\d{4}-\d{2}-\d{2}$/.test(nuit)) { const d = new Date(); if (d.getHours() < 12) d.setDate(d.getDate() - 1); nuit = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+  const d1 = new Date(nuit + 'T12:00:00'), d2 = new Date(d1); d2.setDate(d2.getDate() + 1);
+  const mois = new Intl.DateTimeFormat('fr-FR', { month: 'long' }); const m1 = mois.format(d1), m2 = mois.format(d2);
+  const nuitTexte = m1 === m2 ? `nuit du ${d1.getDate()} au ${d2.getDate()} ${m2} ${d2.getFullYear()}` : `nuit du ${d1.getDate()} ${m1} au ${d2.getDate()} ${m2} ${d2.getFullYear()}`;
+  document.getElementById('diplome').innerHTML = CERTIFICAT.html({ badges: badges.concat(badges.indexOf('jumelle') < 0 ? ['jumelle'] : []), secret, nuitTexte });
+  document.getElementById('btn-print').onclick = () => window.print();
+})();
+</script>
+</body>
+</html>

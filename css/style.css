@@ -1,0 +1,216 @@
+/* La nuit de la Petite Souris — styles (tablette et téléphone d'abord) */
+@font-face{font-family:'Baloo 2';src:url('../fonts/baloo2.woff2') format('woff2');font-weight:400 800;font-display:swap}
+@font-face{font-family:'Patrick Hand';src:url('../fonts/patrickhand.woff2') format('woff2');font-display:swap}
+@font-face{font-family:'Share Tech Mono';src:url('../fonts/sharetechmono.woff2') format('woff2');font-display:swap}
+@font-face{font-family:'Libre Baskerville';src:url('../fonts/librebaskerville.woff2') format('woff2');font-display:swap}
+@font-face{font-family:'Libre Baskerville';src:url('../fonts/librebaskerville-italic.woff2') format('woff2');font-style:italic;font-display:swap}
+
+:root{
+  --nuit:#141A3A; --nuit2:#273066; --nuit3:#1b2250; --encre:#1F2235; --papier:#FFF6E0; --papier2:#f7ecd0;
+  --lanterne:#FFC857; --lanterne2:#b9801a; --rouge:#D64045; --rouge2:#9a2a32; --rose:#F2A3B5; --souris:#A79E95;
+  --foret:#2F5D50; --meuse:#3E7C8F; --cam:#39FF14; --cam2:#2fbf2f; --cambg:#06180B; --or:#C9A227; --clair:#F3EFE6; --muet:#cfd3ee;
+  --display:'Baloo 2','Trebuchet MS',sans-serif; --hand:'Patrick Hand','Segoe Print','Comic Sans MS',cursive; --mono:'Share Tech Mono',Consolas,monospace; --serif:'Libre Baskerville',Georgia,serif;
+  --fil-h:64px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--nuit);color:var(--clair);font-family:var(--display);font-size:18px;line-height:1.4;overflow-x:hidden;min-height:100%}
+button,a.btn{font-family:inherit}
+h1,h2,h3{line-height:1.15;margin:0;text-wrap:balance}
+p{margin:.4rem 0}
+.ico{width:1.25em;height:1.25em;flex:none}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--lanterne);outline-offset:2px}
+
+/* ---------- Fil rouge (en-tête) ---------- */
+.fil{position:sticky;top:0;z-index:20;background:rgba(20,26,58,.92);backdrop-filter:blur(6px);border-bottom:1px solid #2e3768;padding-top:env(safe-area-inset-top,0px)}
+.fil-in{display:flex;align-items:center;gap:10px;max-width:960px;margin:0 auto;height:var(--fil-h);padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+.ruban{position:relative;flex:1;height:44px;min-width:0}
+.fil-ligne{position:absolute;left:4%;right:4%;top:50%;height:4px;margin-top:-2px;background:var(--rouge);border-radius:2px}
+.perle{position:absolute;top:50%;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:3px solid var(--rouge);background:var(--nuit);color:var(--muet);font:700 .85rem var(--display);padding:0;cursor:pointer}
+.perle[data-n="1"]{left:16%}.perle[data-n="2"]{left:33%}.perle[data-n="3"]{left:50%}.perle[data-n="4"]{left:67%}.perle[data-n="5"]{left:84%}
+.perle.faite{background:var(--rouge);color:#fff}
+.perle.active{background:var(--lanterne);border-color:var(--lanterne);color:#3b2a00;transform:scale(1.15)}
+.perle:not(.ouverte){opacity:.55}
+.fil-souris{position:absolute;top:50%;left:6%;width:38px;height:30px;margin:-34px 0 0 -19px;transition:left .8s cubic-bezier(.4,0,.2,1);pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}
+.fil-souris svg{width:100%;height:100%}
+.heure{font-family:var(--mono);font-size:1.05rem;color:var(--lanterne);min-width:3.4em;text-align:center;font-variant-numeric:tabular-nums}
+.btn-ico{width:48px;height:48px;border-radius:50%;border:2px solid #3d4a95;background:#1b2250;color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
+.btn-ico .ico{width:26px;height:26px}
+
+/* ---------- Mise en page générale ---------- */
+.scene{max-width:960px;margin:0 auto;padding:12px max(16px,env(safe-area-inset-left,0px)) 48px max(16px,env(safe-area-inset-right,0px))}
+.barre{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin:4px 0 10px}
+.barre h2{font-size:clamp(1.35rem,4.6vw,1.9rem);font-weight:800}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.consigne{color:var(--muet);font-size:1.05rem;margin:0 0 10px}
+.fin{display:flex;flex-direction:column;align-items:center;gap:12px;margin:16px 0 8px}
+
+/* Boutons : gros, pour le pouce */
+.btn{min-height:64px;font:700 1.2rem var(--display);border-radius:18px;padding:0 1.3rem;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent;transition:transform .12s,box-shadow .12s}
+.btn:active{transform:translateY(3px)}
+.btn-grand{width:100%;max-width:520px;min-height:78px;font-size:1.5rem}
+.btn-or{background:var(--lanterne);color:#3b2a00;box-shadow:0 6px 0 var(--lanterne2)}
+.btn-or:active{box-shadow:0 3px 0 var(--lanterne2)}
+.btn-rouge{background:var(--rouge);color:#fff;box-shadow:0 6px 0 var(--rouge2)}
+.btn-rouge:active{box-shadow:0 3px 0 var(--rouge2)}
+.btn-petit{min-height:48px;font-size:1rem;background:#1b2250;color:#fff;border:2px solid #3d4a95;border-radius:14px;padding:0 .9rem}
+.btn-petit.on,.btn-petit.parle{background:#3d4a95}
+.btn small{font-size:.75em;font-weight:500;opacity:.8}
+
+/* ---------- Chapitre 0 ---------- */
+.ch0{position:relative;min-height:calc(100vh - var(--fil-h) - 24px);display:flex;flex-direction:column;justify-content:flex-end;margin:-12px calc(-1 * max(16px,env(safe-area-inset-left,0px))) -48px calc(-1 * max(16px,env(safe-area-inset-right,0px)));padding:0 max(16px,env(safe-area-inset-left,0px)) 24px}
+.ch0 .ciel{position:absolute;inset:0;overflow:hidden;z-index:0}
+.ciel-svg{width:100%;height:100%;display:block}
+.ch0-texte{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding-bottom:12px;background:linear-gradient(transparent,rgba(20,26,58,.85) 30%)}
+.titre{font-size:clamp(1.8rem,6.5vw,3rem);font-weight:800;text-shadow:0 3px 12px rgba(0,0,0,.5);max-width:14ch}
+.sous{color:var(--muet);font-size:1.05rem;margin:0}
+.recommencer{position:absolute;right:12px;bottom:6px;z-index:2;font-size:.75rem;color:#6e7399;text-decoration:none;opacity:.7}
+.ciel-svg .chemin0,.ciel-svg .qui{opacity:0;transition:opacity 1s}
+.ch0.allume .ciel-svg .chemin0,.ch0.allume .ciel-svg .qui{opacity:1}
+.ciel-svg .fenetre{animation:lueur 3s ease-in-out infinite alternate}
+.ciel-svg .fumee circle{animation:fumee 4s ease-in-out infinite}
+.ciel-svg .fumee circle:nth-child(2){animation-delay:1.3s}.ciel-svg .fumee circle:nth-child(3){animation-delay:2.6s}
+@keyframes lueur{from{opacity:.75}to{opacity:1}}
+@keyframes fumee{0%{opacity:0;transform:translateY(0)}30%{opacity:.5}100%{opacity:0;transform:translateY(-18px)}}
+.ch0.allume #btn-start{box-shadow:0 0 0 6px rgba(255,200,87,.35),0 6px 0 var(--lanterne2)}
+
+/* ---------- Chapitre 1 : carte et journal ---------- */
+.carte-wrap{border-radius:16px;overflow:hidden;border:2px solid #2e3768;background:var(--nuit)}
+.carte{width:100%;height:auto;display:block}
+.carte .lbl{font-family:var(--display);font-size:22px;font-weight:700;fill:#cfd3ee;text-anchor:middle}
+.carte .lbl.petit{font-size:17px}
+.carte #bateau{opacity:0;transition:opacity .3s}
+.carte #bateau.on{opacity:1}
+.carte #marqueur.flotte use{transform:translateY(-6px)}
+.carte #marqueur.tremble{animation:tremble .5s ease-in-out 3}
+@keyframes tremble{0%,100%{translate:0 0}25%{translate:-4px 0}75%{translate:4px 0}}
+.carte .tap{cursor:pointer}
+.carte #marionnettiste.pouss .geant{transform:translateY(-6px)}
+.carte .geant{transition:transform .2s}
+.journal{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px;max-height:38vh;overflow:auto;scroll-behavior:smooth}
+.journal li{display:grid;grid-template-columns:62px 1fr;gap:10px;align-items:baseline;background:var(--nuit3);border-radius:12px;padding:8px 12px;animation:pop .35s ease-out}
+.journal time{font-family:var(--mono);color:var(--lanterne);font-size:1rem}
+.journal li.alerte{background:#4a1f26;border:2px solid var(--rouge);font-weight:700}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.alerte-txt{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1.25rem;color:var(--rouge);background:#2a1418;border-radius:12px;padding:8px 14px;margin:0}
+
+/* ---------- Chapitre 2 : le jeu ---------- */
+.jeu-wrap{border-radius:16px;overflow:hidden;border:2px solid #2e3768}
+.jeu{width:100%;height:auto;display:block}
+.jeu .z{font-family:var(--display);font-weight:800;font-size:30px;fill:#F3EFE6}
+.jeu .z.petit{font-size:22px}
+.jeu #zzz{opacity:1;transition:opacity .2s}
+.jeu #chat:not([data-etat="dort"]) #zzz{opacity:0}
+.jeu #chat[data-etat="dort"] .z{animation:zz 1.6s ease-in-out infinite}
+.jeu #chat[data-etat="dort"] .z.petit{animation-delay:.5s}
+@keyframes zz{0%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-6px)}100%{opacity:.3;transform:translateY(0)}}
+.jeu #chat[data-etat="reveille"] .oeil-ferme,.jeu #chat:not([data-etat="reveille"]) .oeil-ouvert{display:none}
+.jeu #chat:not([data-etat="baille"]) .bouche-ouverte,.jeu #chat[data-etat="baille"] .bouche-fermee{display:none}
+.jeu #queue{transform-box:fill-box;transform-origin:100% 50%}
+.jeu #chat[data-etat="baille"] #queue{animation:twitch .22s ease-in-out 5}
+.jeu #chat[data-etat="reveille"] #queue{animation:twitch .35s ease-in-out infinite}
+@keyframes twitch{0%,100%{transform:rotate(0)}50%{transform:rotate(-14deg)}}
+.jeu #bulle{opacity:0;transition:opacity .15s}
+.jeu #bulle.on{opacity:1}
+.jeu .bulle-txt{font-family:var(--display);font-weight:800;font-size:26px;fill:#1F2235;text-anchor:middle}
+.jeu #jeu-souris{transition:transform .15s linear}
+.jeu #jeu-souris.boule use{transform:scale(.85) translate(10px,16px) rotate(-10deg)}
+.jeu #jeu-souris.marche .p1{animation:pas .3s ease-in-out infinite}
+.jeu #jeu-souris.marche .p2{animation:pas .3s ease-in-out infinite reverse}
+@keyframes pas{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+.jeu #jeu-souris.saute{animation:saut .6s ease-in-out 3}
+@keyframes saut{0%,100%{translate:0 0}50%{translate:0 -24px}}
+.jauge{position:relative;height:30px;border-radius:15px;background:var(--nuit3);border:2px solid #3d4a95;margin:12px 0;overflow:hidden}
+.jauge-in{height:100%;background:linear-gradient(90deg,#FFC857,#ffdc8a);width:0;transition:width .15s linear}
+.jauge span{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;font-size:.95rem;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.btn-tenir{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;display:flex;margin:0 auto;flex-direction:column;gap:0;line-height:1.1;min-height:96px}
+.btn-tenir.on{transform:translateY(4px);box-shadow:0 2px 0 var(--lanterne2);background:#ffd978}
+.bravo{font-size:1.5rem;font-weight:800;text-align:center;margin:0}
+.bravo .h{font-family:var(--mono);color:var(--lanterne);font-size:1.1rem;margin-left:.4em}
+
+/* ---------- Chapitre 3 : la caméra ---------- */
+.cam{position:relative;aspect-ratio:4/3;width:100%;max-width:720px;margin:0 auto;background:var(--cambg);border-radius:12px;overflow:hidden;border:3px solid #1d4d26;font-family:var(--mono);color:var(--cam)}
+.cam .camsvg{position:absolute;inset:0;width:100%;height:100%}
+.cam-hud{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;gap:6px;padding:6px 10px;font-size:clamp(.72rem,2.6vw,1rem);z-index:3;text-shadow:0 0 6px rgba(57,255,20,.6)}
+.rec{color:#ff5a5a;animation:blink 1s steps(1) infinite;text-shadow:0 0 6px rgba(255,90,90,.7)}
+@keyframes blink{50%{opacity:.15}}
+.dets{position:absolute;inset:0;z-index:2;pointer-events:none}
+.det{position:absolute;border:2px solid var(--cam);border-radius:3px;box-shadow:0 0 8px rgba(57,255,20,.35);transition:left .9s ease-in-out,top .9s ease-in-out;animation:apparait .3s steps(3)}
+.det span{position:absolute;left:-2px;bottom:100%;background:var(--cam);color:#03230a;font-size:clamp(.58rem,2.2vw,.86rem);padding:1px 5px;white-space:nowrap;font-weight:700;letter-spacing:.02em}
+.det.bas span{bottom:auto;top:100%}
+.det.droite span{left:100%;bottom:auto;top:-2px;margin-left:4px}
+@keyframes apparait{from{opacity:0}to{opacity:1}}
+.cam-souris,.cam-bateau{transition:transform 2.4s ease-in-out}
+.cam.instant .cam-souris,.cam.instant .cam-bateau,.cam.instant .det{transition:none!important;animation:none!important}
+.cam #dent1{transition:transform 1.2s ease-in,opacity 1.2s}
+.cam #dent1.prise{transform:translate(-50px,-40px) scale(.2);opacity:0}
+.cam #cs2.coucou use{animation:coucou .5s ease-in-out 3}
+@keyframes coucou{0%,100%{transform:rotate(0)}50%{transform:rotate(-8deg)}}
+.cam-grain{position:absolute;inset:0;pointer-events:none;z-index:4;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 2px,transparent 2px 4px);mix-blend-mode:multiply}
+.cam-grain::after{content:"";position:absolute;inset:-60%;background-image:radial-gradient(rgba(57,255,20,.09) 1px,transparent 1.5px);background-size:7px 7px;animation:grain .35s steps(3) infinite;opacity:.9}
+@keyframes grain{0%{transform:translate(0,0)}33%{transform:translate(-9px,6px)}66%{transform:translate(7px,-8px)}100%{transform:translate(-3px,3px)}}
+.cam::before{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%)}
+.preuve{position:absolute;inset:0;z-index:6;display:none;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(6,24,11,.35)}
+.cam.fin .preuve{display:flex}
+.preuve span{border:6px solid var(--rouge);color:var(--rouge);font:800 clamp(2rem,9vw,3.2rem) var(--display);padding:2px 20px;transform:rotate(-12deg);background:rgba(6,24,11,.75);letter-spacing:.05em}
+.preuve small{font-size:clamp(.7rem,2.4vw,.95rem);background:rgba(6,24,11,.8);padding:2px 8px}
+
+/* ---------- Chapitre 4 : la lettre ---------- */
+.env-stage{display:flex;flex-direction:column;align-items:center}
+.env{width:min(100%,560px);height:auto;display:block;overflow:visible}
+.env-nom{font-family:var(--hand);font-size:26px;fill:#5c4a1e;text-anchor:middle}
+.env #rabat{transform-box:view-box;transform-origin:200px 60px;transition:transform .7s ease-in-out}
+.env.ouverte #rabat{transform:scaleY(-1)}
+.env #cachet{cursor:pointer;transform-box:fill-box;transform-origin:center;animation:pulse 1.6s ease-in-out infinite;transition:transform .6s ease-in,opacity .6s}
+.env.ouverte #cachet{animation:none;transform:translateY(80px) rotate(35deg);opacity:0}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.lettre-stage{display:flex;flex-direction:column;align-items:center;animation:pop .5s ease-out}
+.papier{width:min(100%,640px);background:var(--papier);color:var(--encre);font-family:var(--hand);font-size:clamp(1.3rem,4.4vw,1.75rem);line-height:1.45;border-radius:8px;padding:26px 22px 22px;box-shadow:0 12px 32px rgba(0,0,0,.45);background-image:linear-gradient(90deg,transparent 0 36px,rgba(214,64,69,.25) 36px 37px,transparent 37px)}
+.ligne{margin:0 0 .45em;min-height:1.45em;padding:0 0 0 20px;opacity:.001;transition:opacity .3s;border-radius:6px}
+.ligne.vue{opacity:1}
+.ligne.parle{background:#ffe9a8}
+.ligne.sign{text-align:right;margin-top:.5em;font-size:1.05em;min-height:0}
+.ligne.sign+.ligne.sign{margin-top:0;font-size:.95em;color:#5c4a1e}
+.ligne.ps{font-size:.9em;color:#5c4a1e;margin-top:.5em}
+
+/* ---------- Chapitre 5 : le diplôme ---------- */
+.diplome-wrap{display:flex;justify-content:center}
+.diplome-wrap .diplome{width:min(100%,680px)}
+.confettis{position:fixed;inset:0;pointer-events:none;z-index:15;overflow:hidden}
+.confettis i{position:absolute;top:-20px;width:10px;height:16px;border-radius:2px;animation:tombe 4s linear infinite}
+@keyframes tombe{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:.2}}
+
+/* ---------- Chapitre secret ---------- */
+.voile{position:fixed;inset:0;z-index:30;background:rgba(10,12,30,.85);display:grid;place-items:center;padding:12px;opacity:0;transition:opacity .4s}
+.voile.on{opacity:1}
+.scene13{position:relative;width:min(100%,560px);background:var(--nuit3);border-radius:18px;overflow:hidden;border:3px solid var(--rouge)}
+.rideau{position:absolute;top:0;bottom:0;width:52%;background:repeating-linear-gradient(90deg,#D64045 0 18px,#b4323b 18px 36px);z-index:2;transition:transform .9s cubic-bezier(.6,0,.3,1)}
+.rideau.g{left:0}.rideau.d{right:0}
+.voile.ouvert .rideau.g{transform:translateX(-100%)}.voile.ouvert .rideau.d{transform:translateX(100%)}
+.s13-in{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;align-items:center}
+.s13-titre{font-weight:800;font-size:1.3rem;color:var(--lanterne)}
+.tableau svg{width:100%;height:auto;border-radius:12px;display:block}
+.tab-txt{font-size:1.2rem;text-align:center;margin:0;min-height:2.6em}
+.tab-actions{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+
+/* ---------- Toast ---------- */
+#toast{position:fixed;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;pointer-events:none;z-index:40;opacity:0;transform:translateY(16px);transition:opacity .3s,transform .3s}
+#toast.on{opacity:1;transform:none}
+.toast-in{display:flex;align-items:center;gap:10px;background:var(--papier);color:var(--encre);font-weight:700;border-radius:999px;padding:8px 18px 8px 10px;box-shadow:0 8px 24px rgba(0,0,0,.45);max-width:92vw}
+
+/* ---------- Tablette et plus large ---------- */
+@media (min-width:700px){
+  body{font-size:19px}
+  .journal{max-height:260px}
+  .ch0-texte{padding-bottom:30px}
+  .btn-tenir{max-width:420px}
+}
+
+/* ---------- Mouvement réduit ---------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .cam-grain::after{display:none}
+  .rec{opacity:1}
+}
+@media print{.fil,#toast,.btn,.recommencer{display:none!important}}
