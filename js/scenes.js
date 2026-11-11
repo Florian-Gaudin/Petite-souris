@@ -128,7 +128,7 @@ window.SCENES = (function () {
     fermer();
     const mien = ++jeton;
     courant = n; sc = D.scenes[n];
-    root.innerHTML = frise(n) + `<div class="decor-wrap" id="decor-wrap"><h2 class="decor-titre"><span class="decor-heure">${sc.heure.replace(':', ' h ')}</span>${T(sc.titre)}</h2>${DESSINS[sc.id](ctx.state.nuit)}</div>`;
+    root.innerHTML = frise(n) + `<div class="decor-wrap" id="decor-wrap"><h2 class="decor-titre"><span class="decor-heure">${sc.heure.replace(':', ' h ')}</span>${T(sc.titre)}</h2><div class="secrets" id="secrets" title="Secrets découverts dans cette image"><svg viewBox="0 0 24 24"><use href="#etoile5"/></svg><span id="secrets-n"></span></div>${DESSINS[sc.id](ctx.state.nuit)}</div>`;
     wrap = $('#decor-wrap', root); svg = $('svg.decor', root);
     svg.insertAdjacentHTML('beforeend', `<g class="main-aide" aria-hidden="true"><use href="#main" x="-20" y="-6" width="60" height="70"/></g>`);
     ctx.heure(sc.heure); MUS.ambiance(sc.ambiance);
@@ -137,22 +137,33 @@ window.SCENES = (function () {
     const vus = (ctx.state.etoiles && ctx.state.etoiles[sc.id]) || [];
     $$('.tap', svg).forEach(g => {
       const id = g.dataset.el;
-      if (sc.bonus.indexOf(id) >= 0) { g.classList.add('bonus'); if (vus.indexOf(id) >= 0) g.classList.add('deja'); }
+      if (sc.bonus.indexOf(id) >= 0) {
+        g.classList.add('bonus'); if (vus.indexOf(id) >= 0) g.classList.add('deja');
+        // Une petite étoile qui clignote au-dessus de chaque secret
+        const h = g.querySelector('.halo');
+        if (h) { const cx = +h.getAttribute('cx'), cy = +h.getAttribute('cy'), r = +h.getAttribute('r'); g.insertAdjacentHTML('beforeend', `<use href="#etoile5" class="indice" x="${cx - 15}" y="${(cy - r * 0.8 - 15).toFixed(0)}" width="30" height="30"/>`); }
+      }
       g.addEventListener('click', e => onTap(g, e));
       g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTap(g, e); } });
     });
     // Un toucher à côté : la scène bouge doucement, rien de plus
     svg.addEventListener('pointerdown', e => {
       if (e.target.closest('.tap')) return;
-      if (NARR.attend) { NARR.continuer(); return; }
       wrap.classList.remove('bouge'); void wrap.offsetWidth; wrap.classList.add('bouge');
     });
     $$('.pastille', root).forEach(p => p.onclick = () => { const k = +p.dataset.n; if (k <= ctx.state.scene) ouvrir(k); });
-    NARR.action(null);
+    NARR.action(null); compteSecrets();
     await NARR.dire(derniere = bulle(sc.intro));
     if (mien !== jeton) return;
     const ok = await NARR.attendre();
     if (mien !== jeton || !ok) return; // un élément a été touché pendant l'attente : la suite s'en charge
+    if (!ctx.state.indices && sc.bonus.length) {
+      // Première scène : Quenotte explique les secrets à découvrir
+      await NARR.dire(derniere = bulle(D.indices)); if (mien !== jeton) return;
+      const ok2 = await NARR.attendre();
+      ctx.state.indices = true; ctx.save();
+      if (mien !== jeton || !ok2) return;
+    }
     await demande();
   }
   // Cadrage : la scène occupe toute la largeur, et le ciel se prolonge vers le haut si l'écran est en hauteur
@@ -161,8 +172,10 @@ window.SCENES = (function () {
     const W = wrap.clientWidth || 700;
     const mesure = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bandeau-h')) || 0;
     const band = Math.max(mesure, W > 700 ? 150 : 200);
-    const dispo = window.innerHeight - 64 - band - 96;
-    const H = Math.max(240, Math.min(dispo, W * 1.15));
+    // Hauteur disponible : de la position réelle du cadre jusqu'au bandeau (marge de 30 px)
+    const haut = wrap.getBoundingClientRect().top + (window.pageYOffset || 0);
+    const dispo = window.innerHeight - haut - band - 30;
+    const H = Math.max(200, Math.min(dispo, W * 1.15));
     let ext = H * 1000 / W;
     if (ext < 600) {
       // Écran large et bas (tablette en paysage) : la scène entière, un peu moins large, centrée
@@ -171,6 +184,10 @@ window.SCENES = (function () {
       ext = Math.min(1300, Math.round(ext));
       svg.setAttribute('viewBox', `0 ${600 - ext} 1000 ${ext}`); svg.style.width = '100%'; svg.style.height = Math.round(ext * W / 1000) + 'px';
     }
+  }
+  function compteSecrets() {
+    const el = $('#secrets-n', root); if (!el) return;
+    el.textContent = ((ctx.state.etoiles && ctx.state.etoiles[sc.id]) || []).length + '/' + sc.bonus.length;
   }
   function fermer() {
     jeton++; aideStop(); window.removeEventListener('resize', cadre); cancelAnimationFrame(raf); clearTimeout(bougeT); clearTimeout(secretT);
@@ -190,7 +207,9 @@ window.SCENES = (function () {
   // Après une bulle bonus (et un toucher), on revient à ce qu'il y a à faire
   async function rappel(mien, mienBulle) {
     const ok = await NARR.attendre();
-    if (!ok || mien !== jeton || mienBulle !== jetonBulle || occupe) return;
+    if (mien !== jeton) return;
+    NARR.masquerAction(false);
+    if (!ok || mienBulle !== jetonBulle || occupe) return;
     if (idx < chaine.length && !$('.tap.cible', svg)) { await demande(); return; }
     if (derniere) NARR.dire(derniere, { vite: 'instant' });
   }
@@ -201,7 +220,6 @@ window.SCENES = (function () {
     SON.unlock();
     if (sc.bonus.indexOf(id) >= 0) { bonus(g, id, el); aideLance(); return; }
     const pos = chaine.indexOf(id);
-    if (occupe && NARR.attend) { NARR.continuer(); return; }
     if (pos < idx) {
       // Élément obligatoire déjà fait : certains rejouent leur animation
       if (REJOUE[id]) { const act = ACTIONS[sc.id][id]; if (act) act(g); }
@@ -217,12 +235,14 @@ window.SCENES = (function () {
   }
 
   async function bonus(g, id, el) {
-    if (occupe) { SON.play('toc'); return; } // pendant la traversée ou une réponse, on attend
+    // Pendant la traversée, une réponse, ou tant qu'un texte principal s'écrit : on attend
+    if (occupe || NARR.lit) { SON.play('toc'); return; }
     const mien = jeton, mienBulle = ++jetonBulle;
     const premiere = !g.classList.contains('vu') && !g.classList.contains('deja');
     g.classList.add('vu');
     const act = ACTIONS[sc.id][id]; if (act) act(g);
-    if (premiere) ctx.etoile(sc.id, id);
+    if (premiere) { ctx.etoile(sc.id, id); compteSecrets(); }
+    NARR.masquerAction(true); // le bouton Continuer attend la fin du secret
     await NARR.dire(bulle(el.bulle));
     if (mien !== jeton) return;
     rappel(mien, mienBulle);

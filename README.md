@@ -24,8 +24,9 @@ Une petite expérience web (site statique, sans compte, sans suivi) racontée à
 ## Comment ça se joue
 
 - **Chapitre 1, six scènes.** Dans chaque scène, un élément brille fort : c'est l'élément obligatoire (lanterne, champignons, billet à plier en trois touches, Grand Marionnettiste, girouette, Pantoufle). Le toucher débloque « Continuer ». Deux autres éléments scintillent doucement : ce sont les bonus (hulotte, sac, renard, luciole, poisson, reflet de la lune, pigeon, fromage, lampadaire, fenêtre de la chambre, moustache, porte). Chaque bonus donne une **étoile de découverte** ; 6 étoiles donnent le badge Exploratrice, 12 le badge Œil de lynx.
-- Après 4 secondes sans toucher, une petite main montre l'élément ; après 8 secondes, le halo grossit. Un toucher à côté fait juste bouger la scène.
-- **Narration.** Quenotte parle dans le bandeau du bas. Le texte apparaît par petits groupes de mots ; un toucher sur le bandeau affiche tout d'un coup.
+- Les deux secrets de chaque image sont signalés par une petite étoile qui clignote et un compteur « ★ 0/2 » en haut à droite de l'image. Quenotte l'explique une fois, à la première scène. Un secret n'est accepté que lorsque Quenotte a fini sa phrase, et le bouton Continuer disparaît le temps du secret pour ne pas changer de scène par erreur.
+- Après 4 secondes sans toucher, une petite main montre l'élément obligatoire ; après 8 secondes, le halo grossit. Un toucher à côté fait juste bouger la scène.
+- **Narration.** Quenotte parle dans le bandeau du bas, de hauteur fixe pour que l'image reste entière à l'écran (un texte trop long défile dans le cadre). Le texte apparaît par petits groupes de mots ; un toucher sur le texte l'affiche d'un coup. Seul le bouton jaune **« Suite ▸ »** passe au texte suivant : rien n'avance tout seul.
 - **Son.** La musique démarre au premier toucher. Le bouton haut-parleur coupe musique et effets.
 - **Billet.** Dans l'histoire, le billet de 5 € sert de bateau sur la Meuse puis sèche sur la cheminée (éteinte !) : c'est là qu'il faut poser le vrai billet. Le mot A6 sous l'oreiller et la lettre indiquent cet endroit. Sur le diplôme, un bouton « J'ai trouvé mon billet ! » donne le badge correspondant.
 - **Chapitre secret.** Une fois que le Grand Marionnettiste a fait coucou, le toucher trois fois de suite ouvre la 13e scène.

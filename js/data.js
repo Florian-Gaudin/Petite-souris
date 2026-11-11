@@ -106,6 +106,9 @@ window.DATA = {
     },
   ],
 
+  // Première scène : Quenotte explique les secrets (une seule fois)
+  indices: { txt: "Un conseil : dans chaque image, deux secrets brillent avec une petite étoile. Touche-les quand tu veux, chacun te donnera une étoile de découverte !", expr: "clin" },
+
   // Petites phrases quand on découvre un bonus
   etoile: "Une étoile de découverte !",
   etoilesToutes: "Toutes les étoiles de la scène !",
